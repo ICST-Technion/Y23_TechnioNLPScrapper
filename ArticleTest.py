@@ -1,6 +1,6 @@
 import unittest
 
-from Article import Article
+from Article import *
 
 
 class ArticleTests(unittest.TestCase):
@@ -10,8 +10,7 @@ class ArticleTests(unittest.TestCase):
 
     def test_date_extraction(self):
         p1 = Article('https://www.ynet.co.il/news/article/hjg6zmupo#autoplay')
-        self.assertEqual(p1.date, '2022-12-01T13:42:30.887852Z')
-
+        self.assertEqual(p1.date, datetime(2022, 12, 1, 13, 42))
 
 if __name__ == '__main__':
     unittest.main()
