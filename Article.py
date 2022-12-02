@@ -1,6 +1,7 @@
 import bs4 as bs
 import urllib.request
 from datetime import datetime
+from tldextract import extract
 
 '''
 finds the date property in Ynet articles, given the extracted parsed tree
@@ -40,6 +41,11 @@ def parse_date(date_as_string):
     return parsed_day
 
 
+def get_website_name(link):
+    _, name, _ = extract(link)
+    return name
+
+
 class Article:
     """
     This class will represent scrapped data from articles and put them in an Article object
@@ -58,3 +64,4 @@ class Article:
         soup = bs.BeautifulSoup(source, 'lxml')
         self.title = soup.title.string
         self.date = parse_date(extract_date(soup))
+        self.website = get_website_name(link)
