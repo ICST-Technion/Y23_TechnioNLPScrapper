@@ -2,6 +2,7 @@ import bs4 as bs
 import urllib.request
 from datetime import datetime
 from tldextract import extract
+import re
 
 '''
 finds the date property in Ynet articles, given the extracted parsed tree
@@ -65,3 +66,15 @@ class Article:
         self.title = soup.title.string
         self.date = parse_date(extract_date(soup))
         self.website = get_website_name(link)
+
+    def find_text_by_regex(self, regex):
+        """
+        Returns a list of strings which contain the regular expression given as a parameter
+        regex- a regular expression to search for in the website,string
+        """
+        source = urllib.request.urlopen(self.link).read()
+        soup = bs.BeautifulSoup(source, 'lxml')
+        sentences = []
+        for paragraph in soup.body.findAll(re.compile(regex)):
+            sentences.append(paragraph.get_text())
+        return sentences
