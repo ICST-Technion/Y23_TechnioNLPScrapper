@@ -3,7 +3,7 @@ import unittest
 from Graph import *
 
 
-class TestHistogram(unittest.TestCase):
+class TestGraph(unittest.TestCase):
     def test_keywords_by_count(self):
         h = Graph("dummy.csv", "Keyword", "Count", "Count of keywords")
         h.get_graph()
