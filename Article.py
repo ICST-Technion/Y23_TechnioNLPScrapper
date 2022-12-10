@@ -1,3 +1,6 @@
+from collections import Counter
+from string import punctuation
+
 import bs4 as bs
 import urllib.request
 from datetime import datetime
@@ -62,9 +65,9 @@ class Article:
     def __init__(self, link):
         self.link = link
         source = urllib.request.urlopen(link).read()
-        soup = bs.BeautifulSoup(source, 'lxml')
-        self.title = soup.title.string
-        self.date = parse_date(extract_date(soup))
+        self.soup = bs.BeautifulSoup(source, 'lxml')
+        self.title = self.soup.title.string
+        self.date = parse_date(extract_date(self.soup))
         self.website = get_website_name(link)
 
     def find_text_by_regex(self, regex):
@@ -72,9 +75,31 @@ class Article:
         Returns a list of strings which contain the regular expression given as a parameter
         regex- a regular expression to search for in the website,string
         """
-        source = urllib.request.urlopen(self.link).read()
-        soup = bs.BeautifulSoup(source, 'lxml')
         sentences = []
-        for paragraph in soup.body.findAll(re.compile(regex)):
+        for paragraph in self.soup.findAll(string=re.compile(regex)):
             sentences.append(paragraph.get_text())
         return sentences
+
+    def count_word_in_webpage(self, word):
+        '''
+        parameters:
+        word- the word we want to count, string
+        returns number of instances of that word in the text-integer
+        '''
+        return len(self.soup.find_all(string=re.compile(word)))
+
+    def most_common_words_in_page(self, num=5):
+        """
+        finds num most common words in the page
+        Returns:
+            a list of the most common words in the webpage
+        """
+        # We get the words within paragrphs
+
+        paragraphs = (''.join(s.findAll(string=True)) for s in self.soup.findAll('p'))
+        paragraph_count = Counter((x.rstrip(punctuation).lower() for y in paragraphs for x in y.split()))
+        # We get the words within divs
+        divs = (''.join(s.findAll(string=True)) for s in self.soup.findAll('div'))
+        div_count = Counter((x.rstrip(punctuation).lower() for y in divs for x in y.split()))
+        total = div_count + paragraph_count
+        return total.most_common(num)
