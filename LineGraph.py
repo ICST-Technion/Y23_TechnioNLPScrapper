@@ -1,7 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
-from TechnioNLPScrapper.Graph import Graph
+from Graph import Graph
 
 
 class LineGraph(Graph):
@@ -9,4 +9,4 @@ class LineGraph(Graph):
         df = pd.read_csv(self.file)
         fig, ax = plt.subplots(figsize=self.shape)
         df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
-        sns.lineplot(ax=ax, x=df[self.x], y=df[self.y], data=df)
+        sns.lineplot(ax=ax, x=df[self.x], y=df[self.y], data=df).set(title=self.title)

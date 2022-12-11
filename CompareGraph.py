@@ -1,7 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
-from TechnioNLPScrapper.Graph import Graph
+from Graph import Graph
 
 
 class CompareGraph(Graph):
