@@ -1,0 +1,174 @@
+.App {
+  text-align: center;
+  width:100vw;
+  height:100vh;
+  background-image: url('./Images/BG.jpg');
+  background-repeat: no-repeat;
+  background-size: 100vw 100vh;
+}
+
+.App-logo {
+  height: 40vh;
+  pointer-events: none;
+}
+
+.search-bar{
+  width: 60vw;
+  height: 7vh;
+}
+.search-bar .MuiOutlinedInput-root{
+  border-radius: 50px;
+  width: inherit;
+  height: 6vh !important;
+  padding-right: 3.8vw;
+}
+.search-bar .MuiInputLabel-root {
+  color: rgb(0 0 0 / 48%);
+  font-size: 1.3rem;
+  width:max(22vw,29vh);
+  background-color: #f2f4f3;
+}
+.search-bar .MuiInputLabel-root.Mui-focused {
+  color: #61a088;
+}
+.search-bar .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #61a088;
+}
+.search-bar .MuiFormHelperText-root{
+  font-size: 0.9rem;
+}
+
+.search-icon{
+  position: absolute;
+  height: 3.3vh;
+  right: 21vw;
+  top:41.5vh;
+}
+
+
+.button-container{
+  margin-top: 6vh;
+  display: flex;
+  flex-direction: column;
+  gap: 4vh;
+
+}
+
+.button-row{
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width:50vw;
+}
+
+.button-pop-component{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vh;
+}
+
+.select-button{
+  background-color: none;
+  border-radius: 20px;
+  border-width: 2px;
+  width: 18vw;
+  height: 4vh;
+  font-weight: bold;
+  text-transform: capitalize;
+  border-color: rgb(210, 209, 209);
+  font-size: 1.2vw;
+}
+
+.select-button:hover{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.select-button:active{
+  background-color: rgb(178, 177, 177);
+}
+
+.run-query-button{
+  position: absolute;
+  bottom: 10vh;
+  right:5vw;
+  background-color:#b2ccc1;
+  border-color: #a2beb2;
+  border-radius: 20px;
+  font-size: 1.3vw;
+  font-weight: bold;
+  border-width: 3px;
+  width: 9.5vw;
+  height: 4vh;
+}
+
+.run-query-button:hover{
+  background-color:#a0c0b3;
+}
+
+.run-query-button:active{
+  background-color:#8cb0a2;
+}
+
+.FAQ{
+  position: absolute;
+  top: 5vh;
+  left:3vw;
+  font-size: 1vw;
+  font-weight: bold;
+  border-width: 2px;
+  border-color: rgb(218, 216, 216);
+  border-radius: 20px;
+  background-color: #f2f4f3;
+  width: 4vw;
+  height: 3vh;
+}
+
+.FAQ:hover{
+  background-color: rgb(218, 216, 216);
+}
+.FAQ:active{
+  background-color: rgb(199, 197, 197);
+}
+
+.type-in{
+  display: flex;
+  flex-direction: column;
+}
+
+/*calendar customization !!!!*/
+/*selected edges*/
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+background-color: #99d1bb !important;
+}
+/*selected range*/
+.rs-calendar-table-cell-in-range .rs-calendar-table-cell-content, .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  background-color: #99d1bb5a ;
+}
+/*calendar bg*/
+.rs-anim-fade.rs-anim-in.placement-bottom-start.rs-picker-daterange-menu.rs-picker-menu{
+  background-color: #f3f5f4;
+}
+
+.rs-stack-item{
+  color: #61a088;
+}
+
+.rs-stack-item button{
+  color: #61a088;
+}
+
+.rs-stack-item .rs-picker-toolbar-right button{
+  background-color: #61a088;
+  color:#f2f4f3;
+}
+
+.rs-stack-item span{
+  color: #61a088 !important;
+}
+
+.rs-picker-default .rs-picker-toggle:hover{
+  border-color: #61a088 !important;
+}
