@@ -9,6 +9,7 @@
 
 .App-logo {
   height: 40vh;
+  margin-top: -2vh;
   pointer-events: none;
 }
 
@@ -41,16 +42,16 @@
 .search-icon{
   position: absolute;
   height: 3.3vh;
-  right: 21vw;
-  top:41.5vh;
+  right: 21.5vw;
+  top:39vh;
 }
 
 
 .button-container{
-  margin-top: 6vh;
+  margin-top: 7vh;
   display: flex;
   flex-direction: column;
-  gap: 4vh;
+  gap: 6vh 0;
 
 }
 
@@ -59,7 +60,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width:50vw;
+  width:60vw;
 }
 
 .button-pop-component{
@@ -67,6 +68,8 @@
   flex-direction: column;
   align-items: center;
   gap: 1vh;
+  width: 26vw;
+  max-height: 7vh;
 }
 
 .select-button{
@@ -112,7 +115,21 @@
   background-color:#8cb0a2;
 }
 
-.FAQ{
+.clear-query-button{
+  position: absolute;
+  right: 21vw;
+  top: 44.5vh;
+  font-size: 1vw;
+  font-weight: bold;
+  border-width: 2px;
+  border-color: rgb(218, 216, 216);
+  border-radius: 20px;
+  background-color: #f2f4f3;
+  width: 4vw;
+  height: 3vh;
+}
+
+.FAQ, .go-back-button{
   position: absolute;
   top: 5vh;
   left:3vw;
@@ -126,16 +143,29 @@
   height: 3vh;
 }
 
-.FAQ:hover{
+.go-back-button{
+  font-size: 0.8vw !important;
+  width: 6vw !important;
+  text-transform: capitalize;
+}
+
+.FAQ:hover, .clear-query-button:hover, .go-back-button:hover{
   background-color: rgb(218, 216, 216);
 }
-.FAQ:active{
+.FAQ:active, .clear-query-button:active, .go-back-button:active{
   background-color: rgb(199, 197, 197);
 }
 
 .type-in{
   display: flex;
   flex-direction: column;
+}
+
+.type-in input{
+  width: 13vw;
+  align-self: center;
+  border-radius: 12px;
+  border-width: 1px;
 }
 
 /*calendar customization !!!!*/
@@ -171,4 +201,37 @@ background-color: #99d1bb !important;
 
 .rs-picker-default .rs-picker-toggle:hover{
   border-color: #61a088 !important;
+}
+
+.graphs{
+  width: 22vw;
+  height: auto;
+}
+
+.flex{
+  display: flex;
+  flex-direction: column;
+  gap: 15vh;
+}
+
+.selected-values-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4vh 0.4vw;
+  margin-top: 1vh;
+}
+
+.selected-value {
+  border: 1px solid #689e8a;
+  border-radius: 20px;
+  padding: 1px;
+  padding-left: 4px;
+}
+.selected-value button{
+  border: none;
+  color:  #689e8a;
+  background: transparent;
+  margin-left: 0.1vw;
 }
