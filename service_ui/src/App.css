@@ -43,7 +43,7 @@
   position: absolute;
   height: 3.3vh;
   right: 21.5vw;
-  top:39vh;
+  top:39.4vh;
 }
 
 
@@ -234,4 +234,16 @@ background-color: #99d1bb !important;
   color:  #689e8a;
   background: transparent;
   margin-left: 0.1vw;
+}
+
+.about-text {
+  width: 70vw;
+  text-align: center;
+  margin-left: 15vw;
+  font-size: 1.4vw;
+  font-weight: 600;
+}
+
+.about-text p{
+  margin-bottom: 4vh;
 }
