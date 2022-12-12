@@ -31,3 +31,6 @@ class Graph:
 
     def get_graph(self):
         plt.show()
+
+    def graph_to_image(self, image_name):
+        plt.savefig(image_name)
