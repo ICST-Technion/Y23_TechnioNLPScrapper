@@ -259,3 +259,30 @@ background-color: #99d1bb !important;
 .about-text p{
   margin-bottom: 4vh;
 }
+
+.result{
+  gap: 3vh;
+  padding-top: 8vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.result .image-gallery {
+  width: 45%;
+  max-height: 85vh;
+  height: auto;
+}
+
+.result .image-gallery-slide img {
+  width: 100%;
+  height: auto;
+  max-height: 50vh;
+  object-fit:contain;
+  overflow: hidden;
+  object-position: center center;
+}
+
+.result .fullscreen .image-gallery-slide img {
+  max-height: 100vh;
+  width: auto;
+}

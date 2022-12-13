@@ -5,7 +5,8 @@ import './App.css';
 import { TextField } from "@mui/material";
 import {ButtonWithPopUp} from './Components/QueryPage/ButtonWithPopUp'
 import { TimeRange } from './Components/QueryPage/TimeRange';
-import { JsxEmit } from 'typescript';
+import "react-image-gallery/styles/css/image-gallery.css";
+import ImageGallery from 'react-image-gallery';
 
 export class advancedQueryData{
   includedWebsites:Map<number, string>;
@@ -106,21 +107,29 @@ function App() {
     );
   }
   else if(pageNumber === 1){
-
+    const images = [
+      {
+        original: require('./Components/Results/Images/graph1.jpg'),
+        thumbnail: require('./Components/Results/Images/graph1.jpg'),
+      },
+      {
+        original: require('./Components/Results/Images/graph2.jpg'),
+        thumbnail: require('./Components/Results/Images/graph2.jpg'),
+      },
+      {
+        original: require('./Components/Results/Images/graph3.jpg'),
+        thumbnail: require('./Components/Results/Images/graph3.jpg'),
+      },
+    ];
 
     return (
     <>
       <div className="App">
         <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <div className='flex' style={{gap:'6vh', paddingTop:'15vh'}}>
-          <h2 className='result-header'> Example Results</h2>
-          <h3 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h3>
-          <div style={{display:'flex', flexDirection:'row', justifyContent: 'space-around',
-          alignItems: 'baseline', flexWrap:'wrap', maxHeight:'50vh', width:'75vw', alignSelf:'center'}}>
-            <img src={require('./Components/Results/Images/graph1.jpg')} className="graphs" alt="graphs" />
-            <img src={require('./Components/Results/Images/graph2.jpg')} className="graphs" alt="graphs" />
-            <img src={require('./Components/Results/Images/graph3.jpg')} className="graphs" alt="graphs" />
-          </div>
+        <div className='flex result'>
+          <h3 className='result-header'> Example Results</h3>
+          <h4 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h4>
+          <ImageGallery items={images} showThumbnails showFullscreenButton showNav/>
         </div>
       </div>
     </>
