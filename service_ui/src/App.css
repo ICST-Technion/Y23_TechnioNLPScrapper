@@ -4,7 +4,7 @@
   height:100vh;
   background-image: url('./Images/BG.jpg');
   background-repeat: no-repeat;
-  background-size: 100vw 100vh;
+  background-size: 100% 100%;
 }
 
 .App-logo {
@@ -105,6 +105,10 @@
   border-width: 3px;
   width: 9.5vw;
   height: 4vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: end;
 }
 
 .run-query-button:hover{
@@ -127,6 +131,10 @@
   background-color: #f2f4f3;
   width: 4vw;
   height: 3vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
 .FAQ, .go-back-button{
@@ -141,6 +149,10 @@
   background-color: #f2f4f3;
   width: 4vw;
   height: 3vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
 .go-back-button{
@@ -204,7 +216,7 @@ background-color: #99d1bb !important;
 }
 
 .graphs{
-  width: 22vw;
+  width: 24vw;
   height: auto;
 }
 

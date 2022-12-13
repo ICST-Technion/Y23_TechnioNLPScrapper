@@ -110,13 +110,17 @@ function App() {
 
     return (
     <>
-    <div className="App">
-      <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <div style={{display:'flex', flexDirection:'row', justifyContent: 'space-around',
-        alignItems: 'baseline', flexWrap:'wrap', height:'70vh', width:'60vw', position:'absolute', left:'20vw', top:'15vh'}}>
-          <img src={require('./Components/Results/Images/graph1.jpg')} className="graphs" alt="graphs" />
-          <img src={require('./Components/Results/Images/graph2.jpg')} className="graphs" alt="graphs" />
-          <img src={require('./Components/Results/Images/graph3.jpg')} className="graphs" alt="graphs" />
+      <div className="App">
+        <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
+        <div className='flex' style={{gap:'6vh', paddingTop:'15vh'}}>
+          <h2 className='result-header'> Example Results</h2>
+          <h3 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h3>
+          <div style={{display:'flex', flexDirection:'row', justifyContent: 'space-around',
+          alignItems: 'baseline', flexWrap:'wrap', maxHeight:'50vh', width:'75vw', alignSelf:'center'}}>
+            <img src={require('./Components/Results/Images/graph1.jpg')} className="graphs" alt="graphs" />
+            <img src={require('./Components/Results/Images/graph2.jpg')} className="graphs" alt="graphs" />
+            <img src={require('./Components/Results/Images/graph3.jpg')} className="graphs" alt="graphs" />
+          </div>
         </div>
       </div>
     </>
