@@ -1,6 +1,5 @@
-
+*.xml
 *.pyc
-*.xml
 *.iml
-*.xml
-*.xml
+
+
