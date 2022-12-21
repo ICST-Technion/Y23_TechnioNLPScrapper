@@ -1,6 +1,6 @@
+from abc import abstractmethod
+
 import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 
 class Graph:
@@ -9,7 +9,8 @@ class Graph:
     In this example, we read the data from a csv file, but it can also be other files,
     such as csv, excel or SQL.
     """
-    def __init__(self, file, x_axis, y_axis, title, figure_shape=(10, 7)):
+
+    def __init__(self, file, x_axis, y_axis, title="", figure_shape=(10, 7)):
         """
         :param file: the file we read the table from, currently a csv file, string
         :param x_axis: the field which will serve as the x axis to the graph,string
@@ -24,14 +25,12 @@ class Graph:
         self.shape = figure_shape
         self.set_graph()
 
+    @abstractmethod
     def set_graph(self):
-        df = pd.read_csv(self.file)
-        fig, ax = plt.subplots(figsize=self.shape)
-        if self.x == "Date":
-            df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
-            sns.lineplot(ax=ax, x=df[self.x], y=df[self.y], data=df)
-        else:
-            sns.barplot(x=df[self.x], y=df[self.y]).set_title(self.title)
+        raise NotImplementedError('call to abstract method ')
 
     def get_graph(self):
         plt.show()
+
+    def graph_to_image(self, image_name):
+        plt.savefig(image_name)
