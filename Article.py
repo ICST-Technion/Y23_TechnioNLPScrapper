@@ -1,8 +1,12 @@
+from collections import Counter
+from string import punctuation
+import csv
 import bs4 as bs
 import urllib.request
 from datetime import datetime
 from tldextract import extract
 import re
+import os
 
 '''
 finds the date property in Ynet articles, given the extracted parsed tree
@@ -62,9 +66,9 @@ class Article:
     def __init__(self, link):
         self.link = link
         source = urllib.request.urlopen(link).read()
-        soup = bs.BeautifulSoup(source, 'lxml')
-        self.title = soup.title.string
-        self.date = parse_date(extract_date(soup))
+        self.soup = bs.BeautifulSoup(source, 'lxml')
+        self.title = self.soup.title.string
+        self.date = parse_date(extract_date(self.soup))
         self.website = get_website_name(link)
 
     def find_text_by_regex(self, regex):
@@ -72,9 +76,61 @@ class Article:
         Returns a list of strings which contain the regular expression given as a parameter
         regex- a regular expression to search for in the website,string
         """
-        source = urllib.request.urlopen(self.link).read()
-        soup = bs.BeautifulSoup(source, 'lxml')
         sentences = []
-        for paragraph in soup.body.findAll(re.compile(regex)):
+        for paragraph in self.soup.findAll(string=re.compile(regex)):
             sentences.append(paragraph.get_text())
         return sentences
+
+    def count_word_in_webpage(self, word):
+        """
+        parameters:
+        word- the word we want to count, string
+        returns number of instances of that word in the text-integer
+        """
+        return len(self.soup.find_all(string=re.compile(word)))
+
+    def most_common_words_in_page(self, num=5):
+        """
+        finds num most common words in the page
+        Returns:
+            a list of the most common words in the webpage- pairs of: (word,count)
+        """
+        # We get the words within paragraphs
+
+        paragraphs = (''.join(s.findAll(string=True)) for s in self.soup.findAll('p'))
+        paragraph_count = Counter((x.rstrip(punctuation).lower() for y in paragraphs for x in y.split()))
+        # We get the words within divs
+        divs = (''.join(s.findAll(string=True)) for s in self.soup.findAll('div'))
+        div_count = Counter((x.rstrip(punctuation).lower() for y in divs for x in y.split()))
+        total = div_count + paragraph_count
+        return total.most_common(num)
+
+    def write_article_info_to_file(self, file_name, num_rows=0, words=[]):
+        """
+    Writes data from the article in the following format:
+    Date,Website,Keyword,Count
+    the keywords can be either the most common words, or a list of specific words we want
+    this function will append to a file if already exists
+    file_name-
+    words- list of keywords we want to count in the article, if empty, counts the most common words
+    num_rows- the number of records (not including the field names row)
+    note: the csv in the project shows up the words in an incorrect order from count due to encoding,
+    but the file itself shows it correctly
+        """
+        array = []
+        # each row is an array of the information we want from the article- word count, date,keyword, site etc.
+
+        word_to_count = self.most_common_words_in_page(num_rows)
+        if not os.path.exists(file_name):
+            title_row = ['Date', 'Website', 'Keyword', 'Count']
+            array.append(title_row)
+        for i in range(num_rows):
+            if not words:
+                row = [self.date, self.website, word_to_count[i][0], word_to_count[i][1]]
+            else:
+                row = [self.date, self.website, words[i], self.count_word_in_webpage(words[i])]
+            array.append(row)
+        f = open(file_name, 'a')
+        w = csv.writer(f, lineterminator='\n')
+        w.writerows(array)
+        f.close()
