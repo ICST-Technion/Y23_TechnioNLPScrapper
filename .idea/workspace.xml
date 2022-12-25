@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7cfbf4ff-855c-41ac-b926-948dc90d1b86" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/SqlQueries.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SqlQueriesTest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transfer.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/TechnioNLPScrapper.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TechnioNLPScrapper.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ArticleTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/ArticleTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/GraphTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MVP_count_over_time.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MVP_keyword_by_counter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MVP_keyword_over_time.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/date_dummy.csv" beforeDir="false" />
-    </list>
+    <list default="true" id="7cfbf4ff-855c-41ac-b926-948dc90d1b86" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
