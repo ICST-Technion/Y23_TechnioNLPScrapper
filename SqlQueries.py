@@ -19,7 +19,6 @@ def copy_csv_to_sql(file_name):
         port=5433,
         password="password",
     )
-    # conn = psycopg2.connect("host=localhost dbname=TechnioNLPScrapper user=postgres")
     cur = conn.cursor()
     with open(file_name, 'r') as f:
         next(f)  # Skip the header row.
