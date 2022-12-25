@@ -7,7 +7,7 @@ from Graph import Graph
 class CompareGraph(Graph):
     def set_graph(self):
         sns.set_theme(style="ticks")
-        df = pd.read_csv(self.file,encoding='Windows-1255')
+        df = pd.read_csv(self.file, encoding='Windows-1255')
         fig, ax = plt.subplots(figsize=self.shape)
         sns.despine(fig)
         df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')

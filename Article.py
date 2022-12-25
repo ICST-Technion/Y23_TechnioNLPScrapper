@@ -134,3 +134,20 @@ class Article:
         w = csv.writer(f, lineterminator='\n')
         w.writerows(array)
         f.close()
+
+    def create_rows_to_database(self, keyword_intonation_list):
+        """
+        given a keyword list, convert it into a format which can be written to the database
+        :param keyword_intonation_list:
+        list of tuples, each tuple is (keyword,intonation)
+        keyword- string
+        intonation- True: positive, False:negative
+        :return: a list of the tuples :
+         (website name, the keyword, date of the article, the number of times the keyword shows up in the article,
+        the link to the article, the intonation of the keyword)
+        """
+        rows = []
+        for keyword, intonation in keyword_intonation_list:
+            rows.append((self.website, keyword, self.date.strftime("%Y-%m-%d, %H:%M:%S"),
+                         str(self.count_word_in_webpage(keyword)), self.link, str(intonation)))
+        return rows
