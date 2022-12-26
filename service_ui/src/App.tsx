@@ -4,6 +4,8 @@ import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
 import { About } from './About';
 import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
+import { Background } from './Components/Background';
+import { Logo } from './Components/Logo';
 
 export class advancedQueryData{
   includedWebsites:Map<number, string>;
@@ -58,39 +60,49 @@ function App() {
       </p>
     )
   }
+  const getPage = () => {
+    if(pageNumber === 0){
+      return (
+        <>
+          <Logo />
+          <SearchPage data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
+        </>
+      );
+    }
+    else if(pageNumber === 1){
+      return (
+        <>
+          <BaseResults QueryData={QueryData} includedKeywords={keywords} setPageNumber={setPageNumber} />
+        </>
+      )
+    }
+    else if(pageNumber === 2){
+      return (
+        <>
+          <Logo />
+          <About setPageNumber={setPageNumber} />
+        </>
+      )
+    }
+    else if(pageNumber == 3) {
+      return (
+        <>
+          <Logo />
+          <AdvancedSearch data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
+        </>
+      )
+    }
+    else {
+      return (<div> INCORRECT PAGE NUMBER </div>)
+    }
+  }
 
-  if(pageNumber === 0){
-    return (
-      <>
-        <SearchPage data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
-      </>
-    );
-  }
-  else if(pageNumber === 1){
-    return (
-      <>
-        <BaseResults QueryData={QueryData} includedKeywords={keywords} setPageNumber={setPageNumber} />
-      </>
-    )
-  }
-  else if(pageNumber === 2){
-    return (
-      <>
-        <About setPageNumber={setPageNumber} />
-      </>
-    )
-  }
-  else if(pageNumber == 3) {
-    return (
-      <>
-        <AdvancedSearch data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
-      </>
-    )
-  }
-  else {
-    return (<div> INCORRECT PAGE NUMBER </div>)
-  }
-
+  return(
+    <>
+    <Background />
+    {getPage()}
+    </>
+  )
 }
 
 export default App;

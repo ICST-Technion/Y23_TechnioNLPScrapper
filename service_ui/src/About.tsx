@@ -1,6 +1,4 @@
 import React from 'react';
-import { Background } from './Components/Background';
-import { Logo } from './Components/Logo';
 
 
 export interface aboutProps {
@@ -11,10 +9,8 @@ export const About: React.FC<aboutProps> = ({setPageNumber}) => {
 
   return (
     <>
-    
-    <Background />
+    <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
     <div className="App">
-      <Logo />
       <div className='about-text'>
         <p>
           This project addresses the needs of Sikkuy-Aufoq (SA) 
@@ -34,7 +30,6 @@ export const About: React.FC<aboutProps> = ({setPageNumber}) => {
           of their content.
         </p>
       </div>
-      <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
     </div>
   </>
   )

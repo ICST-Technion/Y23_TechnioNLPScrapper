@@ -2,6 +2,16 @@
   text-align: center;
 }
 
+.top-margin{
+  display:inline-block;
+  margin-top: 5vh;
+}
+
+.centered{
+  width: 100vw;
+  text-align: center;
+}
+
 .App-logo {
   height: 40vh;
   margin-top: -2vh;
