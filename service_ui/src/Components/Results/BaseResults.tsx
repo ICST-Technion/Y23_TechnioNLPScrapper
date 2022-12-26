@@ -2,6 +2,7 @@ import React from 'react';
 import { advancedQueryData } from '../../App';
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from 'react-image-gallery';
+import { Background } from '../Background';
 
 
 export interface baseResultsProps {
@@ -30,6 +31,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
   
       return (
       <>
+      <Background />
         <div className="App">
           <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
           <div className='flex result'>

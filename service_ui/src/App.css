@@ -1,16 +1,21 @@
 .App {
   text-align: center;
-  width:100vw;
-  height:100vh;
-  background-image: url('./Images/BG.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
 }
 
 .App-logo {
   height: 40vh;
   margin-top: -2vh;
   pointer-events: none;
+}
+
+.background{
+  position: fixed;
+  z-index: -2;
+  width:100vw;
+  height:100vh;
+  background-image: url('./Images/BG.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .search-bar{

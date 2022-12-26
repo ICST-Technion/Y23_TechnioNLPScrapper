@@ -1,5 +1,7 @@
 import React from 'react';
 import { advancedQueryData } from '../../App';
+import { Background } from '../Background';
+import { Logo } from '../Logo';
 import { ButtonWithPopUp } from './ButtonWithPopUp';
 import { TimeRange } from './TimeRange';
 
@@ -22,7 +24,9 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
 
     return (
         <>
+        <Background />
             <div className='App'>
+                <Logo />
                 <div className='button-container'>
                     <div className='button-row'>
                     <ButtonWithPopUp ID={0} text='exclude keywords' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.excludedKeywords} setUpdated={data.setExcludedKeywords} />

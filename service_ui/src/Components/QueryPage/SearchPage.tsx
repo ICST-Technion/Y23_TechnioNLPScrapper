@@ -1,9 +1,9 @@
 import TextField from '@mui/material/TextField';
 import React from 'react';
 import { advancedQueryData } from '../../App';
-import { AdvancedSearch } from './AdvancedSearch';
-import logo from './Images/logo.jpg';
+import { Background } from '../Background';
 import searchIcon from './Images/magnifying-glass.png'
+import { Logo } from '../Logo';
 
 
 export interface searchPageProps {
@@ -17,9 +17,10 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
 
     return (
         <>
+        <Background/>
           <div className="App">
               <button className='FAQ' onClick={()=>{setPageNumber(2)}}>About</button>
-              <img src={logo} className="App-logo" alt="logo" />
+              <Logo />
               <div className='search-button'>
                 <TextField className='search-bar'
                   label={'Search Keywords Separated by Space'}
