@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .top-margin{
@@ -8,7 +10,7 @@
 }
 
 .centered{
-  width: 100vw;
+  width: 100%;
   text-align: center;
 }
 
@@ -72,7 +74,7 @@
   display: flex;
   flex-direction: column;
   gap: 6vh 0;
-
+  padding-block-end: 10vh;
 }
 
 .button-row{
@@ -89,7 +91,7 @@
   align-items: center;
   gap: 1vh;
   width: 26vw;
-  max-height: 7vh;
+  height: auto;
 }
 
 .select-button{

@@ -7,12 +7,12 @@ import { Background } from '../Background';
 
 export interface baseResultsProps {
     QueryData:advancedQueryData;
-    includedKeywords:string;
+    includedKeywords:string | undefined;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber}) => {
-    React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, []);
+    React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, [includedKeywords]);
 
     const images = [
         {

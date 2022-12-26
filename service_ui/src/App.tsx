@@ -30,7 +30,7 @@ export class advancedQueryData{
 
 function App() {
 
-  const [keywords, setKeywords] = React.useState<string>("");
+  const [keywords, setKeywords] = React.useState<string | undefined>();
 
   const QueryData =  new advancedQueryData(
     [
