@@ -40,7 +40,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
     }
 
     const getPopUpComponent = () =>{
-        if(ID === 4) return(<div>Currently Only Supports Keyword Counter</div>)
+        if(ID === 4 && showTextBox) return(<div>Currently Only Supports Keyword Counter</div>)
         else {
             return(
             <>
