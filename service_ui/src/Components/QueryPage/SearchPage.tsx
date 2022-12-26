@@ -14,13 +14,6 @@ export interface searchPageProps {
 }
 
 export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywords, setPageNumber}) => {
-    const [showPopUp, setShowPopUp] = React.useState<Map<number,[boolean,boolean]>>(new Map([
-        [0,[false,true]],
-        [1,[false,true]],
-        [2,[false,true]],
-        [3,[false,true]],
-        [4,[false,true]],
-      ]));
 
     return (
         <>
@@ -38,9 +31,9 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
                   } }
                 />
                 <img src={searchIcon} className='search-icon'/>
+                <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
+                <button className='advanced-search-button' onClick={()=>{setPageNumber(3)}}>Advanced Search Options</button>
               </div>
-              <AdvancedSearch data={data} keywords={keywords} setKeywords={setKeywords} 
-            setPageNumber={setPageNumber} showPopUp={showPopUp} setShowPopUp={setShowPopUp} />
           </div>
         </>
       );

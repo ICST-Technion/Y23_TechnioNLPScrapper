@@ -4,6 +4,7 @@ import './App.css';
 import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
 import { About } from './About';
+import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 
 export class advancedQueryData{
   includedWebsites:Map<number, string>;
@@ -77,6 +78,13 @@ function App() {
     return (
       <>
         <About setPageNumber={setPageNumber} />
+      </>
+    )
+  }
+  else if(pageNumber == 3) {
+    return (
+      <>
+        <AdvancedSearch data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
       </>
     )
   }
