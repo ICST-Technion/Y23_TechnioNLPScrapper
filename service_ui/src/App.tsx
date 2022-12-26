@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './Images/logo.jpg';
 import './App.css';
 import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';

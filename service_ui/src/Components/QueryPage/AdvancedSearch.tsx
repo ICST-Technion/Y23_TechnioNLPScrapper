@@ -14,13 +14,6 @@ export interface advancedSearchprops {
 }
 
 export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, setKeywords, setPageNumber}) => {
-    const [showPopUp, setShowPopUp] = React.useState<Map<number,[boolean,boolean]>>(new Map([
-        [0,[false,true]],
-        [1,[false,true]],
-        [2,[false,true]],
-        [3,[false,true]],
-        [4,[false,true]],
-      ]));
 
     return (
         <>
@@ -29,15 +22,15 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
                 <Logo />
                 <div className='button-container'>
                     <div className='button-row'>
-                    <ButtonWithPopUp ID={0} text='exclude keywords' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.excludedKeywords} setUpdated={data.setExcludedKeywords} />
-                    <TimeRange text=' Time Range' showPopUp={showPopUp} setShowPopUp={setShowPopUp} timeRange={data.timeRange} setTimeRange={data.setTimeRange}/>
+                    <ButtonWithPopUp ID={0} text='exclude keywords' updated={data.excludedKeywords} setUpdated={data.setExcludedKeywords} />
+                    <TimeRange text=' Time Range' timeRange={data.timeRange} setTimeRange={data.setTimeRange}/>
                     </div>
                     <div className='button-row'>
-                    <ButtonWithPopUp ID={2} text='Specify Websites' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.includedWebsites} setUpdated={data.setIncludedWebsites}/> 
-                    <ButtonWithPopUp ID={3} text='Exclude Websites' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.excludedWebsites} setUpdated={data.setExcludedWebsites}/> 
+                    <ButtonWithPopUp ID={2} text='Specify Websites' updated={data.includedWebsites} setUpdated={data.setIncludedWebsites}/> 
+                    <ButtonWithPopUp ID={3} text='Exclude Websites' updated={data.excludedWebsites} setUpdated={data.setExcludedWebsites}/> 
                     </div>
                     <div className='button-row'>
-                    <ButtonWithPopUp ID={4} text='specify statitcs' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.specificStatistic} setUpdated={data.setSpecificStatistic}/>
+                    <ButtonWithPopUp ID={4} text='specify statitcs' updated={data.specificStatistic} setUpdated={data.setSpecificStatistic}/>
                     </div>
                 </div>
                 <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>

@@ -7,33 +7,17 @@ import { SelectedValues } from './SelectedValues';
 export interface buttonProps {
     ID:number;
     text:string;
-    showPopUp:Map<number,[boolean,boolean]>;
-    setShowPopUp:React.Dispatch<React.SetStateAction<Map<number,[boolean,boolean]>>>;
     updated:Map<number, string>;
     setUpdated:React.Dispatch<React.SetStateAction<Map<number, string>>>;
 }
 
-export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, showPopUp, setShowPopUp, updated, setUpdated}) => {
+export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUpdated}) => {
     const [message, setMessage] = React.useState('');
     const [counter, setCounter] = React.useState<number>(0);
+    const [showTextBox, setShowTextBox] = React.useState<Boolean>(false);
 
     const handleOnClick = () => {
-        let newMap:Map<number,[boolean,boolean]> = new Map(showPopUp);
-        if(showPopUp.get(ID)![0] === true){
-            if(updated.size === 0){
-                newMap.set(ID, [false, true]);
-            }
-            else if (showPopUp.get(ID)![1] === false){
-                newMap.set(ID, [true, true]);
-            }
-            else {
-                newMap.set(ID, [true, false]);
-            }
-        }
-        else{ 
-            newMap.set(ID, [true, true]);
-        }
-        setShowPopUp(newMap);
+        setShowTextBox(!showTextBox);
     }
 
     const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -61,7 +45,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, showPopUp, set
             return(
             <>
                 <div className='type-in'>
-                {showPopUp.get(ID)![1]? 
+                {showTextBox? 
                     <input
                         type="text"
                         id="message"
@@ -81,7 +65,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, showPopUp, set
     return(
         <div className='button-pop-component'>
             <button className='select-button' onClick={handleOnClick}> {text} </button>
-            {showPopUp.get(ID)![0]? getPopUpComponent(): <></>}
+            {getPopUpComponent()}
         </div>
     )
 }
