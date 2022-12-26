@@ -23,14 +23,27 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
     const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setMessage(event.target.value);
       };
+
+    React.useEffect((()=>{
+        //takes care of message being changed into " " at the start of a new keyword
+        //this deletes it and allows all next words to start from index 0
+        if(message === ' ')
+            setMessage('');
+    }),[message])
     
     const handleKeyDown = (event: { key: string; }) => {
-    if (event.key === ' ' || event.key === 'Enter') {
-        // 👇 Get input value
-        setUpdated(updated.set(counter,message.substring(message.lastIndexOf(' '))));
-        setMessage('');
-        setCounter(counter+1);
-    }
+        if (event.key === ' ' || event.key === 'Enter') {
+            // 👇 Get input value
+            let newKey = message.substring(message.lastIndexOf(' '));
+            //make sure we arent adding an empty word
+            if(newKey !== '' && newKey !== undefined)
+            {
+                setUpdated(updated.set(counter,newKey));
+                setCounter(counter+1);
+                setMessage('');
+            }
+            
+        }
     };
 
     const removeOnClick = (index:number) => {
