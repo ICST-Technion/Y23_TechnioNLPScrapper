@@ -1,6 +1,7 @@
 {
   "name": "service_ui",
   "version": "0.1.0",
+  "homepage": "https://jouwana.github.io/TechnioNLPScrapper",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
