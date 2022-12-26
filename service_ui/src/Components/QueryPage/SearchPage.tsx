@@ -1,8 +1,7 @@
 import TextField from '@mui/material/TextField';
 import React from 'react';
 import { advancedQueryData } from '../../App';
-import { ButtonWithPopUp } from './ButtonWithPopUp';
-import { TimeRange } from './TimeRange';
+import { AdvancedSearch } from './AdvancedSearch';
 import logo from './Images/logo.jpg';
 import searchIcon from './Images/magnifying-glass.png'
 
@@ -40,21 +39,8 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
                 />
                 <img src={searchIcon} className='search-icon'/>
               </div>
-              <div className='button-container'>
-                <div className='button-row'>
-                  <ButtonWithPopUp ID={0} text='exclude keywords' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.excludedKeywords} setUpdated={data.setExcludedKeywords} />
-                  <TimeRange text=' Time Range' showPopUp={showPopUp} setShowPopUp={setShowPopUp} timeRange={data.timeRange} setTimeRange={data.setTimeRange}/>
-                </div>
-                <div className='button-row'>
-                  <ButtonWithPopUp ID={2} text='Specify Websites' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.includedWebsites} setUpdated={data.setIncludedWebsites}/> 
-                  <ButtonWithPopUp ID={3} text='Exclude Websites' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.excludedWebsites} setUpdated={data.setExcludedWebsites}/> 
-                </div>
-                <div className='button-row'>
-                  <ButtonWithPopUp ID={4} text='specify statitcs' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={data.specificStatistic} setUpdated={data.setSpecificStatistic}/>
-                </div>
-              </div>
-              <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
-              <button className='clear-query-button' onClick={()=>{window.location.reload()}}>Clear</button>
+              <AdvancedSearch data={data} keywords={keywords} setKeywords={setKeywords} 
+            setPageNumber={setPageNumber} showPopUp={showPopUp} setShowPopUp={setShowPopUp} />
           </div>
         </>
       );
