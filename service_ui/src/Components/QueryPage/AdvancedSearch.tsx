@@ -13,6 +13,15 @@ export interface advancedSearchprops {
 
 export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, setKeywords, setPageNumber}) => {
 
+    const handleClear = () => {
+        data.setExcludedKeywords(new Map());
+        data.setIncludedWebsites(new Map());
+        data.setExcludedWebsites(new Map());
+        data.setSpecificStatistic(new Map());
+        data.setTimeRange(undefined);
+        setKeywords("");
+    }
+
     return (
         <>
             <div className='App'>
@@ -31,7 +40,7 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
                 </div>
                 <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
                 <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
-                <button className='clear-query-button' onClick={()=>{window.location.reload()}}>Clear</button>
+                <button className='clear-query-button' onClick={handleClear}>Clear</button>
               </div>
         </>
 
