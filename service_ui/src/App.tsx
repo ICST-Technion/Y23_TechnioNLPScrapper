@@ -1,12 +1,8 @@
 import React from 'react';
 import logo from './Images/logo.jpg';
-import searchIcon from './Images/magnifying-glass.png'
 import './App.css';
-import { TextField } from "@mui/material";
-import {ButtonWithPopUp} from './Components/QueryPage/ButtonWithPopUp'
-import { TimeRange } from './Components/QueryPage/TimeRange';
-import "react-image-gallery/styles/css/image-gallery.css";
-import ImageGallery from 'react-image-gallery';
+import { SearchPage } from './Components/QueryPage/SearchPage';
+import { BaseResults } from './Components/Results/BaseResults';
 
 export class advancedQueryData{
   includedWebsites:Map<number, string>;
@@ -32,13 +28,6 @@ export class advancedQueryData{
 function App() {
 
   const [keywords, setKeywords] = React.useState<string>("");
-  const [showPopUp, setShowPopUp] = React.useState<Map<number,[boolean,boolean]>>(new Map([
-    [0,[false,true]],
-    [1,[false,true]],
-    [2,[false,true]],
-    [3,[false,true]],
-    [4,[false,true]],
-  ]));
 
   const QueryData =  new advancedQueryData(
     [
@@ -72,67 +61,15 @@ function App() {
   if(pageNumber === 0){
     return (
       <>
-        <div className="App">
-            <button className='FAQ' onClick={()=>{setPageNumber(2)}}>About</button>
-            <img src={logo} className="App-logo" alt="logo" />
-            <div className='search-button'>
-              <TextField className='search-bar'
-                label={'Search Keywords Separated by Space'}
-                value={keywords}
-                helperText={!keywords.length ? 'At Least One Keyword is Required' : ''}
-                onChange={(e) => {
-                  const text = e.target.value;
-                  setKeywords(text);
-                } }
-              />
-              <img src={searchIcon} className='search-icon'/>
-            </div>
-            <div className='button-container'>
-              <div className='button-row'>
-                <ButtonWithPopUp ID={0} text='exclude keywords' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={QueryData.excludedKeywords} setUpdated={QueryData.setExcludedKeywords} />
-                <TimeRange text=' Time Range' showPopUp={showPopUp} setShowPopUp={setShowPopUp} timeRange={QueryData.timeRange} setTimeRange={QueryData.setTimeRange}/>
-              </div>
-              <div className='button-row'>
-                <ButtonWithPopUp ID={2} text='Specify Websites' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={QueryData.includedWebsites} setUpdated={QueryData.setIncludedWebsites}/> 
-                <ButtonWithPopUp ID={3} text='Exclude Websites' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={QueryData.excludedWebsites} setUpdated={QueryData.setExcludedWebsites}/> 
-              </div>
-              <div className='button-row'>
-                <ButtonWithPopUp ID={4} text='specify statitcs' showPopUp={showPopUp} setShowPopUp={setShowPopUp} updated={QueryData.specificStatistic} setUpdated={QueryData.setSpecificStatistic}/>
-              </div>
-            </div>
-            <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
-            <button className='clear-query-button' onClick={()=>{window.location.reload()}}>Clear</button>
-        </div>
+        <SearchPage data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
       </>
     );
   }
   else if(pageNumber === 1){
-    const images = [
-      {
-        original: require('./Components/Results/Images/graph1.jpg'),
-        thumbnail: require('./Components/Results/Images/graph1.jpg'),
-      },
-      {
-        original: require('./Components/Results/Images/graph2.jpg'),
-        thumbnail: require('./Components/Results/Images/graph2.jpg'),
-      },
-      {
-        original: require('./Components/Results/Images/graph3.jpg'),
-        thumbnail: require('./Components/Results/Images/graph3.jpg'),
-      },
-    ];
-
     return (
-    <>
-      <div className="App">
-        <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <div className='flex result'>
-          <h3 className='result-header'> Example Results</h3>
-          <h4 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h4>
-          <ImageGallery items={images} showThumbnails showFullscreenButton showNav/>
-        </div>
-      </div>
-    </>
+      <>
+        <BaseResults QueryData={QueryData} includedKeywords={keywords} setPageNumber={setPageNumber} />
+      </>
     )
   }
   else if(pageNumber === 2){
