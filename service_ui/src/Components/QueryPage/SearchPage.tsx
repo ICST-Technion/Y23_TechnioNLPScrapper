@@ -16,6 +16,8 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
     return (
         <>
         <button className='FAQ' onClick={()=>{setPageNumber(2)}}>About</button>
+        <img src={searchIcon} className='search-icon'/>
+        <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
           <div className="App">
               <div className='search-button'>
                 <TextField className='search-bar'
@@ -27,8 +29,7 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
                     setKeywords(text);
                   } }
                 />
-                <img src={searchIcon} className='search-icon'/>
-                <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
+                <br/>
                 <button className='advanced-search-button' onClick={()=>{setPageNumber(3)}}>Advanced Search Options</button>
               </div>
           </div>
