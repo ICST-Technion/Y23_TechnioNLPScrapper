@@ -1,9 +1,13 @@
 import unittest
 from SqlQueries import *
 
+
 class MyTestCase(unittest.TestCase):
-    def test_csv_to_sql_transfer(self):
-        copy_csv_to_sql('example_csvs\transfer.csv')
+
+    def test_select_sql(self):
+        sql_query = SQLQuery()
+        rows = sql_query.select_articles_from_sql(columns="*", conditions="count=8")
+        self.assertEqual(len(rows), 2)
 
 
 if __name__ == '__main__':

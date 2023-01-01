@@ -40,11 +40,13 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(row_count, 6)
 
     def test_write_keywords_to_sql(self):
-        sql_article = Article('https://www.ynetnews.com/article/sk00tgzxyi')
-        keyword_example = [('shooting', False), ('violent', False)]
+        sql_article = Article('https://www.ynetnews.com/article/hj11i0w19o')
+        keyword_example = [('divide', False), ('security', True)]
+        sql_query = SQLQuery()
         rows = sql_article.create_rows_to_database(keyword_example)
         self.assertEqual(len(rows), len(keyword_example))
-        insert_article_to_sql(rows)
+        sql_query.insert_article_to_sql(rows)
+
 
 if __name__ == '__main__':
     unittest.main()
