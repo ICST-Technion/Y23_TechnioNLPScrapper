@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from './Images/logo.jpg'
 
 
 export interface aboutProps {
@@ -7,10 +8,9 @@ export interface aboutProps {
 
 export const About: React.FC<aboutProps> = ({setPageNumber}) => {
 
-  return (
-    <>
-    <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-    <div className="App">
+    return (
+<div className="App">
+      <img src={logo} className="App-logo" alt="logo" />
       <div className='about-text'>
         <p>
           This project addresses the needs of Sikkuy-Aufoq (SA) 
@@ -29,8 +29,8 @@ export const About: React.FC<aboutProps> = ({setPageNumber}) => {
           digital-newspapers for relevant articles and evaluating the intonation/meaning
           of their content.
         </p>
-      </div>
+       </div>
+      <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
     </div>
-  </>
-  )
+    )
 }

@@ -12,14 +12,16 @@ import { RangeType } from 'rsuite/esm/DateRangePicker';
 
 export interface timeRangeProps {
     text:string;
+    showPopUp:Map<number,[boolean,boolean]>;
+    setShowPopUp:React.Dispatch<React.SetStateAction<Map<number,[boolean,boolean]>>>;
     timeRange:[Date,Date] | undefined;
     setTimeRange:React.Dispatch<React.SetStateAction<[Date,Date] | undefined>>;
 }
 
-export const TimeRange: React.FC<timeRangeProps> = ({text, timeRange, setTimeRange}) => {
-  const ID = 1;
-  const [showSelector, setShowSelector] = React.useState<Boolean>(false);
-  const {afterToday} = DateRangePicker;
+export const TimeRange: React.FC<timeRangeProps> = ({text, showPopUp, setShowPopUp, timeRange, setTimeRange}) => {
+    const ID = 1;
+
+const {afterToday} = DateRangePicker;
 
 const predefinedRanges:RangeType[] = [
     {
@@ -84,7 +86,16 @@ const predefinedRanges:RangeType[] = [
   ];
 
     const handleOnClick = () => {
-      setShowSelector(!showSelector)
+        if(showPopUp.get(ID)![0] === true /*&& timeRange=== undefined*/){
+            let newMap = new Map(showPopUp)
+            newMap.set(ID, [false, true]);
+            setShowPopUp(newMap);
+        }
+        else{ 
+            let newMap = new Map(showPopUp)
+            newMap.set(ID, [true, true]);
+            setShowPopUp(newMap);
+        }
     }
 
     const getDateRangePicker = () => {
@@ -105,26 +116,10 @@ const predefinedRanges:RangeType[] = [
             />
         )
     }
-    const getTimeLabel = () =>{
-      if(!timeRange){
-        return (
-          <>
-          </>
-        )
-      }
-      const startDay = timeRange![0];
-      const endDay = timeRange![1];
-      return (
-        <label>
-          {`${startDay.toDateString()} - ${endDay.toDateString()}`}
-        </label>
-      )
-    }
-    
     return(
         <div className='button-pop-component'>
             <button className='select-button' onClick={handleOnClick}> {text} </button>
-            {showSelector? getDateRangePicker(): getTimeLabel()}
+            {showPopUp.get(ID)![0]? getDateRangePicker(): <></>}
         </div>
     )
 }

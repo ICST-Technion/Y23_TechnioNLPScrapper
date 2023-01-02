@@ -2,17 +2,16 @@ import React from 'react';
 import { advancedQueryData } from '../../App';
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from 'react-image-gallery';
-import { Background } from '../Background';
 
 
 export interface baseResultsProps {
     QueryData:advancedQueryData;
-    includedKeywords:string | undefined;
+    includedKeywords:string;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber}) => {
-    React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, [includedKeywords]);
+    React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, []);
 
     const images = [
         {
@@ -31,7 +30,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
   
       return (
       <>
-      <Background />
         <div className="App">
           <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
           <div className='flex result'>

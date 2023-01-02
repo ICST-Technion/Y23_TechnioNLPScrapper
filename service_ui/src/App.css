@@ -1,17 +1,10 @@
 .App {
   text-align: center;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.top-margin{
-  display:inline-block;
-  margin-top: 5vh;
-}
-
-.centered{
-  width: 100%;
-  text-align: center;
+  width:100vw;
+  height:100vh;
+  background-image: url('./Images/BG.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .App-logo {
@@ -20,28 +13,21 @@
   pointer-events: none;
 }
 
-.background{
-  position: fixed;
-  z-index: -2;
-  width:100vw;
-  height:100vh;
-  background-image: url('./Images/BG.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-
 .search-bar{
   width: 60vw;
-  height: 4rem;
+  height: 7vh;
 }
 .search-bar .MuiOutlinedInput-root{
   border-radius: 50px;
   width: inherit;
+  height: 6vh !important;
   padding-right: 3.8vw;
 }
 .search-bar .MuiInputLabel-root {
   color: rgb(0 0 0 / 48%);
-  font-size: auto;
+  font-size: 1.3rem;
+  width:max(22vw,29vh);
+  background-color: #f2f4f3;
 }
 .search-bar .MuiInputLabel-root.Mui-focused {
   color: #61a088;
@@ -50,22 +36,14 @@
   border-color: #61a088;
 }
 .search-bar .MuiFormHelperText-root{
-  font-size: auto;
+  font-size: 0.9rem;
 }
 
 .search-icon{
   position: absolute;
-  height: 2rem;
+  height: 3.3vh;
   right: 21.5vw;
-  top:44.5vh;
-}
-.advanced-search-button{
-  position: relative;
-  float: right;
-  right: 21vw;
-  background-color: transparent;
-  color: #61a088;
-  text-decoration: underline;
+  top:39.4vh;
 }
 
 
@@ -74,7 +52,7 @@
   display: flex;
   flex-direction: column;
   gap: 6vh 0;
-  padding-block-end: 10vh;
+
 }
 
 .button-row{
@@ -91,7 +69,7 @@
   align-items: center;
   gap: 1vh;
   width: 26vw;
-  height: auto;
+  max-height: 7vh;
 }
 
 .select-button{
@@ -160,7 +138,7 @@
 }
 
 .FAQ, .go-back-button{
-  position: fixed;
+  position: absolute;
   top: 5vh;
   left:3vw;
   font-size: 1vw;
