@@ -14,7 +14,7 @@ class TestGraph(unittest.TestCase):
         h.get_graph()
 
     def test_count_over_time(self):
-        h = LineGraph(file="example_csvs\date_dummy2.csv", x_axis="Date", y_axis="Count", title="Keyword over time")
+        h = LineGraph(file="../example_csvs/date_dummy2.csv", x_axis="Date", y_axis="Count", title="Keyword over time")
         h.get_graph()
 
     def test_compare_keywords_over_time(self):
