@@ -70,7 +70,10 @@ def advanced_search():
     if time_range==[""]:
         datetime_range=[datetime(year=datetime.now().year-1,month= 1, day=1),datetime.now()]
     else:
-        datetime_range = [datetime.strptime(date_string, "%Y-%m-%d") for date_string in time_range]
+        try:
+            datetime_range = [datetime.strptime(date_string, "%Y-%m-%d") for date_string in time_range]
+        except ValueError:
+            return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)  
 
     links_to_scrap=[]
     #TODO: search for queries and stuff here
