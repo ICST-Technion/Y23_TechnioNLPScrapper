@@ -1,7 +1,8 @@
 import unittest
 
 import matplotlib.pyplot as plt
-
+import sys
+sys.path.append('..')
 from Graph import *
 from CompareGraph import CompareGraph
 from HistGraph import HistGraph

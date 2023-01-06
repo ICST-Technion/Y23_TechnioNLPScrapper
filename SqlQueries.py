@@ -70,8 +70,6 @@ class SQLQuery:
 
     def select_articles_from_sql(self, columns="*", conditions=None):
         """
-
-
         """
         if conditions is not None:
             select_query = f"SELECT {columns} FROM Articles WHERE {conditions}"
@@ -86,6 +84,28 @@ class SQLQuery:
             cur = conn.cursor()
             cur.execute(select_query)
             return cur.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn:
+                cur.close()
+                conn.close()
+
+    def clear_table(self):
+        """
+        clears all records from the table, but table structure remains,
+        unlike DROP and DELETE
+        """
+        clear_query = "TRUNCATE TABLE Articles"
+        conn = None
+        cur = None
+        try:
+            conn = psycopg2.connect(
+                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+            )
+            cur = conn.cursor()
+            cur.execute(clear_query)
+            conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
