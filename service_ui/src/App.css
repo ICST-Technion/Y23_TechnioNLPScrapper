@@ -1,0 +1,310 @@
+.App {
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.top-margin{
+  display:inline-block;
+  margin-top: 5vh;
+}
+
+.centered{
+  width: 100%;
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vh;
+  margin-top: -2vh;
+  pointer-events: none;
+}
+
+.background{
+  position: fixed;
+  z-index: -2;
+  width:100vw;
+  height:100vh;
+  background-image: url('./Images/BG.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.search-bar{
+  width: 60vw;
+  height: 4rem;
+}
+.search-bar .MuiOutlinedInput-root{
+  border-radius: 50px;
+  width: inherit;
+  padding-right: 3.8vw;
+}
+.search-bar .MuiInputLabel-root {
+  color: rgb(0 0 0 / 48%);
+  font-size: auto;
+}
+.search-bar .MuiInputLabel-root.Mui-focused {
+  color: #61a088;
+}
+.search-bar .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #61a088;
+}
+.search-bar .MuiFormHelperText-root{
+  font-size: auto;
+}
+
+.search-icon{
+  position: absolute;
+  height: 2rem;
+  right: 21.5vw;
+  top:44.5vh;
+}
+.advanced-search-button{
+  position: relative;
+  float: right;
+  right: 21vw;
+  background-color: transparent;
+  color: #61a088;
+  text-decoration: underline;
+}
+
+
+.button-container{
+  margin-top: 7vh;
+  display: flex;
+  flex-direction: column;
+  gap: 6vh 0;
+  padding-block-end: 10vh;
+}
+
+.button-row{
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width:60vw;
+}
+
+.button-pop-component{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vh;
+  width: 26vw;
+  height: auto;
+}
+
+.select-button{
+  background-color: none;
+  border-radius: 20px;
+  border-width: 2px;
+  width: 18vw;
+  height: 4vh;
+  font-weight: bold;
+  text-transform: capitalize;
+  border-color: rgb(210, 209, 209);
+  font-size: 1.2vw;
+}
+
+.select-button:hover{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.select-button:active{
+  background-color: rgb(178, 177, 177);
+}
+
+.run-query-button{
+  position: absolute;
+  bottom: 10vh;
+  right:5vw;
+  background-color:#b2ccc1;
+  border-color: #a2beb2;
+  border-radius: 20px;
+  font-size: 1.3vw;
+  font-weight: bold;
+  border-width: 3px;
+  width: 9.5vw;
+  height: 4vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: end;
+}
+
+.run-query-button:hover{
+  background-color:#a0c0b3;
+}
+
+.run-query-button:active{
+  background-color:#8cb0a2;
+}
+
+.clear-query-button{
+  position: absolute;
+  right: 21vw;
+  top: 44.5vh;
+  font-size: 1vw;
+  font-weight: bold;
+  border-width: 2px;
+  border-color: rgb(218, 216, 216);
+  border-radius: 20px;
+  background-color: #f2f4f3;
+  width: 4vw;
+  height: 3vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.FAQ, .go-back-button{
+  position: fixed;
+  top: 5vh;
+  left:3vw;
+  font-size: 1vw;
+  font-weight: bold;
+  border-width: 2px;
+  border-color: rgb(218, 216, 216);
+  border-radius: 20px;
+  background-color: #f2f4f3;
+  width: 4vw;
+  height: 3vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.go-back-button{
+  font-size: 0.8vw !important;
+  width: 6vw !important;
+  text-transform: capitalize;
+}
+
+.FAQ:hover, .clear-query-button:hover, .go-back-button:hover{
+  background-color: rgb(218, 216, 216);
+}
+.FAQ:active, .clear-query-button:active, .go-back-button:active{
+  background-color: rgb(199, 197, 197);
+}
+
+.type-in{
+  display: flex;
+  flex-direction: column;
+}
+
+.type-in input{
+  width: 13vw;
+  align-self: center;
+  border-radius: 12px;
+  border-width: 1px;
+}
+
+/*calendar customization !!!!*/
+/*selected edges*/
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+background-color: #99d1bb !important;
+}
+/*selected range*/
+.rs-calendar-table-cell-in-range .rs-calendar-table-cell-content, .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  background-color: #99d1bb5a ;
+}
+/*calendar bg*/
+.rs-anim-fade.rs-anim-in.placement-bottom-start.rs-picker-daterange-menu.rs-picker-menu{
+  background-color: #f3f5f4;
+}
+
+.rs-stack-item{
+  color: #61a088;
+}
+
+.rs-stack-item button{
+  color: #61a088;
+}
+
+.rs-stack-item .rs-picker-toolbar-right button{
+  background-color: #61a088;
+  color:#f2f4f3;
+}
+
+.rs-stack-item span{
+  color: #61a088 !important;
+}
+
+.rs-picker-default .rs-picker-toggle:hover{
+  border-color: #61a088 !important;
+}
+
+.graphs{
+  width: 24vw;
+  height: auto;
+}
+
+.flex{
+  display: flex;
+  flex-direction: column;
+  gap: 15vh;
+}
+
+.selected-values-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4vh 0.4vw;
+  margin-top: 1vh;
+}
+
+.selected-value {
+  border: 1px solid #689e8a;
+  border-radius: 20px;
+  padding: 1px;
+  padding-left: 4px;
+}
+.selected-value button{
+  border: none;
+  color:  #689e8a;
+  background: transparent;
+  margin-left: 0.1vw;
+}
+
+.about-text {
+  width: 70vw;
+  text-align: center;
+  margin-left: 15vw;
+  font-size: 1.4vw;
+  font-weight: 600;
+}
+
+.about-text p{
+  margin-bottom: 4vh;
+}
+
+.result{
+  gap: 3vh;
+  padding-top: 8vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.result .image-gallery {
+  width: 45%;
+  max-height: 85vh;
+  height: auto;
+}
+
+.result .image-gallery-slide img {
+  width: 100%;
+  height: auto;
+  max-height: 50vh;
+  object-fit:contain;
+  overflow: hidden;
+  object-position: center center;
+}
+
+.result .fullscreen .image-gallery-slide img {
+  max-height: 100vh;
+  width: auto;
+}
