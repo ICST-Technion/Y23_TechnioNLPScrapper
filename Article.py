@@ -8,23 +8,10 @@ from tldextract import extract
 import re
 import os
 
-'''
-finds the date property in Ynet articles, given the extracted parsed tree
-returns the date as a string in the format
-"YYYY-MM-DDTHH:MM:SS.SSSSSSZ"
-Y- year
-M-month
-D- day
-H-hour
-M-minute
-S-second
-'''
 
 
-def extract_date(soup):
-    soup.find('head')
-    date_property = soup.find("meta", property="article:published_time")
-    return date_property.get("content")
+
+
 
 
 '''
@@ -45,7 +32,11 @@ def parse_date(date_as_string):
                           , int(hour_minute[0]), int(hour_minute[1]))
     return parsed_day
 
-
+'''
+extract the name of the website from the link without tld,
+for example- www.ynet.co.il
+will return just ynet
+'''
 def get_website_name(link):
     _, name, _ = extract(link)
     return name
@@ -68,18 +59,41 @@ class Article:
         source = urllib.request.urlopen(link).read()
         self.soup = bs.BeautifulSoup(source, 'lxml')
         self.title = self.soup.title.string
-        self.date = parse_date(extract_date(self.soup))
         self.website = get_website_name(link)
+        self.date = parse_date(self.extract_date())
+
+    def extract_date(self):
+        '''
+finds the date property in Ynet articles, given the extracted parsed tree
+returns the date as a string in the format
+"YYYY-MM-DDTHH:MM:SS.SSSSSSZ"
+Y- year
+M-month
+D- day
+H-hour
+M-minute
+S-second
+'''
+        if self.website=="ynet" or self.website=="ynetnews":    
+            date_property = self.soup.find("meta", property="article:published_time")
+            return date_property.get("content")
+        elif self.website=="israelhayom":
+            return self.soup.time.get('datetime')
+            #the marker   
+        elif self.website=="themarker":
+            date_property = self.soup.head.find("meta", property="article:published")
+            return date_property.get("content")
+        else:
+            #we don't know how to extract
+            raise Exception('Extraction of date unknown')
+
 
     def find_text_by_regex(self, regex):
         """
         Returns a list of strings which contain the regular expression given as a parameter
         regex- a regular expression to search for in the website,string
         """
-        sentences = []
-        for paragraph in self.soup.findAll(name='div',string=re.compile(regex)):
-            sentences.append(paragraph.get_text())
-        return sentences
+        return [paragraph.get_text() for paragraph in self.soup.findAll(name='div',string=re.compile(regex))]
 
     def count_word_in_webpage(self, word):
         """

@@ -15,6 +15,12 @@ class ArticleTests(unittest.TestCase):
     def test_date_extraction(self):
         self.assertEqual(self.example_article.date, datetime(2022, 12, 1, 13, 42))
 
+    def test_different_sites_date_extraction(self):
+        israel_hayom_article=Article('https://www.israelhayom.co.il/magazine/hashavua/article/13542285')
+        self.assertEqual(israel_hayom_article.date, datetime(2023, 1, 5, 10, 31))
+        the_marker_article=Article('https://www.themarker.com/news/2023-01-05/ty-article/.premium/00000185-8233-d870-abc5-967750f90000')
+        self.assertEqual(the_marker_article.date, datetime(2023, 1, 5, 15, 56))
+
     def test_website_name(self):
         self.assertEqual(self.example_article.website, "ynet")
 
