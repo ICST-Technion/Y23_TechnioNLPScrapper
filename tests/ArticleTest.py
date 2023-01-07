@@ -1,6 +1,6 @@
 import unittest
-import sys
-sys.path.append('..')
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Article import *
 from SqlQueries import *
 
@@ -33,13 +33,7 @@ class ArticleTests(unittest.TestCase):
         print(common_list)
         self.assertEqual(len(common_list), 7)
 
-    def test_write_article_info_to_file(self):
-        # the reason we check for 6 rows is: 5 records+ 1 fields row
-        self.example_article.write_article_info_to_file('example.csv', num_rows=5)
-        with open('example.csv', 'r') as file:
-            csvreader = csv.reader(file)
-            row_count = sum(1 for _ in csvreader)
-        self.assertEqual(row_count, 6)
+
 
     def test_write_keywords_to_sql(self):
         sql_article = Article('https://www.ynetnews.com/article/hj11i0w19o')

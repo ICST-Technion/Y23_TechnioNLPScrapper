@@ -77,7 +77,7 @@ class Article:
         regex- a regular expression to search for in the website,string
         """
         sentences = []
-        for paragraph in self.soup.findAll(string=re.compile(regex)):
+        for paragraph in self.soup.findAll(name='div',string=re.compile(regex)):
             sentences.append(paragraph.get_text())
         return sentences
 
@@ -105,35 +105,6 @@ class Article:
         total = div_count + paragraph_count
         return total.most_common(num)
 
-    def write_article_info_to_file(self, file_name, num_rows=0, words=[]):
-        """
-    Writes data from the article in the following format:
-    Date,Website,Keyword,Count
-    the keywords can be either the most common words, or a list of specific words we want
-    this function will append to a file if already exists
-    file_name-
-    words- list of keywords we want to count in the article, if empty, counts the most common words
-    num_rows- the number of records (not including the field names row)
-    note: the csv in the project shows up the words in an incorrect order from count due to encoding,
-    but the file itself shows it correctly
-        """
-        array = []
-        # each row is an array of the information we want from the article- word count, date,keyword, site etc.
-
-        word_to_count = self.most_common_words_in_page(num_rows)
-        if not os.path.exists(file_name):
-            title_row = ['Date', 'Website', 'Keyword', 'Count']
-            array.append(title_row)
-        for i in range(num_rows):
-            if not words:
-                row = [self.date, self.website, word_to_count[i][0], word_to_count[i][1]]
-            else:
-                row = [self.date, self.website, words[i], self.count_word_in_webpage(words[i])]
-            array.append(row)
-        f = open(file_name, 'a')
-        w = csv.writer(f, lineterminator='\n')
-        w.writerows(array)
-        f.close()
 
     def create_rows_to_database(self, keyword_intonation_list):
         """
