@@ -1,29 +1,53 @@
 from collections import Counter
 from string import punctuation
-import csv
+from urllib.error import HTTPError
 import bs4 as bs
 import urllib.request
 from datetime import datetime
 from tldextract import extract
 import re
-import os
 
-
-
-
-
-
+def month_string_to_number(month_string):
+    month_to_number = {
+        "Jan": 1,
+        "Feb": 2,
+        "Mar": 3,
+        "Apr": 4,
+        "May": 5,
+        "Jun": 6,
+        "Jul": 7,
+        "Aug": 8,
+        "Sep": 9,
+        "Oct": 10,
+        "Nov": 11,
+        "Dec": 12
+    }
+    return month_to_number[month_string]
 
 '''
 Convert the string with the date to a datetime object
 date_as_string has the format returned by extract_date
 returns a datetime object with the same Year,Month,Day,Hour,Minute
 as the string
+The string format:
+"YYYY-MM-DDTHH:MM:SS.SSSSSSZ"
+(the format of the seconds doesn't really matter because we aren't using them)
+Y- year
+M-month
+D- day
+H-hour
+M-minute
+S-second
+
 '''
 
 
 def parse_date(date_as_string):
-    date_time_list = date_as_string.rsplit("T")
+    #checking if T is in the string not useful because some websites have IST in date
+    if "T" in date_as_string:
+        date_time_list = date_as_string.rsplit("T")
+    else:
+        date_time_list = date_as_string.rsplit(" ")        
     date = date_time_list[0]
     time = date_time_list[1]
     year_month_day = date.rsplit("-")
@@ -31,6 +55,7 @@ def parse_date(date_as_string):
     parsed_day = datetime(int(year_month_day[0]), int(year_month_day[1]), int(year_month_day[2])
                           , int(hour_minute[0]), int(hour_minute[1]))
     return parsed_day
+
 
 '''
 extract the name of the website from the link without tld,
@@ -48,15 +73,19 @@ class Article:
     the properties are:
     link- the link of the article the scrapping is done from
     make sure that the website allows scrapping first
-
     title: the main title of the article
     date: the date the article was published
-
+    website: the name of the website (without TLD such as .com)
     """
 
     def __init__(self, link):
         self.link = link
-        source = urllib.request.urlopen(link).read()
+        try:
+            #can fail because access is forbidden sometimes
+            source = urllib.request.urlopen(link).read()
+        except HTTPError:
+            print("Website inaccessible")
+            return    
         self.soup = bs.BeautifulSoup(source, 'lxml')
         self.title = self.soup.title.string
         self.website = get_website_name(link)
@@ -64,29 +93,24 @@ class Article:
 
     def extract_date(self):
         '''
-finds the date property in Ynet articles, given the extracted parsed tree
-returns the date as a string in the format
-"YYYY-MM-DDTHH:MM:SS.SSSSSSZ"
-Y- year
-M-month
-D- day
-H-hour
-M-minute
-S-second
+tries to search in common tags in the articles where the date is found
+if can't fund the date, raises exception
+returns the date as a string
 '''
-        if self.website=="ynet" or self.website=="ynetnews":    
-            date_property = self.soup.find("meta", property="article:published_time")
+        date_property = self.soup.head.find("meta", property="article:published_time")
+        if date_property is not None:
             return date_property.get("content")
-        elif self.website=="israelhayom":
-            return self.soup.time.get('datetime')
-            #the marker   
-        elif self.website=="themarker":
-            date_property = self.soup.head.find("meta", property="article:published")
-            return date_property.get("content")
-        else:
+        date_property = self.soup.head.find("meta", property="article:published")
+        if date_property is not None:
+            return date_property.get("content")    
+        date_property=self.soup.time   
+        if date_property is not None:
+            return date_property.get('datetime')
+        date_property=self.soup.head.find("meta", property="og:published_time")
+        if date_property is not None:
+            return date_property.get("content")    
             #we don't know how to extract
-            raise Exception('Extraction of date unknown')
-
+        raise Exception('Extraction of date unknown')
 
     def find_text_by_regex(self, regex):
         """
