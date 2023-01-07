@@ -39,8 +39,6 @@ class ArticleTests(unittest.TestCase):
         print(common_list)
         self.assertEqual(len(common_list), 7)
 
-
-
     def test_write_keywords_to_sql(self):
         sql_article = Article('https://www.ynetnews.com/article/hj11i0w19o')
         keyword_example = [('divide', False), ('security', True)]
