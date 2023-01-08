@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
-import { About } from './About';
+import { FAQ } from './FAQ';
 import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
@@ -16,6 +16,10 @@ export class advancedQueryData{
   setExcludedKeywords:React.Dispatch<React.SetStateAction<Map<number, string>>>;
   specificStatistic:Map<number, string>;
   setSpecificStatistic:React.Dispatch<React.SetStateAction<Map<number, string>>>;
+  positiveKeywords:Map<number, string>;
+  setPositiveKeywords:React.Dispatch<React.SetStateAction<Map<number, string>>>; 
+  negativeKeywords:Map<number, string>;
+  setNegativeKeywords:React.Dispatch<React.SetStateAction<Map<number, string>>>;
   timeRange:[Date,Date] | undefined;
   setTimeRange:React.Dispatch<React.SetStateAction<[Date,Date] | undefined>>;
 
@@ -24,6 +28,8 @@ export class advancedQueryData{
     [this.excludedWebsites, this.setExcludedWebsites] = stateList[1];
     [this.excludedKeywords, this.setExcludedKeywords] = stateList[2];
     [this.specificStatistic, this.setSpecificStatistic] = stateList[3];
+    [this.positiveKeywords,this.setPositiveKeywords] = stateList[4];
+    [this.negativeKeywords,this.setNegativeKeywords] = stateList[5];
     [this.timeRange, this.setTimeRange] = timeState;
   }
 }
@@ -37,6 +43,8 @@ function App() {
       React.useState<Map<number,string>>(new Map()),
       React.useState<Map<number,string>>(new Map()),
       React.useState<Map<number,string>>(new Map()),
+      React.useState<Map<number,string>>(new Map()),
+      React.useState<Map<number,string>>(new Map()), 
       React.useState<Map<number,string>>(new Map())
     ],React.useState<[Date,Date]>()
   )
@@ -80,7 +88,7 @@ function App() {
       return (
         <>
           <Logo />
-          <About setPageNumber={setPageNumber} />
+          <FAQ setPageNumber={setPageNumber} />
         </>
       )
     }

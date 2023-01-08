@@ -308,3 +308,13 @@ background-color: #99d1bb !important;
   max-height: 100vh;
   width: auto;
 }
+
+.Loading-Page{ 
+  text-align: center;
+  background-color: #f2f4f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}

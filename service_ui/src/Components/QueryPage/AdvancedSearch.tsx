@@ -19,6 +19,8 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
         data.setExcludedWebsites(new Map());
         data.setSpecificStatistic(new Map());
         data.setTimeRange(undefined);
+        data.setPositiveKeywords(new Map());  
+        data.setNegativeKeywords(new Map());
         setKeywordMap(new Map());
         if(clearOrigKeywords)
             setKeywords('');
@@ -40,6 +42,10 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
                     <div className='button-row'>
                     <ButtonWithPopUp ID={5} text='included keywords' updated={keywordMap} setUpdated={setKeywordMap} />
                     <ButtonWithPopUp ID={0} text='exclude keywords' updated={data.excludedKeywords} setUpdated={data.setExcludedKeywords} />
+                    </div>
+                    <div className='button-row'>
+                    <ButtonWithPopUp ID={6} text='Positive Keywords' updated={data.positiveKeywords} setUpdated={data.setPositiveKeywords}/> 
+                    <ButtonWithPopUp ID={7} text='Negative Keywords' updated={data.negativeKeywords} setUpdated={data.setNegativeKeywords}/> 
                     </div>
                     <div className='button-row'>
                     <ButtonWithPopUp ID={2} text='Specify Websites' updated={data.includedWebsites} setUpdated={data.setIncludedWebsites}/> 

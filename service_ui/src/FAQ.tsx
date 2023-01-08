@@ -1,11 +1,11 @@
 import React from 'react';
 
 
-export interface aboutProps {
+export interface FAQProps {
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const About: React.FC<aboutProps> = ({setPageNumber}) => {
+export const FAQ: React.FC<FAQProps> = ({setPageNumber}) => {
 
   return (
     <>

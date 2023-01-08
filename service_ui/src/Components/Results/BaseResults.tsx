@@ -14,6 +14,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { randomInt } from 'crypto';
+import CircleLoader from "react-spinners/CircleLoader"; 
 
 
 export interface baseResultsProps {
@@ -23,6 +24,7 @@ export interface baseResultsProps {
 }
 
 export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber}) => {
+    const [loading, setLoading] = React.useState(false);
     const [datasets, setDatasets] = React.useState<any[]>([])
     React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, [includedKeywords]);
     React.useEffect( ()=>{
@@ -85,6 +87,13 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
         },
       ];
 
+      React.useEffect(()=>{ 
+        setLoading(true)
+        setTimeout(()=>{
+          setLoading(false)
+        },2000)
+      },[])
+
       if(datasets.length !== 0){
         return (
           <>
@@ -101,17 +110,25 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
         )
       }
   
-      else return (
-      <>
-      <Background />
-        <div className="App">
-          <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-          <div className='flex result'>
-            <h3 className='result-header'> Example Results</h3>
-            <h4 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h4>
-            <ImageGallery items={images} showThumbnails showFullscreenButton showNav/>
-          </div>
+      else return ( 
+      loading? (
+      <div className="Loading-Page">
+      <CircleLoader
+        color={'#36d7b7'}
+        loading={loading}
+        size={150}
+      />
+      </div>):
+     <>
+     <Background />
+      <div className="App">
+        <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
+        <div className='flex result'>
+          <h3 className='result-header'> Example Results</h3>
+          <h4 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h4>
+          <ImageGallery items={images} showThumbnails showFullscreenButton showNav/>
         </div>
-      </>
-      )
+      </div> 
+    </>
+    )
 }
