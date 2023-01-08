@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
-import { FAQ } from './FAQ';
+import { FAQsPage } from './FAQsPage';
 import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
@@ -87,8 +87,7 @@ function App() {
     else if(pageNumber === 2){
       return (
         <>
-          <Logo />
-          <FAQ setPageNumber={setPageNumber} />
+          <FAQsPage setPageNumber={setPageNumber} />
         </>
       )
     }
