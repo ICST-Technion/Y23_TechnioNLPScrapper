@@ -1,9 +1,9 @@
-from flask import Flask, jsonify, request, make_response
+import os
+import sys
 from datetime import datetime
-import os, sys
-
-# this line allows the python to see, the files in the parent directory and import them
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from flask import Flask, jsonify, request, make_response
+#this line allows python to find our module.
+sys.path.append('..\\SQL')
 from SqlQueries import *
 
 # creating a Flask app

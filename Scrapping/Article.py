@@ -7,6 +7,8 @@ from datetime import datetime
 from tldextract import extract
 import re
 
+
+# this dictionary is here in case we will want to parse new date formats
 def month_string_to_number(month_string):
     month_to_number = {
         "Jan": 1,
@@ -23,6 +25,7 @@ def month_string_to_number(month_string):
         "Dec": 12
     }
     return month_to_number[month_string]
+
 
 '''
 Convert the string with the date to a datetime object
@@ -43,11 +46,11 @@ S-second
 
 
 def parse_date(date_as_string):
-    #checking if T is in the string not useful because some websites have IST in date
+    # checking if T is in the string not useful because some websites have IST in date
     if "T" in date_as_string:
         date_time_list = date_as_string.rsplit("T")
     else:
-        date_time_list = date_as_string.rsplit(" ")        
+        date_time_list = date_as_string.rsplit(" ")
     date = date_time_list[0]
     time = date_time_list[1]
     year_month_day = date.rsplit("-")
@@ -62,6 +65,8 @@ extract the name of the website from the link without tld,
 for example- www.ynet.co.il
 will return just ynet
 '''
+
+
 def get_website_name(link):
     _, name, _ = extract(link)
     return name
@@ -81,11 +86,11 @@ class Article:
     def __init__(self, link):
         self.link = link
         try:
-            #can fail because access is forbidden sometimes
+            # can fail because access is forbidden sometimes
             source = urllib.request.urlopen(link).read()
         except HTTPError:
             print("Website inaccessible")
-            return    
+            return
         self.soup = bs.BeautifulSoup(source, 'lxml')
         self.title = self.soup.title.string
         self.website = get_website_name(link)
@@ -102,14 +107,14 @@ returns the date as a string
             return date_property.get("content")
         date_property = self.soup.head.find("meta", property="article:published")
         if date_property is not None:
-            return date_property.get("content")    
-        date_property=self.soup.time   
+            return date_property.get("content")
+        date_property = self.soup.time
         if date_property is not None:
             return date_property.get('datetime')
-        date_property=self.soup.head.find("meta", property="og:published_time")
+        date_property = self.soup.head.find("meta", property="og:published_time")
         if date_property is not None:
-            return date_property.get("content")    
-            #we don't know how to extract
+            return date_property.get("content")
+            # we don't know how to extract
         raise Exception('Extraction of date unknown')
 
     def find_text_by_regex(self, regex):
@@ -117,7 +122,7 @@ returns the date as a string
         Returns a list of strings which contain the regular expression given as a parameter
         regex- a regular expression to search for in the website,string
         """
-        return [paragraph.get_text() for paragraph in self.soup.findAll(name='div',string=re.compile(regex))]
+        return [paragraph.get_text() for paragraph in self.soup.findAll(name='div', string=re.compile(regex))]
 
     def count_word_in_webpage(self, word):
         """
@@ -142,7 +147,6 @@ returns the date as a string
         div_count = Counter((x.rstrip(punctuation).lower() for y in divs for x in y.split()))
         total = div_count + paragraph_count
         return total.most_common(num)
-
 
     def create_rows_to_database(self, keyword_intonation_list):
         """

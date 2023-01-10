@@ -1,4 +1,7 @@
 import psycopg2
+import sys
+
+sys.path.append('..\\Scrapping')
 from Article import Article
 from urllib.parse import urlparse
 
@@ -6,6 +9,7 @@ from urllib.parse import urlparse
 class SQLQuery:
     def __init__(self):
         self.db_url = "postgres://ltwwxnaj:BYQgr0k-KgVH98QbpkMfZ1USDpX2XDGU@ella.db.elephantsql.com/ltwwxnaj"
+        # this line allows us to figure out the connection information to our database independent of the actual url
         url = urlparse(self.db_url)
         self.database = url.path[1:]
         self.user = url.username

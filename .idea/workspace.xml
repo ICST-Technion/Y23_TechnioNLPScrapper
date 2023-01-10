@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7cfbf4ff-855c-41ac-b926-948dc90d1b86" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API.py" beforeDir="false" afterPath="$PROJECT_DIR$/API/API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API/API.py" beforeDir="false" afterPath="$PROJECT_DIR$/API/API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Article.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scrapping/Article.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SqlQueries.py" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/SqlQueries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/ArticleTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/ArticleTest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SqlQueriesTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SqlQueriesTest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +59,14 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\TechnioNLPScrapper\SQL" />
+      <recent name="D:\TechnioNLPScrapper\Scrapping" />
       <recent name="D:\TechnioNLPScrapper\API" />
       <recent name="D:\TechnioNLPScrapper\tests" />
       <recent name="D:\TechnioNLPScrapper\example_csvs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.API">
+  <component name="RunManager" selected="Python.SqlQueriesTest (1)">
     <configuration name="API" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="TechnioNLPScrapper" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -82,6 +88,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ArticleTest (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TechnioNLPScrapper" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/ArticleTest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="ArticleTest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -95,27 +122,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
       <option name="SCRIPT_NAME" value="D:\TechnioNLPScrapper\tests\ArticleTest.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="GraphTest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="TechnioNLPScrapper" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\TechnioNLPScrapper\tests\GraphTest.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -206,18 +212,18 @@
       <item itemvalue="Python.main" />
       <item itemvalue="Python.ArticleTest" />
       <item itemvalue="Python.SqlQueriesTest" />
-      <item itemvalue="Python.GraphTest" />
       <item itemvalue="Python.API" />
       <item itemvalue="Python.SqlQueriesTest (1)" />
       <item itemvalue="Python tests.Unittests" />
+      <item itemvalue="Python.ArticleTest (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.API" />
         <item itemvalue="Python.SqlQueriesTest (1)" />
+        <item itemvalue="Python.ArticleTest (1)" />
+        <item itemvalue="Python.API" />
         <item itemvalue="Python.SqlQueriesTest" />
         <item itemvalue="Python.ArticleTest" />
-        <item itemvalue="Python.GraphTest" />
       </list>
     </recent_temporary>
   </component>
