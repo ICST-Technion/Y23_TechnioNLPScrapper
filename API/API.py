@@ -2,6 +2,10 @@ import os
 import sys
 from datetime import datetime
 from flask import Flask, jsonify, request, make_response
+#this line is for the search engine
+from googleapiclient.discovery import build
+#for hebrew and arabic words
+from urllib.parse import quote, unquote
 #this line allows python to find our module.
 sys.path.append('..\\SQL')
 from SqlQueries import *
@@ -27,11 +31,18 @@ def clear_table():
 # request of regular query
 @app.route('/query', methods=['POST'])
 def get_database_query():
-    query = request.json.get('Query', "")
-    # TODO:add the google search in here
+    query = request.json.get('Query', "") # assuming Query is the keywords
+    # Encode the query in UTF-8
+    encoded_query = quote(query) # we need this for arabic and hebrew 
+    decoded_query = unquote()
+    site_list = ["www.ynet.co.il"] # TODO: connect this to the included websites Database
+    result = search_google(decoded_query,site_list)
+    return make_response(result, 200) # TODO: put the results in DataBase
 
-    return make_response(query, 200)
-
+def search_google(query, site_list):
+  service = build("keywordSearch", "v1", developerKey="AIzaSyAxMB-n27DPUUksC-A5ppV07zuEaN7qtZE")
+  result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list).execute()
+  return result
 
 def parse_json_and_strip(json_field):
     field_content = request.json.get(json_field, [])
@@ -86,9 +97,12 @@ def advanced_search():
     negative_words = create_parameters_list('negative_words', '', 'keyword', conditions='intonation=FALSE')
     positive_words = create_parameters_list('positive_words', '', 'keyword', conditions='intonation=TRUE')
 
-    links_to_scrap = []
-    # TODO: search for queries and stuff here
-
+    encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
+    decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
+    query = ','.join(decoded_keywords)
+    sites = ','.join(websites_to_search)
+    links_to_scrap = search_google(query, sites)
+    # TODO : edit the keywords_to_search and add exclude keywords
     # TODO: scrap info and insert to the database here
     # not adding specified statistics yet, because there is only counter for now
     return make_response(positive_words, 200)

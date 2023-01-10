@@ -7,3 +7,7 @@ If it doesn't work, make sure to run these commands:
 * pip install lxml
 
 * pip install tldextract
+
+To use the google search run:
+
+* pip install google-api-python-client
