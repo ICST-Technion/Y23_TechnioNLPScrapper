@@ -1,13 +1,19 @@
 import React from 'react';
-import FAQ from './FAQ';
+import { AQComponent } from './FAQ';
 
+
+export interface AQObject{
+  question: string;
+  answer: string;
+  open: boolean;
+}
 
 export interface FAQsPageProps {
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
-  const [faqs, setFaqs] = React.useState([{
+  const [faqs, setFaqs] = React.useState<AQObject[]>([{
     question: 'Q1',
     answer: 'answer 1',
     open: false
@@ -48,7 +54,7 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
     <div className="App">
     <div className="faqs">
         {faqs.map((faq, i) => (
-          <FAQ faq={faq} index={i} toggleFAQ={toggleFAQ} />
+          <AQComponent faq={faq} index={i} toggleFAQ={toggleFAQ} />
         ))}
       </div>
     </div>

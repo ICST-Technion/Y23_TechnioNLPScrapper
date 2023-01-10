@@ -1,7 +1,14 @@
 import React from 'react';
-import { FAQsPageProps } from './FAQsPage';
+import { AQObject } from './FAQsPage';
 
-function FAQ ({faq, index, toggleFAQ}:{faq:any;index:number,toggleFAQ:any}) {
+export interface AQComponentProps {
+   faq:AQObject;
+   index:number;
+   toggleFAQ:(index: number) => void;
+}
+
+export const AQComponent: React.FC<AQComponentProps> = ({faq, index, toggleFAQ}) => {
+
 	return (
 		<div
 			className={"faq " + (faq.open ? 'open' : '')}
@@ -16,6 +23,5 @@ function FAQ ({faq, index, toggleFAQ}:{faq:any;index:number,toggleFAQ:any}) {
 			</div>
 		</div>
 	)
-}
 
-export default FAQ
+};
