@@ -4,6 +4,13 @@
   overflow-y: auto;
 }
 
+.flex-column{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
 .top-margin{
   display:inline-block;
   margin-top: 5vh;
@@ -15,7 +22,7 @@
 }
 
 .App-logo {
-  height: 40vh;
+  height: 35vh;
   margin-top: -2vh;
   pointer-events: none;
 }
@@ -99,6 +106,8 @@
 }
 
 .select-button{
+  margin-top: 2vh;
+  margin-bottom: 2vh;
   background-color: none;
   border-radius: 20px;
   border-width: 2px;
@@ -120,7 +129,7 @@
 }
 
 .run-query-button{
-  position: absolute;
+  position: fixed;
   bottom: 10vh;
   right:5vw;
   background-color:#b2ccc1;
@@ -146,9 +155,7 @@
 }
 
 .clear-query-button{
-  position: absolute;
-  right: 21vw;
-  top: 44.5vh;
+  position: relative;
   font-size: 1vw;
   font-weight: bold;
   border-width: 2px;
@@ -158,6 +165,7 @@
   width: 4vw;
   height: 3vh;
   /*weird centering issue of text in button*/
+  align-self: center;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -370,4 +378,17 @@ background-color: #99d1bb !important;
 .faqs .faq.open .faq-answer {
 	max-height: 1000px;
 	opacity: 1;
+}
+
+.category-field{
+  display: flex;
+  flex-direction: row;
+  width:20vw;
+  margin-left: 22vw;
+  justify-content:space-between;
+  align-items: baseline;
+  font-weight: 600;
+  font-size: medium;
+  margin-top: 1vh;
+  margin-bottom: 1.5vh;
 }
