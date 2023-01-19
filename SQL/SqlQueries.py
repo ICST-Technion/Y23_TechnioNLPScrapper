@@ -1,7 +1,7 @@
 import psycopg2
 import sys
 
-# sys.path.append('..\\Scrapping')
+sys.path.append('..\\Scrapping')
 from Article import Article
 from urllib.parse import urlparse
 

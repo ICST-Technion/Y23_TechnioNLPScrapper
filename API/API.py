@@ -2,11 +2,12 @@ import os
 import sys
 from datetime import datetime
 from flask import Flask, jsonify, request, make_response
-#this line is for the search engine
+# this line is for the search engine
 from googleapiclient.discovery import build
-#for hebrew and arabic words
+# for hebrew and arabic words
 from urllib.parse import quote, unquote
-#this line allows python to find our module.
+
+# this line allows python to find our module.
 sys.path.append('..\\SQL')
 from SqlQueries import *
 
@@ -31,18 +32,20 @@ def clear_table():
 # request of regular query
 @app.route('/query', methods=['POST'])
 def get_database_query():
-    query = request.json.get('Query', "") # assuming Query is the keywords
+    query = request.json.get('Query', "")  # assuming Query is the keywords
     # Encode the query in UTF-8
-    encoded_query = quote(query) # we need this for arabic and hebrew 
+    encoded_query = quote(query)  # we need this for arabic and hebrew
     decoded_query = unquote()
-    site_list = ["www.ynet.co.il"] # TODO: connect this to the included websites Database
-    result = search_google(decoded_query,site_list)
-    return make_response(result, 200) # TODO: put the results in DataBase
+    site_list = ["www.ynet.co.il"]  # TODO: connect this to the included websites Database
+    result = search_google(decoded_query, site_list)
+    return make_response(result, 200)  # TODO: put the results in DataBase
+
 
 def search_google(query, site_list):
-  service = build("keywordSearch", "v1", developerKey="AIzaSyAxMB-n27DPUUksC-A5ppV07zuEaN7qtZE")
-  result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list).execute()
-  return result
+    service = build("keywordSearch", "v1", developerKey="AIzaSyAxMB-n27DPUUksC-A5ppV07zuEaN7qtZE")
+    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list).execute()
+    return result
+
 
 def parse_json_and_strip(json_field):
     field_content = request.json.get(json_field, [])
@@ -105,7 +108,7 @@ def advanced_search():
     # TODO : edit the keywords_to_search and add exclude keywords
     # TODO: scrap info and insert to the database here
     # not adding specified statistics yet, because there is only counter for now
-    return make_response(positive_words, 200)
+    return make_response("OK", 200)
 
 
 # driver function
