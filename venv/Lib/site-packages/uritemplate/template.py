@@ -14,19 +14,15 @@ What do you do?
 >
 
 """
+
 import re
-import typing as t
+from uritemplate.orderedset import OrderedSet
+from uritemplate.variable import URIVariable
 
-from uritemplate import orderedset
-from uritemplate import variable
-
-template_re = re.compile("{([^}]+)}")
+template_re = re.compile('{([^}]+)}')
 
 
-def _merge(
-    var_dict: t.Optional[variable.VariableValueDict],
-    overrides: variable.VariableValueDict,
-) -> variable.VariableValueDict:
+def _merge(var_dict, overrides):
     if var_dict:
         opts = var_dict.copy()
         opts.update(overrides)
@@ -34,7 +30,7 @@ def _merge(
     return overrides
 
 
-class URITemplate:
+class URITemplate(object):
 
     """This parses the template and will be used to expand it.
 
@@ -67,63 +63,54 @@ class URITemplate:
 
     """
 
-    def __init__(self, uri: str):
+    def __init__(self, uri):
         #: The original URI to be parsed.
-        self.uri: str = uri
+        self.uri = uri
         #: A list of the variables in the URI. They are stored as
-        #: :class:`~uritemplate.variable.URIVariable`\ s
-        self.variables: t.List[variable.URIVariable] = [
-            variable.URIVariable(m.groups()[0])
-            for m in template_re.finditer(self.uri)
+        #: :class:`URIVariable`\ s
+        self.variables = [
+            URIVariable(m.groups()[0]) for m in template_re.finditer(self.uri)
         ]
         #: A set of variable names in the URI.
-        self.variable_names = orderedset.OrderedSet()
-        for var in self.variables:
-            for name in var.variable_names:
+        self.variable_names = OrderedSet()
+        for variable in self.variables:
+            for name in variable.variable_names:
                 self.variable_names.add(name)
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return 'URITemplate("%s")' % self
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.uri
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, URITemplate):
-            return NotImplemented
+    def __eq__(self, other):
         return self.uri == other.uri
 
-    def __hash__(self) -> int:
+    def __hash__(self):
         return hash(self.uri)
 
-    def _expand(
-        self, var_dict: variable.VariableValueDict, replace: bool
-    ) -> str:
+    def _expand(self, var_dict, replace):
         if not self.variables:
             return self.uri
 
         expansion = var_dict
-        expanded: t.Dict[str, str] = {}
+        expanded = {}
         for v in self.variables:
             expanded.update(v.expand(expansion))
 
-        def replace_all(match: "re.Match[str]") -> str:
-            return expanded.get(match.groups()[0], "")
+        def replace_all(match):
+            return expanded.get(match.groups()[0], '')
 
-        def replace_partial(match: "re.Match[str]") -> str:
-            match_group = match.groups()[0]
-            var = "{%s}" % match_group
-            return expanded.get(match_group) or var
+        def replace_partial(match):
+            match = match.groups()[0]
+            var = '{%s}' % match
+            return expanded.get(match) or var
 
-        replace_func = replace_partial if replace else replace_all
+        replace = replace_partial if replace else replace_all
 
-        return template_re.sub(replace_func, self.uri)
+        return template_re.sub(replace, self.uri)
 
-    def expand(
-        self,
-        var_dict: t.Optional[variable.VariableValueDict] = None,
-        **kwargs: variable.VariableValue,
-    ) -> str:
+    def expand(self, var_dict=None, **kwargs):
         """Expand the template with the given parameters.
 
         :param dict var_dict: Optional dictionary with variables and values
@@ -146,11 +133,7 @@ class URITemplate:
         """
         return self._expand(_merge(var_dict, kwargs), False)
 
-    def partial(
-        self,
-        var_dict: t.Optional[variable.VariableValueDict] = None,
-        **kwargs: variable.VariableValue,
-    ) -> "URITemplate":
+    def partial(self, var_dict=None, **kwargs):
         """Partially expand the template with the given parameters.
 
         If all of the parameters for the template are not given, return a

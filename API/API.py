@@ -28,16 +28,35 @@ def clear_table():
     clear_query.clear_table()
     return make_response("table cleared", 200)
 
+def get_default_websites():
+    return ["www.ynet.co.il","www.israelhayom.co.il","www.themarker.com"] 
+
+def scrap_links(links_to_scrap,keywords_intonation_list):
+    for link in links_to_scrap:
+        try:
+            article_info=Article(link)
+            rows_to_add=article_info.create_rows_to_database(keywords_intonation_list)
+            insert_query=SQLQuery()
+            insert_query.insert_article_to_sql(rows_to_add)
+        except HTTPError:
+            make_response("This website is forbidden to scrap",403)
+        finally:
+            continue        
 
 # request of regular query
 @app.route('/query', methods=['POST'])
 def get_database_query():
     query = request.json.get('Query', "")  # assuming Query is the keywords
     # Encode the query in UTF-8
-    encoded_query = quote(query)  # we need this for arabic and hebrew
-    decoded_query = unquote()
-    site_list = ["www.ynet.co.il"]  # TODO: connect this to the included websites Database
-    result = search_google(decoded_query, site_list)
+    if query!="":
+        encoded_query = quote(query)  # we need this for arabic and hebrew
+        decoded_query = unquote(encoded_query)
+        site_list = get_default_websites()  # TODO: connect this to the included websites Database
+        result = search_google(decoded_query, site_list)
+    #TODO: scrap the links we get
+    
+        scrap_links(result,[(query,"neutral")])
+
     return make_response(result, 200)  # TODO: put the results in DataBase
 
 
@@ -97,8 +116,10 @@ def advanced_search():
             datetime_range = [datetime.strptime(date_string, "%Y-%m-%d") for date_string in time_range]
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
+
     negative_words = create_parameters_list('negative_words', '', 'keyword', conditions='intonation=FALSE')
     positive_words = create_parameters_list('positive_words', '', 'keyword', conditions='intonation=TRUE')
+
 
     encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
     decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
@@ -107,6 +128,11 @@ def advanced_search():
     links_to_scrap = search_google(query, sites)
     # TODO : edit the keywords_to_search and add exclude keywords
     # TODO: scrap info and insert to the database here
+
+    keyword_to_intonation=[(keyword,"positive") for keyword in positive_words]
+    keyword_to_intonation.extend([(keyword,"negative") for keyword in negative_words])
+    keyword_to_intonation.extend([(keyword,"neutral") for keyword in keywords_to_search])
+    scrap_links(links_to_scrap,keyword_to_intonation)
     # not adding specified statistics yet, because there is only counter for now
     return make_response("OK", 200)
 
