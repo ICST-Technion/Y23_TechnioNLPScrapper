@@ -61,7 +61,7 @@ def get_database_query():
 
 
 def search_google(query, site_list):
-    service = build("keywordSearch", "v1", developerKey="AIzaSyAxMB-n27DPUUksC-A5ppV07zuEaN7qtZE")
+    service = build("customsearch", "v1", developerKey="AIzaSyDShZ9oDpV1o-z-KAcrQXAB-pKEexqNJHc")
     result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list).execute()
     return result
 

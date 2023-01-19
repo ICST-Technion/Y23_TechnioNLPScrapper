@@ -5,12 +5,12 @@ from urllib.parse import quote, unquote
 class TestGoogleSearch(unittest.TestCase):
     def test_search(self):
         # Set up the API client
-        service = build('Testsearch', 'v1', developerKey='AIzaSyAxMB-n27DPUUksC-A5ppV07zuEaN7qtZE')
+        service = build('customsearch', 'v1', developerKey='AIzaSyDShZ9oDpV1o-z-KAcrQXAB-pKEexqNJHc',cache_discovery=False)
 
         # Define the search query
         query = 'בהר הגעש הפעיל'
         encoded_keyword = quote(query)
-        decoded_keyword = unquote(query)
+        decoded_keyword = unquote(encoded_keyword)
 
         # Perform the search
         result = service.cse().list(q=decoded_keyword, cx='0655ca3f748ac4757', siteSearch='www.ynet.co.il').execute()
