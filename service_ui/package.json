@@ -22,6 +22,7 @@
     "react-dom": "^18.2.0",
     "react-image-gallery": "^1.2.11",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.7",
     "rsuite": "^5.23.2",
     "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"

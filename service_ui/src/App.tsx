@@ -94,7 +94,7 @@ function App() {
     else if(pageNumber == 3) {
       return (
         <>
-          <Logo />
+          <Logo cssClasses='minimized-logo'/>
           <AdvancedSearch data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
         </>
       )

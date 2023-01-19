@@ -19,6 +19,10 @@
   margin-top: -2vh;
   pointer-events: none;
 }
+.minimized-logo{
+  height: 21vh !important;
+  margin-top: -4vh !important;
+}
 
 .background{
   position: fixed;
