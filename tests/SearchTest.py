@@ -21,3 +21,5 @@ class TestGoogleSearch(unittest.TestCase):
         for item in result['items']:
             self.assertIn(query, item['title'])
             self.assertIn(query, item['snippet'])
+if __name__ == '__main__':
+    unittest.main()
