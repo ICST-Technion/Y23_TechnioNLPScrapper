@@ -1,7 +1,5 @@
 import React from 'react';
-import { DateRangePicker } from 'rsuite';
 import "rsuite/dist/rsuite.min.css";
-import { advancedQueryData } from '../../App';
 import { SelectedValues } from './SelectedValues';
 
 export interface buttonProps {

@@ -1,13 +1,15 @@
+import { Divider } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React from 'react';
-import { advancedQueryData } from '../../App';
+import { advancedQueryData } from '../../helpers';
 import searchIcon from './Images/magnifying-glass.png'
+import { SearchComponent } from './searchComponent';
 
 
 export interface searchPageProps {
-    data: advancedQueryData;
-    keywords: string | undefined;
-    setKeywords: React.Dispatch<React.SetStateAction<string | undefined>>;
+    data: advancedQueryData[];
+    keywords: string[];
+    setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -16,22 +18,40 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
     return (
         <>
         <button className='FAQs' onClick={()=>{setPageNumber(2)}}>FAQs</button>
-        <img src={searchIcon} className='search-icon'/>
         <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
           <div className="App">
-              <div className='search-button'>
-                <TextField className='search-bar'
-                  label={'Search Keywords Separated by Space'}
-                  value={keywords}
-                  helperText={!keywords?.length ? 'At Least One Keyword is Required' : ''}
+              <div className='category-field'>
+                Category: <TextField
+                  required
+                  id="outlined-required"
+                  label="Required"
+                  variant="standard"
+                  value={data[0].category_ID}
                   onChange={(e) => {
                     const text = e.target.value;
-                    setKeywords(text);
-                  } }
+                    data[0].setCategory_ID(text)}}
                 />
-                <br/>
-                <button className='advanced-search-button' onClick={()=>{setPageNumber(3)}}>Advanced Search Options</button>
               </div>
+              <SearchComponent keywords={keywords} setKeywords={setKeywords} idx={0} />
+              <br/>
+              <br/>
+              <Divider style={{width:'70vw', marginLeft:'15vw'}}/>
+              <br/>
+              <div className='category-field'>
+                Category: <TextField
+                  required
+                  id="outlined-required"
+                  label="Required"
+                  variant="standard"
+                  value={data[1].category_ID}
+                  onChange={(e) => {
+                    const text = e.target.value;
+                    data[1].setCategory_ID(text)}}
+                />
+              </div>
+              <SearchComponent keywords={keywords} setKeywords={setKeywords} idx={1} />
+              <br/>
+              <button className='advanced-search-button' onClick={()=>{setPageNumber(3)}}>Advanced Search Options</button>
           </div>
         </>
       );

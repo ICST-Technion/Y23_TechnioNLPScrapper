@@ -1,5 +1,4 @@
 import React from 'react';
-import { advancedQueryData } from '../../App';
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from 'react-image-gallery';
 import { Background } from '../Background';
@@ -15,11 +14,12 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { randomInt } from 'crypto';
 import CircleLoader from "react-spinners/CircleLoader"; 
+import { advancedQueryData } from '../../helpers';
 
 
 export interface baseResultsProps {
-    QueryData:advancedQueryData;
-    includedKeywords:string | undefined;
+    QueryData:advancedQueryData[];
+    includedKeywords:string[];
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -67,9 +67,9 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
     };
 
     const data = {
-      labels: datasets.map((row) => row.keyword),
-      datasets: [{id: 1, label:'count', data:datasets.map((row) => { return row.count}),backgroundColor: 'rgb(255, 99, 132)',},
-      {id: 2, label:'random data', data:datasets.map((row) => { return Math.floor(Math.random() * (12 - 0 + 1)) + 0;}),backgroundColor: 'rgb(75, 192, 192)',}]
+      labels: [...datasets.map((row) => row.keyword), "only in cat 2", "in neither"],
+      datasets: [{id: 1, label:"category: "+QueryData[0].category_ID, data:datasets.map((row) => { return row.count}),backgroundColor: 'rgb(255, 99, 132)',},
+      {id: 2, label:"category: "+QueryData[1].category_ID, data:[...datasets.map((row) => { return Math.floor(Math.random() * (12 - 0 + 1)) + 0;}), 5],backgroundColor: 'rgb(75, 192, 192)',}]
     }
 
     const images = [
@@ -98,7 +98,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
         return (
           <>
           <Background />
-          <div className='App flex result'>
+          <div className='App flex result' style={{width:'70vw', marginLeft:'15vw'}}>
             <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
             <Bar 
             datasetIdKey='trial'

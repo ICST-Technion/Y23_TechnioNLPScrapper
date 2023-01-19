@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
@@ -6,48 +6,35 @@ import { FAQsPage } from './FAQsPage';
 import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
+import { advancedQueryData } from './helpers';
 
-export class advancedQueryData{
-  includedWebsites:Map<number, string>;
-  setIncludedWebsites:React.Dispatch<React.SetStateAction<Map<number, string>>>;
-  excludedWebsites:Map<number, string>;
-  setExcludedWebsites:React.Dispatch<React.SetStateAction<Map<number, string>>>;
-  excludedKeywords:Map<number, string>;
-  setExcludedKeywords:React.Dispatch<React.SetStateAction<Map<number, string>>>;
-  specificStatistic:Map<number, string>;
-  setSpecificStatistic:React.Dispatch<React.SetStateAction<Map<number, string>>>;
-  positiveKeywords:Map<number, string>;
-  setPositiveKeywords:React.Dispatch<React.SetStateAction<Map<number, string>>>; 
-  negativeKeywords:Map<number, string>;
-  setNegativeKeywords:React.Dispatch<React.SetStateAction<Map<number, string>>>;
-  timeRange:[Date,Date] | undefined;
-  setTimeRange:React.Dispatch<React.SetStateAction<[Date,Date] | undefined>>;
-
-  constructor(stateList:[Map<number, string>, React.Dispatch<React.SetStateAction<Map<number, string>>>][], timeState:[[Date, Date] | undefined, React.Dispatch<React.SetStateAction<[Date, Date] | undefined>>]){
-    [this.includedWebsites, this.setIncludedWebsites] = stateList[0];
-    [this.excludedWebsites, this.setExcludedWebsites] = stateList[1];
-    [this.excludedKeywords, this.setExcludedKeywords] = stateList[2];
-    [this.specificStatistic, this.setSpecificStatistic] = stateList[3];
-    [this.positiveKeywords,this.setPositiveKeywords] = stateList[4];
-    [this.negativeKeywords,this.setNegativeKeywords] = stateList[5];
-    [this.timeRange, this.setTimeRange] = timeState;
-  }
-}
 
 function App() {
 
-  const [keywords, setKeywords] = React.useState<string | undefined>();
+  const [keywords, setKeywords] = React.useState<string[]>(['', '']);
+  const queryArray = [
+    new advancedQueryData(
+        React.useState<string>("1"),[
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()), 
+        React.useState<Map<number,string>>(new Map())
+      ],React.useState<[Date,Date]>()
+    ),
+    new advancedQueryData(
+        React.useState<string>("2"),[
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()),
+        React.useState<Map<number,string>>(new Map()), 
+        React.useState<Map<number,string>>(new Map())
+      ],React.useState<[Date,Date]>()
+    )
+  ];
 
-  const QueryData =  new advancedQueryData(
-    [
-      React.useState<Map<number,string>>(new Map()),
-      React.useState<Map<number,string>>(new Map()),
-      React.useState<Map<number,string>>(new Map()),
-      React.useState<Map<number,string>>(new Map()),
-      React.useState<Map<number,string>>(new Map()), 
-      React.useState<Map<number,string>>(new Map())
-    ],React.useState<[Date,Date]>()
-  )
 
   const [pageNumber, setPageNumber] = React.useState<number>(0)
 
@@ -73,14 +60,14 @@ function App() {
       return (
         <>
           <Logo />
-          <SearchPage data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
+          <SearchPage data={queryArray} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
         </>
       );
     }
     else if(pageNumber === 1){
       return (
         <>
-          <BaseResults QueryData={QueryData} includedKeywords={keywords} setPageNumber={setPageNumber} />
+          <BaseResults QueryData={queryArray} includedKeywords={keywords} setPageNumber={setPageNumber} />
         </>
       )
     }
@@ -95,7 +82,7 @@ function App() {
       return (
         <>
           <Logo cssClasses='minimized-logo'/>
-          <AdvancedSearch data={QueryData} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
+          <AdvancedSearch data={queryArray} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
         </>
       )
     }
