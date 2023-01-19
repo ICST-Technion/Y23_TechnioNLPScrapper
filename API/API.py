@@ -9,7 +9,7 @@ from urllib.parse import quote, unquote
 
 # this line allows python to find our module.
 sys.path.append('..\\SQL')
-from SqlQueries import *
+from SQL.SqlQueries import *
 
 # creating a Flask app
 app = Flask(__name__)

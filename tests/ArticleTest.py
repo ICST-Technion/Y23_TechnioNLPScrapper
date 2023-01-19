@@ -3,10 +3,10 @@ import sys
 import unittest
 
 sys.path.append('..\\Scrapping')
-from Article import *
+from Scrapping.Article import *
 
 sys.path.append('..\\SQL')
-from SqlQueries import *
+from SQL.SqlQueries import *
 
 
 class ArticleTests(unittest.TestCase):

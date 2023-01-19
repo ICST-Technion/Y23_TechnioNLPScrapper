@@ -1,10 +1,9 @@
-import datetime
 import unittest
 import sys
-from datetime import date
+
 
 sys.path.append('..\\SQL')
-from SqlQueries import *
+from SQL.SqlQueries import *
 
 
 class MyTestCase(unittest.TestCase):
@@ -12,7 +11,7 @@ class MyTestCase(unittest.TestCase):
     def test_select_sql(self):
         sql_query = SQLQuery()
         rows = sql_query.select_articles_from_sql(columns="keyword")
-        self.assertEqual(len(rows), 6)
+        self.assertEqual(len(rows), 8)
 
     def test_add_neutral_keyword(self):
         sql_query = SQLQuery()
