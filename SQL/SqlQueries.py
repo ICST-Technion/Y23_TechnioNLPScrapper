@@ -1,7 +1,7 @@
 import psycopg2
 import sys
 
-sys.path.append('..\\Scrapping')
+# sys.path.append('..\\Scrapping')
 from Article import Article
 from urllib.parse import urlparse
 
@@ -26,7 +26,7 @@ class SQLQuery:
     date- when the article was written format: yyyy-mm-dd hh:mm:ss
     count- the number of appearances of the keyword
     link- the link the data was scrapped from
-    intonation- the intonation of the keyword boolean (true:positive or false:negative)
+    intonation- the intonation of the keyword (positive ,negative,neutral)
     """
         conn = psycopg2.connect(
             database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
