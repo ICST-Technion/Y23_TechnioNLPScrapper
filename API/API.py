@@ -1,4 +1,3 @@
-import os
 import sys
 from datetime import datetime
 from flask import Flask, jsonify, request, make_response
@@ -29,19 +28,21 @@ def clear_table():
     return make_response("table cleared", 200)
 
 def get_default_websites():
-    return ["www.ynet.co.il","www.israelhayom.co.il","www.themarker.com"] 
+    websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
+    return  websites_to_search
 
 def scrap_links(links_to_scrap,keywords_intonation_list):
-    for link in links_to_scrap:
-        try:
-            article_info=Article(link)
-            rows_to_add=article_info.create_rows_to_database(keywords_intonation_list)
-            insert_query=SQLQuery()
-            insert_query.insert_article_to_sql(rows_to_add)
-        except HTTPError:
-            make_response("This website is forbidden to scrap",403)
-        finally:
-            continue        
+    if 'items' in links_to_scrap.keys():
+        for item in links_to_scrap['items']:
+            try:
+                article_info=Article(item['link'])
+                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list)
+                insert_query=SQLQuery()
+                insert_query.insert_article_to_sql(rows_to_add)
+            except HTTPError:
+                make_response("This website is forbidden to scrap",403)
+            finally:
+                continue        
 
 # request of regular query
 @app.route('/query', methods=['POST'])
@@ -52,12 +53,13 @@ def get_database_query():
         encoded_query = quote(query)  # we need this for arabic and hebrew
         decoded_query = unquote(encoded_query)
         site_list = get_default_websites()  # TODO: connect this to the included websites Database
-        result = search_google(decoded_query, site_list)
+        for website in site_list:
+            result = search_google(decoded_query, website)
+            scrap_links(result,[(query,"neutral")])
     #TODO: scrap the links we get
-    
-        scrap_links(result,[(query,"neutral")])
 
-    return make_response(result, 200)  # TODO: put the results in DataBase
+        
+    return make_response(result, 200)  
 
 
 def search_google(query, site_list):
@@ -85,16 +87,27 @@ def create_parameters_list(included_field, excluded_field, database_field, condi
     query_executor = SQLQuery()
     included_parameters = parse_json_and_strip(included_field)
     excluded_parameters = parse_json_and_strip(excluded_field)
-    database_rows = query_executor.select_articles_from_sql(columns=database_field, conditions=conditions)
-    database_parameters = parse_table_rows(database_rows)
-    return include_exclude_lists(database_parameters, included_parameters, excluded_parameters)
+    # database_rows = query_executor.select_articles_from_sql(columns=database_field, conditions=conditions)
+    # database_parameters = parse_table_rows(database_rows)
+    return include_exclude_lists([], included_parameters, excluded_parameters)
 
 
 def is_at_least_one_keyword():
     included_keywords = parse_json_and_strip('included_keywords')
     return included_keywords != []
 
+def map_keywords_to_intonation(keywords_list):
 
+    known_keyword_to_intonation=dict(SQLQuery().select_learned_keywords())
+
+    keyword_to_intonation=[]
+    for keyword in keywords_list:
+        if keyword in known_keyword_to_intonation.keys():
+            keyword_to_intonation.append((keyword,known_keyword_to_intonation[keyword]))
+        else:
+            keyword_to_intonation.append((keyword,'neutral'))
+    return keyword_to_intonation
+    
 @app.route('/advancedSearch', methods=['POST'])
 def advanced_search():
     # TODO: check format
@@ -105,6 +118,7 @@ def advanced_search():
 
     keywords_to_search = create_parameters_list('included_keywords', 'excluded_keywords', 'keyword')
     websites_to_search = create_parameters_list('Sites', 'excluded_Sites', 'website')
+    websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
     # assumption: time range would be just two dates separated by comma
     time_range = parse_json_and_strip('date_range')
     # no dates were passed
@@ -117,26 +131,33 @@ def advanced_search():
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
 
-    negative_words = create_parameters_list('negative_words', '', 'keyword', conditions='intonation=FALSE')
-    positive_words = create_parameters_list('positive_words', '', 'keyword', conditions='intonation=TRUE')
+    #TODO: add seperate table for positive and negative keywords
+    #TODO: add 2 categories
+    #learn the words we got
+    query_executor = SQLQuery()
+    negative_words =parse_json_and_strip('negative_words')
+    positive_words =parse_json_and_strip('positive_words')
+    words_to_insert=[(word,'negative') for word in negative_words]
+    words_to_insert.extend([(word,'positive') for word in positive_words])
+    query_executor.insert_keyword_intonation_to_sql(words_to_insert)
 
+    keyword_to_intonation=map_keywords_to_intonation(keywords_to_search)
+
+    
 
     encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
     decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
     query = ','.join(decoded_keywords)
-    sites = ','.join(websites_to_search)
-    links_to_scrap = search_google(query, sites)
+    for website in websites_to_search:
+        links_to_scrap = search_google(query, website)
+        scrap_links(links_to_scrap,keyword_to_intonation)
     # TODO : edit the keywords_to_search and add exclude keywords
-    # TODO: scrap info and insert to the database here
 
-    keyword_to_intonation=[(keyword,"positive") for keyword in positive_words]
-    keyword_to_intonation.extend([(keyword,"negative") for keyword in negative_words])
-    keyword_to_intonation.extend([(keyword,"neutral") for keyword in keywords_to_search])
-    scrap_links(links_to_scrap,keyword_to_intonation)
     # not adding specified statistics yet, because there is only counter for now
-    return make_response("OK", 200)
+    return make_response("ok", 200)
 
 
 # driver function
 if __name__ == '__main__':
+    #TODO: remove debug mode in the final version
     app.run(debug=True)

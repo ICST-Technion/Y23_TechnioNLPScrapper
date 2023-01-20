@@ -71,7 +71,27 @@ class SQLQuery:
         insert_sql = "INSERT INTO Articles(website,keyword,date,count,link,intonation) " \
                      "VALUES(%s,%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, keyword_list)
-
+    def insert_keyword_intonation_to_sql(self,keyword_intonation_list):
+        insert_sql = "INSERT INTO Keywords(keyword,intonation) " \
+                     "VALUES(%s,%s);"
+        self.execute_query(insert_sql, keyword_intonation_list)
+    def select_learned_keywords(self):
+        select_query='SELECT * FROM Keywords'
+        conn = None
+        cur = None
+        try:
+            conn = psycopg2.connect(
+                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+            )
+            cur = conn.cursor()
+            cur.execute(select_query)
+            return cur.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn:
+                cur.close()
+                conn.close()
     def select_articles_from_sql(self, columns="*", conditions=None):
         """
         """
