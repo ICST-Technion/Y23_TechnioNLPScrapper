@@ -148,7 +148,7 @@ returns the date as a string
         total = div_count + paragraph_count
         return total.most_common(num)
 
-    def create_rows_to_database(self, keyword_intonation_list):
+    def create_rows_to_database(self, keyword_intonation_list,category='1'):
         """
         given a keyword list, convert it into a format which can be written to the database
         :param keyword_intonation_list:
@@ -162,5 +162,5 @@ returns the date as a string
         rows = []
         for keyword, intonation in keyword_intonation_list:
             rows.append((self.website, keyword, self.date.strftime("%Y-%m-%d, %H:%M:%S"),
-                         str(self.count_word_in_webpage(keyword)), self.link, str(intonation)))
+                         str(self.count_word_in_webpage(keyword)), self.link, str(intonation),category))
         return rows

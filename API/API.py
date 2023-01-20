@@ -31,23 +31,20 @@ def get_default_websites():
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
 
-def scrap_links(links_to_scrap,keywords_intonation_list):
+def scrap_links(links_to_scrap,keywords_intonation_list,category):
     if 'items' in links_to_scrap.keys():
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
-                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list)
+                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,category)
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)
             finally:
                 continue        
-
-# request of regular query
-@app.route('/query', methods=['POST'])
-def get_database_query():
-    query = request.json.get('Query', "")  # assuming Query is the keywords
+def do_search_query(category='1'):
+    query = request.json.get('Query'+category, "")  # assuming Query is the keywords
     # Encode the query in UTF-8
     if query!="":
         encoded_query = quote(query)  # we need this for arabic and hebrew
@@ -55,11 +52,14 @@ def get_database_query():
         site_list = get_default_websites()  # TODO: connect this to the included websites Database
         for website in site_list:
             result = search_google(decoded_query, website)
-            scrap_links(result,[(query,"neutral")])
-    #TODO: scrap the links we get
+            scrap_links(result,map_keywords_to_intonation([query]),category)
 
-        
-    return make_response(result, 200)  
+# request of regular query
+@app.route('/query', methods=['POST'])
+def get_database_query():
+    do_search_query('1')
+    do_search_query('2')
+    return make_response("OK", 200)  
 
 
 def search_google(query, site_list):
@@ -83,12 +83,9 @@ def include_exclude_lists(universe, included, excluded):
     return list((set(universe) | set(included)) - set(excluded))
 
 
-def create_parameters_list(included_field, excluded_field, database_field, conditions=None):
-    query_executor = SQLQuery()
+def create_parameters_list(included_field, excluded_field):
     included_parameters = parse_json_and_strip(included_field)
     excluded_parameters = parse_json_and_strip(excluded_field)
-    # database_rows = query_executor.select_articles_from_sql(columns=database_field, conditions=conditions)
-    # database_parameters = parse_table_rows(database_rows)
     return include_exclude_lists([], included_parameters, excluded_parameters)
 
 
@@ -107,20 +104,16 @@ def map_keywords_to_intonation(keywords_list):
         else:
             keyword_to_intonation.append((keyword,'neutral'))
     return keyword_to_intonation
-    
-@app.route('/advancedSearch', methods=['POST'])
-def advanced_search():
-    # TODO: check format
-    # requires at least one keyword
+def advanced_search_query(category='1'):
     if not is_at_least_one_keyword():
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
 
-    keywords_to_search = create_parameters_list('included_keywords', 'excluded_keywords', 'keyword')
-    websites_to_search = create_parameters_list('Sites', 'excluded_Sites', 'website')
+    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)
+    websites_to_search = create_parameters_list('Sites'+category, 'excluded_Sites'+category)
     websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
     # assumption: time range would be just two dates separated by comma
-    time_range = parse_json_and_strip('date_range')
+    time_range = parse_json_and_strip('date_range'+category)
     # no dates were passed
     if time_range == []:
         # either default range or just not searching by range at all
@@ -131,19 +124,17 @@ def advanced_search():
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
 
-    #TODO: add seperate table for positive and negative keywords
+  
     #TODO: add 2 categories
     #learn the words we got
     query_executor = SQLQuery()
-    negative_words =parse_json_and_strip('negative_words')
-    positive_words =parse_json_and_strip('positive_words')
+    negative_words =parse_json_and_strip('negative_words'+category)
+    positive_words =parse_json_and_strip('positive_words'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
     query_executor.insert_keyword_intonation_to_sql(words_to_insert)
 
     keyword_to_intonation=map_keywords_to_intonation(keywords_to_search)
-
-    
 
     encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
     decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
@@ -153,6 +144,10 @@ def advanced_search():
         scrap_links(links_to_scrap,keyword_to_intonation)
     # TODO : edit the keywords_to_search and add exclude keywords
 
+@app.route('/advancedSearch', methods=['POST'])
+def advanced_search():
+    advanced_search_query('1')
+    advanced_search_query('2')
     # not adding specified statistics yet, because there is only counter for now
     return make_response("ok", 200)
 
