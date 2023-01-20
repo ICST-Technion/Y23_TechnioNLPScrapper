@@ -17,25 +17,6 @@ class SQLQuery:
         self.host = url.hostname
         self.port = url.port
 
-    def copy_csv_to_sql(self, file_name):
-        """
-    copies the records from a csv file to the posgresql server
-    file must contain the following fields, in this order:
-    website- name of the website the data was scrapped from
-    keyword- the keyword that was scrapped
-    date- when the article was written format: yyyy-mm-dd hh:mm:ss
-    count- the number of appearances of the keyword
-    link- the link the data was scrapped from
-    intonation- the intonation of the keyword (positive ,negative,neutral)
-    """
-        conn = psycopg2.connect(
-            database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
-        )
-        cur = conn.cursor()
-        with open(file_name, 'r') as f:
-            next(f)  # Skip the header row.
-            cur.copy_from(f, 'Articles', sep=',')
-        conn.commit()
 
     def execute_query(self, sql_query, values=None):
 
@@ -121,18 +102,4 @@ class SQLQuery:
         unlike DROP and DELETE
         """
         clear_query = "TRUNCATE TABLE Articles"
-        conn = None
-        cur = None
-        try:
-            conn = psycopg2.connect(
-                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
-            )
-            cur = conn.cursor()
-            cur.execute(clear_query)
-            conn.commit()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn:
-                cur.close()
-                conn.close()
+        self.execute_query(clear_query)

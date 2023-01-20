@@ -1,5 +1,6 @@
 import sys
 from datetime import datetime
+#for handling requests and responses
 from flask import Flask, jsonify, request, make_response
 # this line is for the search engine
 from googleapiclient.discovery import build
@@ -32,6 +33,19 @@ def get_default_websites():
     return  websites_to_search
 
 def scrap_links(links_to_scrap,keywords_intonation_list,category):
+    '''
+    scrapping information about each keyword and website
+    then inserting them into the databse
+
+    parameters:
+    links_to_scrap: the dictionary we get from the custom google search engine
+    keywords_intonation_list: a list of tuples, each tuple is (keyword,its intonation)
+    when intonation is positive,negative or neutral
+    category: the current query we are scrapping, currently placeholders
+    for comparison
+
+    notes: some websites are forbidden to scrap and we can't access to them
+    '''
     if 'items' in links_to_scrap.keys():
         for item in links_to_scrap['items']:
             try:
@@ -44,6 +58,13 @@ def scrap_links(links_to_scrap,keywords_intonation_list,category):
             finally:
                 continue        
 def do_search_query(category='1'):
+    '''
+    performs a google search query (only keywords, no additional parameter)
+    scraps from the links we found, and updates the database
+    parameters:
+    category: the number of the current category we are scrapping for
+
+    '''
     query = request.json.get('Query'+category, "")  # assuming Query is the keywords
     # Encode the query in UTF-8
     if query!="":
@@ -57,6 +78,9 @@ def do_search_query(category='1'):
 # request of regular query
 @app.route('/query', methods=['POST'])
 def get_database_query():
+    '''
+    search and scrap 2 categories, and then return a response when finished
+    '''
     do_search_query('1')
     do_search_query('2')
     return make_response("OK", 200)  
@@ -69,6 +93,11 @@ def search_google(query, site_list):
 
 
 def parse_json_and_strip(json_field):
+    '''
+    searches for an element with the name json_field
+    if exists, returns a list of the content of that field
+    if not, returns empty list
+    '''
     field_content = request.json.get(json_field, [])
     if field_content == []:
         return []
@@ -76,25 +105,41 @@ def parse_json_and_strip(json_field):
 
 
 def parse_table_rows(rows):
+    '''
+    when returning a select query, it returns as a list of tuple [(row1),(row2),...]
+    '''
     return [row[0] for row in rows]
 
 
 def include_exclude_lists(universe, included, excluded):
+    '''
+    prevents repetition in searching included and excluded keywords, websites etc.
+    | is the union operator
+    '''
     return list((set(universe) | set(included)) - set(excluded))
 
 
 def create_parameters_list(included_field, excluded_field):
+    '''
+    returns a list of the parameters we want in the search, and without the ones we want to exclude
+    '''
     included_parameters = parse_json_and_strip(included_field)
     excluded_parameters = parse_json_and_strip(excluded_field)
     return include_exclude_lists([], included_parameters, excluded_parameters)
 
 
 def is_at_least_one_keyword():
+    '''
+    any request requires at least one keyword, bad request otherwise
+    '''
     included_keywords = parse_json_and_strip('included_keywords')
     return included_keywords != []
 
 def map_keywords_to_intonation(keywords_list):
-
+    '''
+    uses the existing keyword database and queries to map a keyword to the intonation
+    (if exists already)
+    '''
     known_keyword_to_intonation=dict(SQLQuery().select_learned_keywords())
 
     keyword_to_intonation=[]
@@ -105,6 +150,10 @@ def map_keywords_to_intonation(keywords_list):
             keyword_to_intonation.append((keyword,'neutral'))
     return keyword_to_intonation
 def advanced_search_query(category='1'):
+    '''
+    performs scrapping based on all the advanced search parameters.
+    the only mandatory one is keywords
+    '''
     if not is_at_least_one_keyword():
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
@@ -125,7 +174,7 @@ def advanced_search_query(category='1'):
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
 
   
-    #TODO: add 2 categories
+
     #learn the words we got
     query_executor = SQLQuery()
     negative_words =parse_json_and_strip('negative_words'+category)
@@ -146,6 +195,13 @@ def advanced_search_query(category='1'):
 
 @app.route('/advancedSearch', methods=['POST'])
 def advanced_search():
+    '''
+    api response to advanced search
+    searching with tags such as included/exluded keywords,websites, date range and so on
+    adds the information by category to the database for display in the frontend later
+    returns bad request if there are no keywords in the search query
+    otherwise returns ok
+    '''
     advanced_search_query('1')
     advanced_search_query('2')
     # not adding specified statistics yet, because there is only counter for now
