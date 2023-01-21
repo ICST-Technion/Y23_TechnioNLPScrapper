@@ -18,10 +18,17 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
     return (
         <>
         <button className='FAQs' onClick={()=>{setPageNumber(2)}}>FAQs</button>
-        <button className='run-query-button' onClick={()=>{
+        <button className='run-query-button' onClick={async ()=>{
           setPageNumber(1);
           const query_body={"Query1": keywords[0],"Query2":keywords[1]};
-                   
+          const reactServer='http://localhost:4000'
+                try
+                {
+                    const response=await axios.post(reactServer+'/query',query_body)
+                }
+                catch (err) {
+                    console.log(err);
+                }                   
           }}>Run</button>
           <div className="App">
               <div className='category-field'>

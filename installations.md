@@ -11,3 +11,7 @@ If it doesn't work, make sure to run these commands:
 To use the google search run:
 
 * pip install google-api-python-client
+
+To be able to run the servers:
+
+* npm install axios
