@@ -4,7 +4,7 @@ import React from 'react';
 import { advancedQueryData } from '../../helpers';
 import searchIcon from './Images/magnifying-glass.png'
 import { SearchComponent } from './searchComponent';
-
+import axios, {isCancel, AxiosError} from 'axios';
 
 export interface searchPageProps {
     data: advancedQueryData[];
@@ -18,7 +18,11 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
     return (
         <>
         <button className='FAQs' onClick={()=>{setPageNumber(2)}}>FAQs</button>
-        <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
+        <button className='run-query-button' onClick={()=>{
+          setPageNumber(1);
+          const query_body={"Query1": keywords[0],"Query2":keywords[1]};
+                   
+          }}>Run</button>
           <div className="App">
               <div className='category-field'>
                 Category: <TextField

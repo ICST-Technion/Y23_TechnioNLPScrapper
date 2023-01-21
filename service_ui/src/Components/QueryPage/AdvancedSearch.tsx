@@ -19,7 +19,19 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
         console.log(keywords);
         setKeywords((old) => idx === 0? ['',...old.slice(1)] : [...old.slice(0,1),'']);
     }
-
+    const getAdvancedSearchJson=(idx:Number)=>{
+        //Numbers can't be used as indices
+        const advanced_body={ 
+            [`included_keywords${idx}`]:keywords[idx.valueOf()],
+            [`excluded_keywords${idx}`]:data[idx.valueOf()].excludedKeywords,
+            [`included_sites${idx}`]:data[idx.valueOf()].includedWebsites,
+            [`excluded_sites${idx}`]:data[idx.valueOf()].excludedWebsites,
+            [`date_range${idx}`]:data[idx.valueOf()].timeRange,
+            [`positive_words${idx}`]:data[idx.valueOf()].positiveKeywords,
+            [`negative_words${idx}`]:data[idx.valueOf()].negativeKeywords
+                };
+        return advanced_body;
+    }
     return (
         <>
             <div className='App'>
@@ -30,7 +42,10 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
                 </div>
 
                 <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-                <button className='run-query-button' onClick={()=>{setPageNumber(1)}}>Run</button>
+                <button className='run-query-button' onClick={()=>{setPageNumber(1);
+                const merged = {...getAdvancedSearchJson(0), ...getAdvancedSearchJson(1)};
+                
+                }}>Run</button>
 
               </div>
         </>

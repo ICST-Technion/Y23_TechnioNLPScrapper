@@ -101,7 +101,7 @@ def parse_json_and_strip(json_field):
     field_content = request.json.get(json_field, [])
     if field_content == []:
         return []
-    return [word.strip() for word in field_content.split(',')]
+    return [word.strip() for word in field_content.split(' ')]
 
 
 def parse_table_rows(rows):
@@ -211,4 +211,4 @@ def advanced_search():
 # driver function
 if __name__ == '__main__':
     #TODO: remove debug mode in the final version
-    app.run(debug=True)
+    app.run(host="0.0.0.0",debug=True)

@@ -4,7 +4,7 @@ import knex from 'knex';
 import dotenv from 'dotenv';
 import {client} from "./elephantsql.js"
 import axios, {isCancel, AxiosError} from 'axios';
-import {clear_request} from "./consts.js"
+import * as consts from "./consts.js"
 dotenv.config();
 
 const port = process.env.PORT || 5000;
@@ -16,17 +16,13 @@ app.use(express.json());
 app.use(cors());
 
 
-async function clear_table() {
+async function clearTable() {
   const body={}
   try {
-    const response = await axios.request({
-      method:'post',
-     url:clear_request,
+    axios.post(
+      consts.api_address+consts.clear_request,
       body
-    }
-      
-      );
-    console.log(response.data);
+     ).then((response:Response)=>console.log(response.data));
   } catch (error) {
     console.error(error);
   }
@@ -34,9 +30,19 @@ async function clear_table() {
 
 app.get('/query', async (req: Request, res: Response) => {
   try {
-    const response = 
+    const response = await axios.post(consts.api_address+consts.query_request,req.body)
     console.log(response);
-    clear_table()
+    clearTable()
+} catch (err) {
+    console.log(err);
+}
+});
+
+app.get('/advancedSearch', async (req: Request, res: Response) => {
+  try {
+    const response = await axios.post(consts.api_address+consts.advanced_search_request,req.body)
+    console.log(response);
+    clearTable()
 } catch (err) {
     console.log(err);
 }
