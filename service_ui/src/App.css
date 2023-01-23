@@ -24,6 +24,7 @@
 .App-logo {
   height: 35vh;
   margin-top: -2vh;
+  margin-bottom: -2vh;
   pointer-events: none;
 }
 .minimized-logo{
@@ -46,7 +47,7 @@
   height: 4rem;
 }
 .search-bar .MuiOutlinedInput-root{
-  border-radius: 50px;
+  border-radius: 250px;
   width: inherit;
   padding-right: 3.8vw;
 }
@@ -55,11 +56,12 @@
   font-size: auto;
 }
 .search-bar .MuiInputLabel-root.Mui-focused {
-  color: #61a088;
+  color: black;
 }
 .search-bar .MuiOutlinedInput-root.Mui-focused fieldset {
-  border-color: #61a088;
+  border-color: black;
 }
+
 .search-bar .MuiFormHelperText-root{
   font-size: auto;
 }
@@ -70,12 +72,17 @@
   right: 21.5vw;
   top:44.5vh;
 }
+
+.search-button{
+  margin-top: 2vh;
+}
+
 .advanced-search-button{
   position: relative;
   float: right;
   right: 21vw;
   background-color: transparent;
-  color: #61a088;
+  color: #5e17eb;
   text-decoration: underline;
 }
 
@@ -94,30 +101,41 @@
   flex-direction: row;
   justify-content: space-around;
   width:60vw;
+  gap:2vw;
 }
 
 .button-pop-component{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 1vh;
-  width: 26vw;
+  gap: 1vw;
+  width: 30vw;
+  height: 10vh;
   height: auto;
+  align-items: baseline;
+}
+
+.button-pop-component p{
+  width: 11vw;
+  text-align: justify;
+  text-transform: capitalize;
+  color: black;
+  font-weight: 500;
 }
 
 .select-button{
-  margin-top: 2vh;
-  margin-bottom: 2vh;
-  background-color: none;
-  border-radius: 20px;
-  border-width: 2px;
   width: 18vw;
   height: 4vh;
   font-weight: bold;
   text-transform: capitalize;
-  border-color: rgb(210, 209, 209);
   font-size: 1.2vw;
+  color: black;
+  border-width: 1.35px;
+  border-color:rgb(221, 221, 221);
+  border-radius: 20px;
+  background-color: white;
 }
+
 
 .select-button:hover{
   background-color: rgb(206, 205, 205);
@@ -132,14 +150,15 @@
   position: fixed;
   bottom: 10vh;
   right:5vw;
-  background-color:#b2ccc1;
-  border-color: #a2beb2;
+  border-color:rgb(221, 221, 221);
+  background-color: white;
+  color: black;
   border-radius: 20px;
   font-size: 1.3vw;
   font-weight: bold;
-  border-width: 3px;
+  border-width: 1.35px;
   width: 9.5vw;
-  height: 4vh;
+  height: 4.2vh;
   /*weird centering issue of text in button*/
   justify-content: center;
   display: flex;
@@ -147,25 +166,28 @@
 }
 
 .run-query-button:hover{
-  background-color:#a0c0b3;
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
 }
 
 .run-query-button:active{
-  background-color:#8cb0a2;
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
 }
 
 .clear-query-button{
   position: relative;
   font-size: 1vw;
   font-weight: bold;
-  border-width: 2px;
-  border-color: rgb(218, 216, 216);
+  width: 9.5vw;
+  height: 4vh;
+  color: black;
+  border-width: 1.35px;
+  border-color:rgb(221, 221, 221);
   border-radius: 20px;
-  background-color: #f2f4f3;
-  width: 4vw;
-  height: 3vh;
+  background-color: white;
+  margin-left: 20vw;
   /*weird centering issue of text in button*/
-  align-self: center;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -177,39 +199,40 @@
   left:3vw;
   font-size: 1vw;
   font-weight: bold;
-  border-width: 2px;
-  border-color: rgb(218, 216, 216);
+  color: black;
+  border-width: 1.35px;
+  border-color:rgb(221, 221, 221);
   border-radius: 20px;
-  background-color: #f2f4f3;
-  width: 4vw;
+  background-color: white;
+  width: 6vw;
   height: 3vh;
   /*weird centering issue of text in button*/
   justify-content: center;
   display: flex;
   align-items: center;
-}
-
-.go-back-button{
-  font-size: 0.8vw !important;
-  width: 6vw !important;
   text-transform: capitalize;
 }
 
-.FAQ:hover, .clear-query-button:hover, .go-back-button:hover{
-  background-color: rgb(218, 216, 216);
+.FAQs:active, .clear-query-button:active, .go-back-button:active{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
 }
-.FAQ:active, .clear-query-button:active, .go-back-button:active{
-  background-color: rgb(199, 197, 197);
+
+.FAQs:hover, .clear-query-button:hover, .go-back-button:hover{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
 }
 
 .type-in{
   display: flex;
   flex-direction: column;
+  gap: 1vh;
+  align-items: flex-start;
+  width: 15vw;
 }
 
 .type-in input{
-  width: 13vw;
-  align-self: center;
+  width: 15vw;
   border-radius: 12px;
   border-width: 1px;
 }
@@ -217,11 +240,11 @@
 /*calendar customization !!!!*/
 /*selected edges*/
 .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
-background-color: #99d1bb !important;
+background-color: #8d6cdf !important;
 }
 /*selected range*/
 .rs-calendar-table-cell-in-range .rs-calendar-table-cell-content, .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
-  background-color: #99d1bb5a ;
+  background-color: #9d9af7 ;
 }
 /*calendar bg*/
 .rs-anim-fade.rs-anim-in.placement-bottom-start.rs-picker-daterange-menu.rs-picker-menu{
@@ -229,24 +252,28 @@ background-color: #99d1bb !important;
 }
 
 .rs-stack-item{
-  color: #61a088;
+  color: #5e17eb;
 }
 
 .rs-stack-item button{
-  color: #61a088;
+  color: #5e17eb;
 }
 
 .rs-stack-item .rs-picker-toolbar-right button{
-  background-color: #61a088;
+  background-color: #5e17eb;
   color:#f2f4f3;
 }
 
 .rs-stack-item span{
-  color: #61a088 !important;
+  color: #5e17eb !important;
 }
 
 .rs-picker-default .rs-picker-toggle:hover{
-  border-color: #61a088 !important;
+  border-color: #5e17eb !important;
+}
+
+.rs-picker {
+  width:18vw;
 }
 
 .graphs{
@@ -266,20 +293,22 @@ background-color: #99d1bb !important;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.4vh 0.4vw;
-  margin-top: 1vh;
 }
 
 .selected-value {
-  border: 1px solid #689e8a;
+  border: 1px solid #4d13c2;
   border-radius: 20px;
-  padding: 1px;
   padding-left: 4px;
+  font-size: smaller;
+  height: 3.5vh;
+  color: black;
 }
 .selected-value button{
   border: none;
   color:  #689e8a;
   background: transparent;
   margin-left: 0.1vw;
+  font-size: smaller;
 }
 
 .result{
@@ -311,7 +340,6 @@ background-color: #99d1bb !important;
 
 .Loading-Page{ 
   text-align: center;
-  background-color: #f2f4f3;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -329,8 +357,8 @@ background-color: #99d1bb !important;
 
 .faqs .faq {
 	margin: 12px;
-	padding: 12px;
-	background-color: #f2f4f3;
+	padding: 1vh 1vw;
+	background-color:white;
 	border-radius: 10px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 }
@@ -339,10 +367,7 @@ background-color: #99d1bb !important;
   text-align: left;
 	position: relative;
 	font-size: 20px;
-	padding-right: 50px;
 	transition: all 0.4s ease;
-  
-
 }
 
 .faqs .faq .faq-question::after {
@@ -353,10 +378,6 @@ background-color: #99d1bb !important;
 	transform: translateY(-50%);
 	width: 30px;
 	height: 30px;
-	background-image: url('./iconmonstr-angel-down-circle-thin.svg');
-	background-position: center;
-	background-size: contain;
-	background-repeat: no-repeat;
 	transition: all 0.4s ease-out;
 }
 

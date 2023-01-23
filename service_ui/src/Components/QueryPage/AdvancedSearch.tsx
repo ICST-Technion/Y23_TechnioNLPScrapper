@@ -1,9 +1,9 @@
 import { Divider } from '@mui/material';
 import React from 'react';
 import { advancedQueryData } from '../../helpers';
-import { AdvancedSearchComponent } from './advancedSearchComponent';
-import { ButtonWithPopUp } from './ButtonWithPopUp';
-import { TimeRange } from './TimeRange';
+import { AdvancedSearchComponent } from './Components/advancedSearchComponent';
+import { ButtonWithPopUp } from './Components/ButtonWithPopUp';
+import { TimeRange } from './Components/TimeRange';
 import axios, {isCancel, AxiosError} from 'axios';
 
 export interface advancedSearchprops {
@@ -39,8 +39,6 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
             <div className='App'>
                 <div className="flex-column">
                     <AdvancedSearchComponent data={data} keywords={keywords[0]} setKeywords={clearKeywords} idx={0}/>
-                    <Divider style={{width:'70vw', marginLeft:'15vw'}}/>
-                    <AdvancedSearchComponent data={data} keywords={keywords[1]} setKeywords={clearKeywords} idx={1}/>
                 </div>
 
                 <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>

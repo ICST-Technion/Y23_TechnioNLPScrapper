@@ -9,6 +9,7 @@ import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import addMonths from 'date-fns/addMonths';
 import { RangeType } from 'rsuite/esm/DateRangePicker';
+import { Typography } from '@mui/material';
 
 export interface timeRangeProps {
     text:string;
@@ -18,7 +19,7 @@ export interface timeRangeProps {
 
 export const TimeRange: React.FC<timeRangeProps> = ({text, timeRange, setTimeRange}) => {
   const ID = 1;
-  const [showSelector, setShowSelector] = React.useState<Boolean>(false);
+  const [showSelector, setShowSelector] = React.useState<Boolean>(true);
   const {afterToday} = DateRangePicker;
 
 const predefinedRanges:RangeType[] = [
@@ -89,6 +90,7 @@ const predefinedRanges:RangeType[] = [
 
     const getDateRangePicker = () => {
         return (
+          <div style={{marginLeft:'-3vw'}}>
             <DateRangePicker 
                 placeholder="Select Time Range" 
                 onChange={(range) => {
@@ -103,6 +105,7 @@ const predefinedRanges:RangeType[] = [
                 disabledDate={afterToday!()}
                 ranges={predefinedRanges}
             />
+          </div>
         )
     }
     const getTimeLabel = () =>{
@@ -123,7 +126,7 @@ const predefinedRanges:RangeType[] = [
     
     return(
         <div className='button-pop-component'>
-            <button className='select-button' onClick={handleOnClick}> {text} </button>
+            <Typography variant='body1'> {text} </Typography>
             {showSelector? getDateRangePicker(): getTimeLabel()}
         </div>
     )

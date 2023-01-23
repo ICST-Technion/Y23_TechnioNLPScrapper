@@ -90,9 +90,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
 
       React.useEffect(()=>{ 
         setLoading(true)
-        setTimeout(()=>{
-          setLoading(false)
-        },2000)
       },[])
 
       if(datasets.length !== 0){
@@ -112,24 +109,15 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
       }
   
       else return ( 
-      loading? (
+      
+        <>
+        <Background />
       <div className="Loading-Page">
       <CircleLoader
-        color={'#36d7b7'}
+        color={'#5e17eb'}
         loading={loading}
-        size={150}
+        size={180}
       />
-      </div>):
-     <>
-     <Background />
-      <div className="App">
-        <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <div className='flex result'>
-          <h3 className='result-header'> Example Results</h3>
-          <h4 className='result-sub-header'>keyword check in a hardcoded HTML from ynet</h4>
-          <ImageGallery items={images} showThumbnails showFullscreenButton showNav/>
-        </div>
-      </div> 
-    </>
-    )
+      </div>
+      </>);
 }

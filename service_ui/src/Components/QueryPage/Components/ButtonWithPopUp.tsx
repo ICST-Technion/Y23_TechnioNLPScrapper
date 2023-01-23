@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React from 'react';
 import "rsuite/dist/rsuite.min.css";
 import { SelectedValues } from './SelectedValues';
@@ -12,7 +13,7 @@ export interface buttonProps {
 export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUpdated}) => {
     const [message, setMessage] = React.useState('');
     const [counter, setCounter] = React.useState<number>(0);
-    const [showTextBox, setShowTextBox] = React.useState<Boolean>(false);
+    const [showTextBox, setShowTextBox] = React.useState<Boolean>(true);
 
     const handleOnClick = () => {
         setShowTextBox(!showTextBox);
@@ -29,10 +30,11 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
             setMessage('');
     }),[message])
     
-    const handleKeyDown = (event: { key: string; }) => {
-        if (event.key === ' ' || event.key === 'Enter') {
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter') {
+            console.log("in here")
             // 👇 Get input value
-            let newKey = message.substring(message.lastIndexOf(' '));
+            let newKey = event.target.value;
             //make sure we arent adding an empty word
             if(newKey !== '' && newKey !== undefined)
             {
@@ -75,7 +77,8 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
 
     return(
         <div className='button-pop-component'>
-            <button className='select-button' onClick={handleOnClick}> {text} </button>
+            {/*<button className='select-button' onClick={handleOnClick}> {text} </button>*/}
+            <Typography variant='body1'> {text} </Typography>
             {getPopUpComponent()}
         </div>
     )

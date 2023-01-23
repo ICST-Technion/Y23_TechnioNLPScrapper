@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import React from 'react'
-import { advancedQueryData } from '../../helpers';
+import { advancedQueryData } from '../../../helpers';
 import { ButtonWithPopUp } from './ButtonWithPopUp';
 import { TimeRange } from './TimeRange';
 export interface AdvancedSearchComponentProps {
@@ -38,7 +38,6 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
 
    return(<>
    <div className='button-container'>
-        <Typography variant='h3'> Advanced Search on Category: {data[idx].category_ID}</Typography>
         <div className='button-row'>
         <ButtonWithPopUp ID={5} text='included keywords' updated={keywordMap} setUpdated={setKeywordMap} />
         <ButtonWithPopUp ID={0} text='exclude keywords' updated={data[idx].excludedKeywords} setUpdated={data[idx].setExcludedKeywords} />
