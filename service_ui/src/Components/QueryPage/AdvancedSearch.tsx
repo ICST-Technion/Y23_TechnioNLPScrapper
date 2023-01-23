@@ -11,9 +11,10 @@ export interface advancedSearchprops {
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
+    setAxiosPromise: React.Dispatch<any>
 }
 
-export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, setKeywords, setPageNumber}) => {
+export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
 
     const clearKeywords = (idx:number) => {
         console.log(keywords);
@@ -48,7 +49,7 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
                 const reactServer='http://localhost:4000'
                 try
                 {
-                    const response=await axios.post(reactServer+'/advancedSearch',merged)
+                    setAxiosPromise(axios.post(reactServer+'/advancedSearch',merged));
                 }
                 catch (err) {
                     console.log(err);

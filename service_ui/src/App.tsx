@@ -12,6 +12,8 @@ import { advancedQueryData } from './helpers';
 function App() {
 
   const [keywords, setKeywords] = React.useState<string[]>(['', '']);
+  const [axiosPromise, setAxiosPromise] = React.useState<any>();
+
   const queryArray = [
     new advancedQueryData(
         React.useState<string>("1"),[
@@ -60,14 +62,16 @@ function App() {
       return (
         <>
           <Logo />
-          <SearchPage data={queryArray} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
+          <SearchPage data={queryArray} keywords={keywords} setKeywords={setKeywords}
+           setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
         </>
       );
     }
     else if(pageNumber === 1){
       return (
         <>
-          <BaseResults QueryData={queryArray} includedKeywords={keywords} setPageNumber={setPageNumber} />
+          <BaseResults QueryData={queryArray} includedKeywords={keywords} 
+          setPageNumber={setPageNumber} axiosPromise={axiosPromise}/>
         </>
       )
     }
@@ -82,7 +86,8 @@ function App() {
       return (
         <>
           <Logo cssClasses='minimized-logo'/>
-          <AdvancedSearch data={queryArray} keywords={keywords} setKeywords={setKeywords} setPageNumber={setPageNumber} />
+          <AdvancedSearch data={queryArray} keywords={keywords} setKeywords={setKeywords}
+           setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
         </>
       )
     }

@@ -10,10 +10,11 @@ export interface searchPageProps {
     data: advancedQueryData[];
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
-    setPageNumber: React.Dispatch<React.SetStateAction<number>>
+    setPageNumber: React.Dispatch<React.SetStateAction<number>>;
+    setAxiosPromise: React.Dispatch<any>;
 }
 
-export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywords, setPageNumber}) => {
+export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
 
     return (
         <>
@@ -24,7 +25,7 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
           const reactServer='http://localhost:4000'
                 try
                 {
-                    const response=await axios.post(reactServer+'/query',query_body)
+                    setAxiosPromise(axios.post(reactServer+'/query',query_body));
                 }
                 catch (err) {
                     console.log(err);

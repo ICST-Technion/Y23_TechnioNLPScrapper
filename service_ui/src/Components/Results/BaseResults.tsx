@@ -20,16 +20,17 @@ import { advancedQueryData } from '../../helpers';
 export interface baseResultsProps {
     QueryData:advancedQueryData[];
     includedKeywords:string[];
-    setPageNumber: React.Dispatch<React.SetStateAction<number>>
+    setPageNumber: React.Dispatch<React.SetStateAction<number>>;
+    axiosPromise:any;
 }
 
-export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber}) => {
+export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber, axiosPromise}) => {
     const [loading, setLoading] = React.useState(false);
     const [datasets, setDatasets] = React.useState<any[]>([])
     React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, [includedKeywords]);
     React.useEffect( ()=>{
       const getData = async () => {
-        
+        await(axiosPromise);
         let data:any = await fetch('http://localhost:5000/rows');
         data = (await data.json()).data;
         setDatasets(data);
