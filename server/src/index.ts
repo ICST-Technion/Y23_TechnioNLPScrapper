@@ -3,7 +3,7 @@ import cors from 'cors';
 import knex from 'knex';
 import dotenv from 'dotenv';
 import {client} from "./elephantsql.js"
-import axios, {isCancel, AxiosError} from 'axios';
+import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 dotenv.config();
 
@@ -22,7 +22,7 @@ async function clearTable() {
     axios.post(
       consts.api_address+consts.clear_request,
       body
-     ).then((response:Response)=>console.log(response.data));
+     ).then((response:AxiosResponse)=>console.log(response.data));
   } catch (error) {
     console.error(error);
   }

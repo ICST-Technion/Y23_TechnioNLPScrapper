@@ -192,6 +192,9 @@
   display: flex;
   align-items: center;
 }
+.go-back-button.run{
+  top: 9vh;
+}
 
 .FAQs, .go-back-button{
   position: fixed;

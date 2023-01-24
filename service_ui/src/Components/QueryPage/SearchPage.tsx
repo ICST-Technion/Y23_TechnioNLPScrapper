@@ -18,11 +18,11 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
 
     return (
         <>
-        <button className='FAQs' onClick={()=>{setPageNumber(2)}}>FAQs</button>
+        <button className='FAQs' onClick={()=>{setPageNumber(2); console.log("XXDDSS")}}>FAQs</button>
         <button className='run-query-button' onClick={async ()=>{
           setPageNumber(1);
           const query_body={"Query1": keywords[0],"Query2":keywords[1]};
-          const reactServer='http://localhost:4000'
+          const reactServer='http://localhost:5000'
                 try
                 {
                     setAxiosPromise(axios.post(reactServer+'/query',query_body));

@@ -54,7 +54,7 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
     <div className="App">
     <div className="faqs">
         {faqs.map((faq, i) => (
-          <AQComponent faq={faq} index={i} toggleFAQ={toggleFAQ} />
+          <AQComponent key={i} faq={faq} index={i} toggleFAQ={toggleFAQ} />
         ))}
       </div>
     </div>
