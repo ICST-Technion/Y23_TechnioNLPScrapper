@@ -61,7 +61,7 @@ def get_keyword_list_from_query(query):
         return query.strip('\"')
     # search separately keywords by space
     else:
-        return query.split()              
+        return query              
 def do_search_query(category='1'):
     '''
     performs a google search query (only keywords, no additional parameter)
