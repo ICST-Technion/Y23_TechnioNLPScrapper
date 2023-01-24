@@ -93,7 +93,7 @@ def get_database_query():
 
 def search_google(query, site_list, exclude_query=''):
     service = build("customsearch", "v1", developerKey="AIzaSyAamOh6jNC3irTF4NLwJQUv4Hb5S7AKK9s")
-    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query).execute()
+    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf').execute()
     return result
 
 
