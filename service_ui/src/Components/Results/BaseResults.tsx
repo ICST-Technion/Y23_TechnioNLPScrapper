@@ -32,7 +32,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
     React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, [includedKeywords]);
     React.useEffect( ()=>{
       const getData = async () => {
-        //await(axiosPromise);
+        await(axiosPromise);
         let data:any = await fetch('http://localhost:5000/rows');
         data = (await data.json()).data;
         setDatasets(data);
