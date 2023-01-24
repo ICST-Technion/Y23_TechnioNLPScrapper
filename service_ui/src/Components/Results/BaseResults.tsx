@@ -71,8 +71,8 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
 
     const data = {
       labels: [...datasets.map((row) => row.keyword), "only in cat 2", "in neither"],
-      datasets: [{id: 1, label:"category: "+QueryData[0].category_ID, data:datasets.map((row) => { return row.count}),backgroundColor: 'rgb(255, 99, 132)',},
-      {id: 2, label:"category: "+QueryData[1].category_ID, data:[...datasets.map((row) => { return Math.floor(Math.random() * (12 - 0 + 1)) + 0;}), 5],backgroundColor: 'rgb(75, 192, 192)',}]
+      datasets: [{id: 1, label:"category: "+QueryData[0].category_ID, data:datasets.map((row) => { return row.count}),backgroundColor: '#6a91dc',},
+      {id: 2, label:"category: "+QueryData[1].category_ID, data:[...datasets.map((row) => { return Math.floor(Math.random() * (12 - 0 + 1)) + 0;}), 5],backgroundColor: '#5e17eb',}]
     };
 
     
