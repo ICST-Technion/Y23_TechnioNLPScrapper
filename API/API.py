@@ -101,7 +101,7 @@ def parse_json_and_strip(json_field):
     field_content = request.json.get(json_field, [])
     if field_content == []:
         return []
-    return [word.strip() for word in field_content.split(' ')]
+    return field_content
 
 
 def parse_table_rows(rows):
@@ -158,13 +158,13 @@ def advanced_search_query(category='1'):
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
 
-    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)
+    keywords_to_search = create_parameters_list('included_keywords', 'excluded_keywords'+category)
     websites_to_search = create_parameters_list('Sites'+category, 'excluded_Sites'+category)
     websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
     # assumption: time range would be just two dates separated by comma
     time_range = parse_json_and_strip('date_range'+category)
     # no dates were passed
-    if time_range == []:
+    if not time_range:
         # either default range or just not searching by range at all
         datetime_range = [datetime(year=datetime.now().year - 1, month=1, day=1), datetime.now()]
     else:

@@ -32,7 +32,6 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
     
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter') {
-            console.log("in here")
             // 👇 Get input value
             let newKey = event.target.value;
             //make sure we arent adding an empty word

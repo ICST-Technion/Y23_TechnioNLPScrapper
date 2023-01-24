@@ -20,17 +20,24 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
         console.log(keywords);
         setKeywords((old) => idx === 0? ['',...old.slice(1)] : [...old.slice(0,1),'']);
     }
+    const setKeywordsFromChild = (idx:number, newKeywords:string) => {
+        console.log("setKeywordsFromChild",idx,newKeywords);
+        setKeywords((old) => idx === 0? [newKeywords,...old.slice(1)] : [...old.slice(0,1),newKeywords]);
+    }
+    
+    React.useEffect(() => { console.log(keywords[0].split(',')); }, [keywords]);
+
     const getAdvancedSearchJson=(idx:Number)=>{
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
         const advanced_body={ 
-            [`included_keywords${id_title}`]:keywords[idx.valueOf()],
-            [`excluded_keywords${id_title}`]:data[idx.valueOf()].excludedKeywords,
-            [`included_sites${id_title}`]:data[idx.valueOf()].includedWebsites,
-            [`excluded_sites${id_title}`]:data[idx.valueOf()].excludedWebsites,
-            [`date_range${id_title}`]:data[idx.valueOf()].timeRange,
-            [`positive_words${id_title}`]:data[idx.valueOf()].positiveKeywords,
-            [`negative_words${id_title}`]:data[idx.valueOf()].negativeKeywords
+            [`included_keywords`]:keywords[0].split(','),
+            [`excluded_keywords${id_title}`]:data[0].excludedKeywords,
+            [`included_sites${id_title}`]:data[0].includedWebsites,
+            [`excluded_sites${id_title}`]:data[0].excludedWebsites,
+            [`date_range${id_title}`]:data[0].timeRange,
+            [`positive_words${id_title}`]:data[0].positiveKeywords,
+            [`negative_words${id_title}`]:data[0].negativeKeywords
                 };
         return advanced_body;
     }
@@ -38,7 +45,7 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
         <>
             <div className='App'>
                 <div className="flex-column">
-                    <AdvancedSearchComponent data={data} keywords={keywords[0]} setKeywords={clearKeywords} idx={0}/>
+                    <AdvancedSearchComponent data={data} keywords={keywords[0]} clearKeywords={clearKeywords} setKeywords={setKeywordsFromChild} idx={0}/>
                 </div>
 
                 <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>

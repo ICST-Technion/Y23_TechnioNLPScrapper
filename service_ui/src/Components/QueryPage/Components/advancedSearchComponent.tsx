@@ -6,11 +6,12 @@ import { TimeRange } from './TimeRange';
 export interface AdvancedSearchComponentProps {
     data: advancedQueryData[];
     keywords: string;
-    setKeywords: (idx: number) => void;
+    clearKeywords: (idx: number) => void;
+    setKeywords: (idx: number, newKeywords: string) => void
     idx:number;
 }
 
-export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = ({data,keywords, setKeywords, idx}) => {
+export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = ({data,keywords, setKeywords, clearKeywords, idx}) => {
 
     const [keywordMap, setKeywordMap] = React.useState<Map<number,string>>(new Map());
 
@@ -23,23 +24,31 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
             newQuery.setTimeRange(undefined);
             newQuery.setPositiveKeywords(new Map());  
             newQuery.setNegativeKeywords(new Map());
-        setKeywords(idx);
+        clearKeywords(idx);
         setKeywordMap(new Map());
     }
 
     React.useEffect(()=>{
         const keywordArray= keywords?.split(' ');
         keywordArray?.forEach((keyword, index) => {
-            if(keyword)
+            if(keyword){
                 setKeywordMap(keywordMap.set(index,keyword));
+            }
         })
     }
     ,[])
 
+    const setKeywordMapFromChild:React.Dispatch<React.SetStateAction<Map<number, string>>> = (newMap) => {
+        console.log("on update keywordMap 1");
+        setKeywordMap(newMap);
+        const newKeywords = Array.from(keywordMap.values()).join(',');
+        setKeywords(idx, newKeywords);
+    }
+
    return(<>
    <div className='button-container'>
         <div className='button-row'>
-        <ButtonWithPopUp ID={5} text='included keywords' updated={keywordMap} setUpdated={setKeywordMap} />
+        <ButtonWithPopUp ID={5} text='included keywords' updated={keywordMap} setUpdated={setKeywordMapFromChild} />
         <ButtonWithPopUp ID={0} text='exclude keywords' updated={data[idx].excludedKeywords} setUpdated={data[idx].setExcludedKeywords} />
         </div>
         <div className='button-row'>
