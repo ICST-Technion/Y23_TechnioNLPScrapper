@@ -92,7 +92,8 @@ class Article:
             print("Website inaccessible")
             return
         self.soup = bs.BeautifulSoup(source, 'lxml')
-        self.title = self.soup.title.string
+        if  self.soup.title is not None:
+            self.title = self.soup.title.string
         self.website = get_website_name(link)
         self.date = parse_date(self.extract_date())
 
@@ -115,7 +116,8 @@ returns the date as a string
         if date_property is not None:
             return date_property.get("content")
             # we don't know how to extract
-        raise Exception('Extraction of date unknown')
+        return datetime.now()
+        # raise Exception('Extraction of date unknown')
 
     def find_text_by_regex(self, regex):
         """

@@ -213,5 +213,4 @@ def advanced_search():
 
 # driver function
 if __name__ == '__main__':
-    #TODO: remove debug mode in the final version
-    app.run(host="0.0.0.0",debug=True, port=4000)
+    app.run(host="0.0.0.0",debug=False, port=10000)

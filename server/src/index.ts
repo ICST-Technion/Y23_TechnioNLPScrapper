@@ -30,7 +30,7 @@ async function clearTable() {
 
 app.post('/query', async (req: Request, res: Response) => {
   try {
-    // console.log("made it");
+
     const response = await axios.post(consts.api_address+consts.query_request,req.body)
     console.log(response);
     const results = await client.query('SELECT * FROM "public"."articles"');
