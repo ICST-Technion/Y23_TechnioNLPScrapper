@@ -25,7 +25,7 @@ export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywor
           const reactServer='http://localhost:5000'
                 try
                 {
-                    setAxiosPromise(axios.post(reactServer+'/query',query_body));
+                    setAxiosPromise(axios.post(reactServer+'/query',query_body));              
                 }
                 catch (err) {
                     console.log(err);

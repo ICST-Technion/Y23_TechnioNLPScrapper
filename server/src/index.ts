@@ -28,8 +28,9 @@ async function clearTable() {
   }
 }
 
-app.get('/query', async (req: Request, res: Response) => {
+app.post('/query', async (req: Request, res: Response) => {
   try {
+    // console.log("made it");
     const response = await axios.post(consts.api_address+consts.query_request,req.body)
     console.log(response);
     const results = await client.query('SELECT * FROM "public"."articles"');
@@ -40,7 +41,7 @@ app.get('/query', async (req: Request, res: Response) => {
 }
 });
 
-app.get('/advancedSearch', async (req: Request, res: Response) => {
+app.post('/advancedSearch', async (req: Request, res: Response) => {
   try {
     const response = await axios.post(consts.api_address+consts.advanced_search_request,req.body)
     console.log(response);

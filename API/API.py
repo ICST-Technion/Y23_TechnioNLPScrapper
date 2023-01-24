@@ -82,7 +82,7 @@ def get_database_query():
     search and scrap 2 categories, and then return a response when finished
     '''
     do_search_query('1')
-    do_search_query('2')
+    # do_search_query('2')
     return make_response("OK", 200)  
 
 
@@ -203,7 +203,7 @@ def advanced_search():
     otherwise returns ok
     '''
     advanced_search_query('1')
-    advanced_search_query('2')
+    # advanced_search_query('2')
     # not adding specified statistics yet, because there is only counter for now
     return make_response("ok", 200)
 
@@ -211,4 +211,4 @@ def advanced_search():
 # driver function
 if __name__ == '__main__':
     #TODO: remove debug mode in the final version
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="0.0.0.0",debug=True, port=4000)
