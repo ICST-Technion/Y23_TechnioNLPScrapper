@@ -14,27 +14,27 @@ export interface FAQsPageProps {
 
 export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
   const [faqs, setFaqs] = React.useState<AQObject[]>([{
-    question: 'Q1',
-    answer: 'answer 1',
+    question: 'How do I search on the website?',
+    answer: 'You can search by entering keywords into the search bar on the homepage and clicking the run button.',
     open: false
   },{
-    question: 'Q2',
-    answer: 'answer 2',
+    question: 'Are there any advanced search options?',
+    answer: 'Yes, You can click on the advanced search options button which shows the diffrent ways to elevate the search such as filtering by date.',
     open: false
   },
   {
-    question: 'Q3',
-    answer: 'answer 3',
+    question: 'Is it possible to search in a specific language?',
+    answer: 'Yes, you can search in any language you want.',
     open: false
   }, {
-    question: 'Q4',
-    answer: 'answer 4',
+    question: 'Can I view the statistics for articles in different languages?',
+    answer: 'Yes, You can by searching the keywords in that language.',
     open: false
-  }, {
-    question: 'Q5',
-    answer: 'answer 5',
+  },{
+    question: 'Are the statistics updated in real-time?',
+    answer: 'Yes, You will always see the most up-to-date information when you view an articles statistics.',
     open: false
-  }]);
+  },]);
 
   const toggleFAQ = (index: number) => {
     setFaqs(faqs.map((faq, i) => {
