@@ -34,8 +34,8 @@ app.post('/query', async (req: Request, res: Response) => {
     const response = await axios.post(consts.api_address+consts.query_request,req.body)
     console.log(response);
     const results = await client.query('SELECT * FROM "public"."articles"');
-    res.send({data: results.rows});
-    clearTable()
+    res.status(200).send({data: results.rows}).end();
+    clearTable();
 } catch (err) {
     console.log(err);
     res.status(500).send(err);
@@ -47,8 +47,8 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
     const response = await axios.post(consts.api_address+consts.advanced_search_request,req.body)
     console.log(response);
     const results = await client.query('SELECT * FROM "public"."articles"');
-    res.send({data: results.rows});
-    clearTable()
+    res.status(200).send({data: results.rows}).end();
+    clearTable();
 } catch (err) {
     console.log(err);
     res.status(500).send(err);
@@ -59,6 +59,7 @@ app.get('/rows', async (req: Request, res: Response) => {
   try {
     const results = await client.query('SELECT * FROM "public"."articles"');
     res.send({data: results.rows});
+    clearTable();
 } catch (err) {
     console.log(err);
     res.status(500).send(err);

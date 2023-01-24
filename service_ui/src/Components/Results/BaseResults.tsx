@@ -35,9 +35,10 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
       const getData = async () => {
         try{
           const req = await(axiosPromise!);
-          let data:any = await fetch('http://localhost:5000/rows');
-          data = (await data.json()).data;
+          //let data:any = await fetch('http://localhost:5000/rows');
+          let data = req.data.data;
           setDatasets(data);
+          setLoading(false);
         }
         catch(err){
           alert(err);
@@ -142,7 +143,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
         };
       
 
-      if(datasets.length !== 0){
+      if(!loading){
         return (
           <>
           <Background />
