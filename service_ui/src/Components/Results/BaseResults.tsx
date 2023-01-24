@@ -14,7 +14,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { randomInt } from 'crypto';
 import CircleLoader from "react-spinners/CircleLoader"; 
-import { advancedQueryData } from '../../helpers';
+import { advancedQueryData, randomIntFromInterval } from '../../helpers';
 import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { AxiosResponse } from 'axios';
@@ -167,21 +167,37 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
 
           const intonationData = {
             labels: ["negative intonation sum", "nuetral intonation" ,"positive intonation sum"],
-            datasets: [{id:1, label:"negative intonation", data:[countSum("false"),0,0],backgroundColor: '#6a91dc',}
+            datasets: [{id:1, label:"negative intonation", data:[countSum("negative"),0,0],backgroundColor: '#6a91dc',}
               , {id:2, label:"nuetral intonation", data:[0,countSum("neutral"),0],backgroundColor: '#5e17eb',}
-              ,{id:3, label:"positive intonation", data:[0,0, countSum("true")],backgroundColor: '#4aeddd',},
+              ,{id:3, label:"positive intonation", data:[0,0, countSum("positive")],backgroundColor: '#4aeddd',},
             ]
           };
 
+          const keywords = merged.map((row) => row.keyword).filter(onlyUnique);
+          const websites = merged.map((row) => row.website).filter(onlyUnique);
+          const websiteDatasets =() => { 
+            let innerData = Array(keywords.length).fill(0);
+            let inner = websites.map((website, idx) => {
+            merged.forEach((row) => {if(row.website === website) innerData[keywords.indexOf(row.keyword)] = row.count});
+            console.log(innerData);
+            return {id:idx, label:website, data:innerData,
+               backgroundColor: `rgba(${randomIntFromInterval(0,255)}, ${randomIntFromInterval(0,255)}, ${randomIntFromInterval(0,255)}, 0.5)`,}
+          })
+          console.log(inner);
+          return inner;
+        }
+          
+
+          merged.map((row, idx) => {return {id: idx, label: row.keyword +": "+ row.website, data:[row.count],backgroundColor: '#6a91dc',}})
+
           const data = {
             labels: [...merged.map((row) => row.keyword).filter(onlyUnique)],
-            datasets: [{id: 1, label:"category: "+ merged[0].website, data:[merged[0].count],backgroundColor: '#6a91dc',},
-            {id: 2, label:"category: "+merged[1].website, data:[merged[1].count],backgroundColor: '#5e17eb',}]
+            datasets: websiteDatasets(),
           };
 
           const data2 = {
             labels: [...datasets.map((row) => row.keyword)],
-            datasets: [{id: 1, label:"category:1", data:datasets.map((row) => row.count),backgroundColor: '#6a91dc',}]
+            datasets: [{id: 1, label:"all data", data:datasets.map((row) => row.count),backgroundColor: '#6a91dc',}]
           };
       
           
