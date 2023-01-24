@@ -37,7 +37,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
             //make sure we arent adding an empty word
             if(newKey !== '' && newKey !== undefined)
             {
-                setUpdated(updated.set(counter,newKey));
+                setUpdated((old) => new Map(old.set(counter,newKey)));
                 setCounter(counter+1);
                 setMessage('');
             }

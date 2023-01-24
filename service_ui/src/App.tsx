@@ -15,28 +15,14 @@ function App() {
   const [keywords, setKeywords] = React.useState<string[]>(['', '']);
   const [axiosPromise, setAxiosPromise] = React.useState<Promise<AxiosResponse<any, any>>>();
 
-  const queryArray = [
-    new advancedQueryData(
-        React.useState<string>("1"),[
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()), 
-        React.useState<Map<number,string>>(new Map())
-      ],React.useState<[Date,Date]>()
-    ),
-    new advancedQueryData(
-        React.useState<string>("2"),[
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()),
-        React.useState<Map<number,string>>(new Map()), 
-        React.useState<Map<number,string>>(new Map())
-      ],React.useState<[Date,Date]>()
-    )
-  ];
+  const [category_ID, setCategory_ID] = React.useState<string>("1");
+  const [includedWebsites, setIncludedWebsites] = React.useState<Map<number,string>>(new Map());
+  const [excludedWebsites, setExcludedWebsites] = React.useState<Map<number,string>>(new Map());
+  const [excludedKeywords, setExcludedKeywords] = React.useState<Map<number,string>>(new Map());
+  const [specificStatistic, setSpecificStatistic] = React.useState<Map<number,string>>(new Map());
+  const [positiveKeywords,setPositiveKeywords] = React.useState<Map<number,string>>(new Map());
+  const [negativeKeywords,setNegativeKeywords] = React.useState<Map<number,string>>(new Map());
+  const [timeRange, setTimeRange] = React.useState<[Date,Date]>();
 
 
   const [pageNumber, setPageNumber] = React.useState<number>(0)
@@ -63,7 +49,7 @@ function App() {
       return (
         <>
           <Logo />
-          <SearchPage data={queryArray} keywords={keywords} setKeywords={setKeywords}
+          <SearchPage keywords={keywords} setKeywords={setKeywords}
            setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
         </>
       );
@@ -71,7 +57,7 @@ function App() {
     else if(pageNumber === 1){
       return (
         <>
-          <BaseResults QueryData={queryArray} includedKeywords={keywords} 
+          <BaseResults includedKeywords={keywords} 
           setPageNumber={setPageNumber} axiosPromise={axiosPromise}/>
         </>
       )
@@ -87,7 +73,14 @@ function App() {
       return (
         <>
           <Logo cssClasses='minimized-logo'/>
-          <AdvancedSearch data={queryArray} keywords={keywords} setKeywords={setKeywords}
+          <AdvancedSearch keywords={keywords} setKeywords={setKeywords}
+            includedWebsites={includedWebsites} setIncludedWebsites={setIncludedWebsites}
+            excludedWebsites={excludedWebsites} setExcludedWebsites={setExcludedWebsites}
+            excludedKeywords={excludedKeywords} setExcludedKeywords={setExcludedKeywords}
+            specificStatistic={specificStatistic} setSpecificStatistic={setSpecificStatistic}
+            positiveKeywords={positiveKeywords} setPositiveKeywords={setPositiveKeywords}
+            negativeKeywords={negativeKeywords} setNegativeKeywords={setNegativeKeywords}
+            timeRange={timeRange} setTimeRange={setTimeRange}
            setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
         </>
       )

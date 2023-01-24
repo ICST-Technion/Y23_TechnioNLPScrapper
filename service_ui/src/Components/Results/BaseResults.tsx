@@ -22,13 +22,12 @@ import { DataObject } from '../../clasees';
 
 
 export interface baseResultsProps {
-    QueryData:advancedQueryData[];
     includedKeywords:string[];
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     axiosPromise?:Promise<AxiosResponse<any, any>>;
 }
 
-export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber, axiosPromise}) => {
+export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPageNumber, axiosPromise}) => {
     const [loading, setLoading] = React.useState(false);
     const [datasets, setDatasets] = React.useState<any[]>([]);
     const [merged, setMerged] = React.useState<any[]>([]);

@@ -7,14 +7,13 @@ import { SearchComponent } from './Components/searchComponent';
 import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 
 export interface searchPageProps {
-    data: advancedQueryData[];
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>>>;
 }
 
-export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
+export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
 
     return (
         <>
