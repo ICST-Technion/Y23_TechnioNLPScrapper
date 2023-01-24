@@ -58,7 +58,8 @@ function App() {
       return (
         <>
           <BaseResults includedKeywords={keywords} 
-          setPageNumber={setPageNumber} axiosPromise={axiosPromise}/>
+          setPageNumber={setPageNumber} axiosPromise={axiosPromise}
+          positiveKeywords={Array.from(positiveKeywords.values())} negativeKeywords={Array.from(negativeKeywords.values())}/>
         </>
       )
     }

@@ -25,9 +25,11 @@ export interface baseResultsProps {
     includedKeywords:string[];
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     axiosPromise?:Promise<AxiosResponse<any, any>>;
+    positiveKeywords?:string[];
+    negativeKeywords?:string[];
 }
 
-export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPageNumber, axiosPromise}) => {
+export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPageNumber, axiosPromise, positiveKeywords, negativeKeywords}) => {
     const [loading, setLoading] = React.useState(false);
     const [datasets, setDatasets] = React.useState<any[]>([]);
     const [merged, setMerged] = React.useState<any[]>([]);
@@ -103,15 +105,13 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
       return self.indexOf(value) === index;
     }
 
-
     const countSum = (type:string) => {
       let sum = 0;
-      datasets.forEach((row) => {row.intonation === type? sum++ : sum=sum});
+      datasets.forEach((row) => {row.intonation === type? sum++ : type === 'positive'? 
+      positiveKeywords?.includes(row.keyword)? sum++ : sum = sum : type==='negative'? negativeKeywords?.includes(row.keyword)? sum++ 
+      : sum = sum : sum = sum});
       return sum;
     }
-
-
-
 
       React.useEffect(()=>{ 
         setLoading(true)
@@ -175,15 +175,18 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
           const keywords = merged.map((row) => row.keyword).filter(onlyUnique);
           const websites = merged.map((row) => row.website).filter(onlyUnique);
           const websiteDatasets =() => { 
-            let innerData = Array(keywords.length).fill(0);
-            let inner = websites.map((website, idx) => {
-            merged.forEach((row) => {if(row.website === website) innerData[keywords.indexOf(row.keyword)] = row.count});
+            let innerData = new Array(websites.length);
+            for (let i = 0; i < websites.length; i++) {
+                innerData[i] = new Array(keywords.length);
+            }
+            websites.forEach((website, idx) => {
+            merged.forEach((row) => {if(row.website === website) innerData[idx][keywords.indexOf(row.keyword)] = row.count});
             console.log(innerData);
-            return {id:idx, label:website, data:innerData,
-               backgroundColor: `rgba(${randomIntFromInterval(0,255)}, ${randomIntFromInterval(0,255)}, ${randomIntFromInterval(0,255)}, 0.5)`,}
           })
-          console.log(inner);
-          return inner;
+          let sets = innerData.map((dataset, idx) => 
+          {return {id: idx, label: websites[idx], data:dataset,
+            backgroundColor: `rgba(${randomIntFromInterval(0,255)},${randomIntFromInterval(0,255)},${randomIntFromInterval(0,255)},0.5)`,}})
+          return sets;
         }
           
 
