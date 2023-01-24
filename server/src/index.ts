@@ -38,6 +38,7 @@ app.post('/query', async (req: Request, res: Response) => {
     clearTable();
 } catch (err) {
     console.log(err);
+    clearTable();
     res.status(500).send(err);
 }
 });
@@ -51,6 +52,7 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
     clearTable();
 } catch (err) {
     console.log(err);
+    clearTable();
     res.status(500).send(err);
 }
 });
