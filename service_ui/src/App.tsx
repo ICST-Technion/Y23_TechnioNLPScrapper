@@ -7,12 +7,13 @@ import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
 import { advancedQueryData } from './helpers';
+import { AxiosResponse } from 'axios';
 
 
 function App() {
 
   const [keywords, setKeywords] = React.useState<string[]>(['', '']);
-  const [axiosPromise, setAxiosPromise] = React.useState<any>();
+  const [axiosPromise, setAxiosPromise] = React.useState<Promise<AxiosResponse<any, any>>>();
 
   const queryArray = [
     new advancedQueryData(

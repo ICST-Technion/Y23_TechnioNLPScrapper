@@ -17,25 +17,33 @@ import CircleLoader from "react-spinners/CircleLoader";
 import { advancedQueryData } from '../../helpers';
 import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
+import { AxiosResponse } from 'axios';
 
 
 export interface baseResultsProps {
     QueryData:advancedQueryData[];
     includedKeywords:string[];
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-    axiosPromise:any;
+    axiosPromise?:Promise<AxiosResponse<any, any>>;
 }
 
 export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeywords, setPageNumber, axiosPromise}) => {
     const [loading, setLoading] = React.useState(false);
-    const [datasets, setDatasets] = React.useState<any[]>([])
+    const [datasets, setDatasets] = React.useState<any[]>([]);
     React.useEffect(() => { console.log(`searching for keywords ${includedKeywords}`)}, [includedKeywords]);
     React.useEffect( ()=>{
       const getData = async () => {
-        await(axiosPromise);
-        let data:any = await fetch('http://localhost:5000/rows');
-        data = (await data.json()).data;
-        setDatasets(data);
+        try{
+          const req = await(axiosPromise!);
+          //let data:any = await fetch('http://localhost:5000/rows');
+          let data = req.data.data;
+          setDatasets(data);
+          setLoading(false);
+        }
+        catch(err){
+          alert(err);
+          setPageNumber(0);
+        }
       }
       getData();
     },[])
@@ -135,7 +143,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({QueryData, includedKeyw
         };
       
 
-      if(datasets.length !== 0){
+      if(!loading){
         return (
           <>
           <Background />

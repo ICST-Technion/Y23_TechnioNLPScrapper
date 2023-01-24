@@ -4,14 +4,14 @@ import React from 'react';
 import { advancedQueryData } from '../../helpers';
 import searchIcon from './Images/magnifying-glass.png'
 import { SearchComponent } from './Components/searchComponent';
-import axios, {isCancel, AxiosError} from 'axios';
+import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 
 export interface searchPageProps {
     data: advancedQueryData[];
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-    setAxiosPromise: React.Dispatch<any>;
+    setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>>>;
 }
 
 export const SearchPage: React.FC<searchPageProps> = ({data, keywords, setKeywords, setPageNumber, setAxiosPromise}) => {

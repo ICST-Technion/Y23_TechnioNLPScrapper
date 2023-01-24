@@ -4,14 +4,14 @@ import { advancedQueryData } from '../../helpers';
 import { AdvancedSearchComponent } from './Components/advancedSearchComponent';
 import { ButtonWithPopUp } from './Components/ButtonWithPopUp';
 import { TimeRange } from './Components/TimeRange';
-import axios, {isCancel, AxiosError} from 'axios';
+import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 
 export interface advancedSearchprops {
     data: advancedQueryData[];
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-    setAxiosPromise: React.Dispatch<any>
+    setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>>>
 }
 
 export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
