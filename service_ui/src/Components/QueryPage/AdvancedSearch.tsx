@@ -31,7 +31,7 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({data, keywords, s
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
         const advanced_body={ 
-            [`included_keywords`]:keywords[0].split(','),
+            [`included_keywords${id_title}`]:keywords[0].split(','),
             [`excluded_keywords${id_title}`]:data[0].excludedKeywords,
             [`included_sites${id_title}`]:data[0].includedWebsites,
             [`excluded_sites${id_title}`]:data[0].excludedWebsites,

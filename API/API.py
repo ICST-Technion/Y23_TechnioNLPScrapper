@@ -86,9 +86,9 @@ def get_database_query():
     return make_response("OK", 200)  
 
 
-def search_google(query, site_list):
+def search_google(query, site_list, exclude_query=''):
     service = build("customsearch", "v1", developerKey="AIzaSyDShZ9oDpV1o-z-KAcrQXAB-pKEexqNJHc")
-    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list).execute()
+    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query).execute()
     return result
 
 
@@ -128,11 +128,11 @@ def create_parameters_list(included_field, excluded_field):
     return include_exclude_lists([], included_parameters, excluded_parameters)
 
 
-def is_at_least_one_keyword():
+def is_at_least_one_keyword(category='1'):
     '''
     any request requires at least one keyword, bad request otherwise
     '''
-    included_keywords = parse_json_and_strip('included_keywords')
+    included_keywords = parse_json_and_strip('included_keywords'+category)
     return included_keywords != []
 
 def map_keywords_to_intonation(keywords_list):
@@ -158,7 +158,7 @@ def advanced_search_query(category='1'):
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
 
-    keywords_to_search = create_parameters_list('included_keywords', 'excluded_keywords'+category)
+    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)
     websites_to_search = create_parameters_list('Sites'+category, 'excluded_Sites'+category)
     websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
     # assumption: time range would be just two dates separated by comma
@@ -179,6 +179,7 @@ def advanced_search_query(category='1'):
     query_executor = SQLQuery()
     negative_words =parse_json_and_strip('negative_words'+category)
     positive_words =parse_json_and_strip('positive_words'+category)
+    keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
     query_executor.insert_keyword_intonation_to_sql(words_to_insert)
@@ -188,10 +189,14 @@ def advanced_search_query(category='1'):
     encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
     decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
     query = ','.join(decoded_keywords)
+    encoded_exclude = [quote(keyword) for keyword in keywords_to_exclude]
+    decoded_exclude = [unquote(keyword) for keyword in encoded_exclude]
+    exclude_query = ','.join(decoded_exclude)
     for website in websites_to_search:
-        links_to_scrap = search_google(query, website)
+        links_to_scrap = search_google(query, website, exclude_query)
         scrap_links(links_to_scrap,keyword_to_intonation)
-    # TODO : edit the keywords_to_search and add exclude keywords
+    # TODO: specify dates in the google search
+
 
 @app.route('/advancedSearch', methods=['POST'])
 def advanced_search():
