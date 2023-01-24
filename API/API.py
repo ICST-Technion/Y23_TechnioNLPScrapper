@@ -54,9 +54,7 @@ def scrap_links(links_to_scrap,keywords_intonation_list,category):
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
-                make_response("This website is forbidden to scrap",403)
-            finally:
-                continue        
+                make_response("This website is forbidden to scrap",403)        
 def do_search_query(category='1'):
     '''
     performs a google search query (only keywords, no additional parameter)
