@@ -1,22 +1,17 @@
 {
   "files": {
-    "main.css": "/TechnioNLPScrapper/static/css/main.98837b9c.css",
-    "main.js": "/TechnioNLPScrapper/static/js/main.f623e4db.js",
+    "main.css": "/TechnioNLPScrapper/static/css/main.c6cf63c0.css",
+    "main.js": "/TechnioNLPScrapper/static/js/main.d1741465.js",
     "static/js/787.3dc3f978.chunk.js": "/TechnioNLPScrapper/static/js/787.3dc3f978.chunk.js",
-    "static/media/graph1.jpg": "/TechnioNLPScrapper/static/media/graph1.9eec708ffbafb442b7a4.jpg",
-    "static/media/graph3.jpg": "/TechnioNLPScrapper/static/media/graph3.42a533fc6b97ea28cc53.jpg",
-    "static/media/graph2.jpg": "/TechnioNLPScrapper/static/media/graph2.07236a0c99cd67bbaaa5.jpg",
-    "static/media/logo.jpg": "/TechnioNLPScrapper/static/media/logo.2c395670a4c810bc6bcc.jpg",
-    "static/media/magnifying-glass.png": "/TechnioNLPScrapper/static/media/magnifying-glass.f74bdf1b3c6437d319df.png",
-    "static/media/BG.jpg": "/TechnioNLPScrapper/static/media/BG.115ba2e71907969f8e56.jpg",
+    "static/media/BG.jpg": "/TechnioNLPScrapper/static/media/BG.ce8836c333f90dfa9ebc.jpg",
+    "static/media/logo.jpg": "/TechnioNLPScrapper/static/media/logo.9a699c8733f12729f9a4.jpg",
     "index.html": "/TechnioNLPScrapper/index.html",
-    "static/media/iconmonstr-angel-down-circle-thin.svg": "/TechnioNLPScrapper/static/media/iconmonstr-angel-down-circle-thin.91c27b40643bb1b11813.svg",
-    "main.98837b9c.css.map": "/TechnioNLPScrapper/static/css/main.98837b9c.css.map",
-    "main.f623e4db.js.map": "/TechnioNLPScrapper/static/js/main.f623e4db.js.map",
+    "main.c6cf63c0.css.map": "/TechnioNLPScrapper/static/css/main.c6cf63c0.css.map",
+    "main.d1741465.js.map": "/TechnioNLPScrapper/static/js/main.d1741465.js.map",
     "787.3dc3f978.chunk.js.map": "/TechnioNLPScrapper/static/js/787.3dc3f978.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.98837b9c.css",
-    "static/js/main.f623e4db.js"
+    "static/css/main.c6cf63c0.css",
+    "static/js/main.d1741465.js"
   ]
 }
