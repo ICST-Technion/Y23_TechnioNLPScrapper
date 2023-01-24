@@ -38,6 +38,7 @@ app.post('/query', async (req: Request, res: Response) => {
     clearTable()
 } catch (err) {
     console.log(err);
+    res.status(500).send(err);
 }
 });
 
@@ -50,6 +51,7 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
     clearTable()
 } catch (err) {
     console.log(err);
+    res.status(500).send(err);
 }
 });
 
@@ -59,7 +61,12 @@ app.get('/rows', async (req: Request, res: Response) => {
     res.send({data: results.rows});
 } catch (err) {
     console.log(err);
+    res.status(500).send(err);
 }
+});
+
+app.all('*', (req: Request, res: Response) => {
+  res.status(404).send('Page not found');
 });
 
 app.listen(port);
