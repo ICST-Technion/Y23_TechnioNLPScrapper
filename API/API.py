@@ -32,7 +32,7 @@ def get_default_websites():
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
 
-def scrap_links(links_to_scrap,keywords_intonation_list,category):
+def scrap_links(links_to_scrap,keywords_intonation_list,category='1'):
     '''
     scrapping information about each keyword and website
     then inserting them into the databse
