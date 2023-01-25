@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/TechnioNLPScrapper/static/css/main.c6cf63c0.css",
-    "main.js": "/TechnioNLPScrapper/static/js/main.57b68bd5.js",
+    "main.css": "/TechnioNLPScrapper/static/css/main.47455677.css",
+    "main.js": "/TechnioNLPScrapper/static/js/main.b4df3c1b.js",
     "static/js/787.3dc3f978.chunk.js": "/TechnioNLPScrapper/static/js/787.3dc3f978.chunk.js",
     "static/media/BG.jpg": "/TechnioNLPScrapper/static/media/BG.ce8836c333f90dfa9ebc.jpg",
     "static/media/logo.jpg": "/TechnioNLPScrapper/static/media/logo.9a699c8733f12729f9a4.jpg",
     "index.html": "/TechnioNLPScrapper/index.html",
-    "main.c6cf63c0.css.map": "/TechnioNLPScrapper/static/css/main.c6cf63c0.css.map",
-    "main.57b68bd5.js.map": "/TechnioNLPScrapper/static/js/main.57b68bd5.js.map",
+    "main.47455677.css.map": "/TechnioNLPScrapper/static/css/main.47455677.css.map",
+    "main.b4df3c1b.js.map": "/TechnioNLPScrapper/static/js/main.b4df3c1b.js.map",
     "787.3dc3f978.chunk.js.map": "/TechnioNLPScrapper/static/js/787.3dc3f978.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c6cf63c0.css",
-    "static/js/main.57b68bd5.js"
+    "static/css/main.47455677.css",
+    "static/js/main.b4df3c1b.js"
   ]
 }
