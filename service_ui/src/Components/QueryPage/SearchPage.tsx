@@ -21,7 +21,7 @@ export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, se
         <button className='run-query-button' onClick={async ()=>{
           setPageNumber(1);
           const query_body={"Query1": keywords[0]};
-          const reactServer='http://localhost:5000'
+          const reactServer='https://technionlp-fe-service.onrender.com'
                 try
                 {
                     setAxiosPromise(axios.post(reactServer+'/query',query_body));              

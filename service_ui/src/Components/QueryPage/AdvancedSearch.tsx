@@ -126,7 +126,7 @@ export const AdvancedSearch: React.FC<advancedSearchprops> = ({keywords, setKeyw
                 <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
                 <button className='run-query-button' onClick={async ()=>{setPageNumber(1);
                 const merged = {...getAdvancedSearchJson(0)};
-                const reactServer='http://localhost:5000'
+                const reactServer='https://technionlp-fe-service.onrender.com'
                 try
                 {
                     setAxiosPromise(axios.post(reactServer+'/advancedSearch',merged));
