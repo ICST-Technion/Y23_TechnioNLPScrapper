@@ -51,8 +51,12 @@ def parse_date(date_as_string):
         date_time_list = date_as_string.rsplit("T")
     else:
         date_time_list = date_as_string.rsplit(" ")
-    date = date_time_list[0]
-    time = date_time_list[1]
+    if len(date_time_list) >= 2:
+        date = date_time_list[0]
+        time = date_time_list[1]
+    else:
+        date = "2023-01-01"
+        time = "00:00"
     year_month_day = date.rsplit("-")
     hour_minute = time.rsplit(":")
     parsed_day = datetime(int(year_month_day[0]), int(year_month_day[1]), int(year_month_day[2])
