@@ -36,3 +36,55 @@ export class advancedQueryData{
   export function randomIntFromInterval(min: number, max: number) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
+
+  export const useQueryConstructor = (advancedQuery: any, setAdvancedQuery: React.Dispatch<any>, idx: number) => {
+    const createNewQuery = () => setAdvancedQuery(
+        {
+             category_ID: idx,
+             includedWebsites: new Map<number, string>(),
+             excludedWebsites: new Map<number, string>(),
+             excludedKeywords: new Map<number, string>(),
+             specificStatistic: new Map<number, string>(),
+             positiveKeywords: new Map<number, string>(),
+             negativeKeywords: new Map<number, string>(),
+             timeRange:undefined
+        }
+    )
+
+     const setIncludedWebsites = (includedWebsites:Map<number, string>) =>
+     setAdvancedQuery((oldData:any) => {oldData.includedWebsites = includedWebsites; return {...oldData}});
+
+     const setExcludedWebsites = (excludedWebsites:Map<number, string>) =>
+     setAdvancedQuery((oldData:any) => {oldData.excludedWebsites = excludedWebsites; return {...oldData}});
+
+     const setExcludedKeywords = (excludedKeywords:Map<number, string>) =>
+     setAdvancedQuery((oldData:any) => {oldData.excludedKeywords = excludedKeywords; return {...oldData}});
+
+     const setSpecificStatistic = (specificStatistic:Map<number, string>) =>
+     setAdvancedQuery((oldData:any) => {oldData.specificStatistic = specificStatistic; return {...oldData}});
+
+     const setPositiveKeywords = (positiveKeywords:Map<number, string>) =>
+     setAdvancedQuery((oldData:any) => {oldData.positiveKeywords = positiveKeywords; return {...oldData}});
+
+     const setNegativeKeywords = (negativeKeywords:Map<number, string>) =>
+     setAdvancedQuery((oldData:any) => {oldData.negativeKeywords = negativeKeywords; return {...oldData}});
+
+     const setTimeRange = (timeRange:[Date,Date] | undefined) =>
+     setAdvancedQuery((oldData:any) => {oldData.timeRange = timeRange; return {...oldData}});
+
+     const clear = () => { createNewQuery()}
+
+     return{
+        advancedQuery,
+        createNewQuery,
+        setIncludedWebsites,
+        setExcludedWebsites,
+        setExcludedKeywords,
+        setSpecificStatistic,
+        setPositiveKeywords,
+        setNegativeKeywords,
+        setTimeRange,
+        clear
+     }
+
+}

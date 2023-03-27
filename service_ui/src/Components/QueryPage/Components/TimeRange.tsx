@@ -14,8 +14,10 @@ import { Typography } from '@mui/material';
 export interface timeRangeProps {
     text:string;
     timeRange:[Date,Date] | undefined;
-    setTimeRange:React.Dispatch<React.SetStateAction<[Date,Date] | undefined>>;
+    setTimeRange:(v:[Date,Date] | undefined) => void;
 }
+
+
 
 export const TimeRange: React.FC<timeRangeProps> = ({text, timeRange, setTimeRange}) => {
   const ID = 1;
@@ -84,10 +86,6 @@ const predefinedRanges:RangeType[] = [
     },
   ];
 
-    const handleOnClick = () => {
-      setShowSelector(!showSelector)
-    }
-
     const getDateRangePicker = () => {
         return (
           <div style={{marginLeft:'-3vw'}}>
@@ -97,7 +95,7 @@ const predefinedRanges:RangeType[] = [
                     if(range)
                         setTimeRange([range![0], range![1]]);
                 }}
-                value={timeRange}
+                value={timeRange ? timeRange : null}
                 preventOverflow
                 cleanable={true}
                 onClean={() => {setTimeRange(undefined)}}

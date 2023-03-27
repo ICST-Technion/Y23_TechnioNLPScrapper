@@ -6,8 +6,9 @@ import { FAQsPage } from './FAQsPage';
 import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
-import { advancedQueryData } from './helpers';
+import { advancedQueryData, useQueryConstructor } from './helpers';
 import { AxiosResponse } from 'axios';
+import { AdvancedSearchComponent } from './Components/QueryPage/Components/advancedSearchComponent';
 
 
 function App() {
@@ -23,7 +24,12 @@ function App() {
   const [positiveKeywords,setPositiveKeywords] = React.useState<Map<number,string>>(new Map());
   const [negativeKeywords,setNegativeKeywords] = React.useState<Map<number,string>>(new Map());
   const [timeRange, setTimeRange] = React.useState<[Date,Date]>();
+  const [queryState, setQueryState] = React.useState<any>();
+  const query = useQueryConstructor(queryState, setQueryState, 1);
 
+  React.useEffect(() => {
+    query.createNewQuery();
+  },[])
 
   const [pageNumber, setPageNumber] = React.useState<number>(0)
 
@@ -51,6 +57,7 @@ function App() {
           <Logo />
           <SearchPage keywords={keywords} setKeywords={setKeywords}
            setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
+           <button onClick={() => setPageNumber(6)}>Advanced Search trial</button>
         </>
       );
     }
@@ -70,7 +77,7 @@ function App() {
         </>
       )
     }
-    else if(pageNumber == 3) {
+    else if(pageNumber === 3) {
       return (
         <>
           <Logo cssClasses='minimized-logo'/>
@@ -82,7 +89,17 @@ function App() {
             positiveKeywords={positiveKeywords} setPositiveKeywords={setPositiveKeywords}
             negativeKeywords={negativeKeywords} setNegativeKeywords={setNegativeKeywords}
             timeRange={timeRange} setTimeRange={setTimeRange}
-           setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
+            setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
+        </>
+      )
+    }
+    else if(pageNumber === 6) {
+      
+      return (
+        <>
+          <Logo cssClasses='minimized-logo'/>
+          <AdvancedSearchComponent keywords={keywords} setKeywords={setKeywords} idx={0} query={query}
+          setAxiosPromise={setAxiosPromise} setPageNumber={setPageNumber}/>
         </>
       )
     }

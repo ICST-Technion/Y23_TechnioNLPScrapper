@@ -7,17 +7,12 @@ export interface buttonProps {
     ID:number;
     text:string;
     updated:Map<number, string>;
-    setUpdated:React.Dispatch<React.SetStateAction<Map<number, string>>>;
+    setUpdated:(v:Map<number, string>) => void
 }
 
 export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUpdated}) => {
     const [message, setMessage] = React.useState('');
     const [counter, setCounter] = React.useState<number>(0);
-    const [showTextBox, setShowTextBox] = React.useState<Boolean>(true);
-
-    const handleOnClick = () => {
-        setShowTextBox(!showTextBox);
-    }
 
     const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setMessage(event.target.value);
@@ -37,7 +32,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
             //make sure we arent adding an empty word
             if(newKey !== '' && newKey !== undefined)
             {
-                setUpdated((old) => new Map(old.set(counter,newKey)));
+                setUpdated(new Map(updated.set(counter,newKey)));
                 setCounter(counter+1);
                 setMessage('');
             }
@@ -52,12 +47,11 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
     }
 
     const getPopUpComponent = () =>{
-        if(ID === 4 && showTextBox) return(<div>Currently Only Supports Keyword Counter</div>)
+        if(ID === 4) return(<div>Currently Only Supports Keyword Counter</div>)
         else {
             return(
             <>
                 <div className='type-in'>
-                {showTextBox? 
                     <input
                         type="text"
                         id="message"
@@ -65,8 +59,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
                         value={message}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
-                    /> : <></>
-                }
+                    />
                     <SelectedValues values={updated} removeString={removeOnClick} ID={ID}/>
                 </div>
             </>
