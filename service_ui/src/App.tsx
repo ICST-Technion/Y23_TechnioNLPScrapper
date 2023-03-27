@@ -24,9 +24,13 @@ function App() {
   const [positiveKeywords,setPositiveKeywords] = React.useState<Map<number,string>>(new Map());
   const [negativeKeywords,setNegativeKeywords] = React.useState<Map<number,string>>(new Map());
   const [timeRange, setTimeRange] = React.useState<[Date,Date]>();
+
+  // this will be used instead of the long list of states above, the base query
   const [queryState, setQueryState] = React.useState<any>();
+  //create the constructed query, and save the value
   const query = useQueryConstructor(queryState, setQueryState, 1);
 
+  // during only the first load of the page, create a new query object, which will initialize the queryState
   React.useEffect(() => {
     query.createNewQuery();
   },[])
@@ -57,6 +61,8 @@ function App() {
           <Logo />
           <SearchPage keywords={keywords} setKeywords={setKeywords}
            setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
+           {// add a trial button to lead to the new search page
+           }
            <button onClick={() => setPageNumber(6)}>Advanced Search trial</button>
         </>
       );
@@ -94,7 +100,8 @@ function App() {
       )
     }
     else if(pageNumber === 6) {
-      
+      //the trial page, will lead to the new page using the new component
+      // can see how much shorter it is that the if statement above
       return (
         <>
           <Logo cssClasses='minimized-logo'/>
