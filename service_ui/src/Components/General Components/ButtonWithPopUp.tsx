@@ -40,6 +40,11 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
         }
     };
 
+    /*
+    *   This function is called when the user clicks on the x button next to a keyword
+    *   It takes in the index of the keyword and deletes it from the map
+    *   It then updates the map
+    */
     const removeOnClick = (index:number) => {
         let newMap = new Map(updated);
         newMap.delete(index);
@@ -47,8 +52,10 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
     }
 
     const getPopUpComponent = () =>{
+        // will not need the id statement when we support statistic types or remove it
         if(ID === 4) return(<div>Currently Only Supports Keyword Counter</div>)
         else {
+            // return the text input and the selected values component
             return(
             <>
                 <div className='type-in'>
@@ -69,7 +76,6 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
 
     return(
         <div className='button-pop-component'>
-            {/*<button className='select-button' onClick={handleOnClick}> {text} </button>*/}
             <Typography variant='body1'> {text} </Typography>
             {getPopUpComponent()}
         </div>

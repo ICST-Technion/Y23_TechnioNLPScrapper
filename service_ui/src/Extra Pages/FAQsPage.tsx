@@ -1,19 +1,16 @@
 import React from 'react';
-import { AQComponent } from './FAQ';
+import { MAIN_SEARCH_PAGE } from '../Helpers/consts';
+import { AQComponent, FAQObject } from './FAQComponent';
 
-
-export interface AQObject{
-  question: string;
-  answer: string;
-  open: boolean;
-}
 
 export interface FAQsPageProps {
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
-  const [faqs, setFaqs] = React.useState<AQObject[]>([{
+
+
+  const FAQList = [{
     question: 'How do I search on the website?',
     answer: 'You can search by entering keywords into the search bar on the homepage and clicking the run button.',
     open: false
@@ -34,8 +31,14 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
     question: 'Are the statistics updated in real-time?',
     answer: 'Yes, You will always see the most up-to-date information when you view an articles statistics.',
     open: false
-  },]);
+  },]
 
+  const [faqs, setFaqs] = React.useState<FAQObject[]>(FAQList);
+
+
+  /*
+  * This function toggles the open state of the FAQ object at the given index
+  */
   const toggleFAQ = (index: number) => {
     setFaqs(faqs.map((faq, i) => {
       if (i === index) {
@@ -50,7 +53,7 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
   
   return (
     <>
-    <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
+    <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
     <div className="App">
     <div className="faqs">
         {faqs.map((faq, i) => (

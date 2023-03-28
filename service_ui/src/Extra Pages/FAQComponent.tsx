@@ -1,14 +1,18 @@
 import React from 'react';
-import { AQObject } from './FAQsPage';
-import ExpandMore from '@mui/icons-material';
 
-export interface AQComponentProps {
-   faq:AQObject;
+export interface FAQObject{
+	question: string;
+	answer: string;
+	open: boolean;
+  }
+
+export interface FAQComponentProps {
+   faq:FAQObject;
    index:number;
    toggleFAQ:(index: number) => void;
 }
 
-export const AQComponent: React.FC<AQComponentProps> = ({faq, index, toggleFAQ}) => {
+export const AQComponent: React.FC<FAQComponentProps> = ({faq, index, toggleFAQ}) => {
 
 	return (
 		<div

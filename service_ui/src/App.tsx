@@ -4,10 +4,11 @@ import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
-import {mapToArray, useQueryConstructor } from './helpers';
+import {mapToArray, useQueryConstructor } from './Helpers/helpers';
 import { AxiosResponse } from 'axios';
-import { AdvancedSearchComponent } from './Components/QueryPage/Components/advancedSearchComponent';
-import { FAQsPage } from './FAQsPage';
+import { AdvancedSearchComponent } from './Components/QueryPage/advancedSearchComponent';
+import { FAQsPage } from './Extra Pages/FAQsPage';
+import * as consts from './Helpers/consts';
 
 
 function App() {
@@ -27,8 +28,11 @@ function App() {
 
   const [pageNumber, setPageNumber] = React.useState<number>(0)
 
+  /*
+  * This function returns the correct page to be displayed, based on the pageNumber state
+  */
   const getPage = () => {
-    if(pageNumber === 0){
+    if(pageNumber === consts.MAIN_SEARCH_PAGE){
       return (
         <>
           <Logo />
@@ -37,7 +41,7 @@ function App() {
         </>
       );
     }
-    else if(pageNumber === 1){
+    else if(pageNumber === consts.RESULTS_PAGE){
       return (
         <>
           <BaseResults includedKeywords={keywords} 
@@ -46,14 +50,14 @@ function App() {
         </>
       )
     }
-    else if(pageNumber === 2){
+    else if(pageNumber === consts.FAQ_PAGE){
       return (
         <>
           <FAQsPage setPageNumber={setPageNumber} />
         </>
       )
     }
-    else if(pageNumber === 3) {
+    else if(pageNumber === consts.ADVANCED_SEARCH_PAGE) {
       return (
         <>
           <Logo cssClasses='minimized-logo'/>
