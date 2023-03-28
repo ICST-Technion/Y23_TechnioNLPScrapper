@@ -1,10 +1,6 @@
-import { Divider } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import React from 'react';
-import { advancedQueryData } from '../../helpers';
-import searchIcon from './Images/magnifying-glass.png'
 import { SearchComponent } from './Components/searchComponent';
-import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
 export interface searchPageProps {
     keywords: string[];
