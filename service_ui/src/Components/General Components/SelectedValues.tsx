@@ -8,6 +8,10 @@ export interface selectedProps {
 
 export const SelectedValues: React.FC<selectedProps> = ({values, removeString, ID}) => {
 
+    /*
+    *   This function creates the JSX elements for the selected values
+    *   It uses the values map to create the JSX elements
+    */
     const createValues = () => {
         let childrenComponents:JSX.Element[] = [];
         values.forEach((value,key) => {

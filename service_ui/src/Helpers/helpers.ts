@@ -115,6 +115,10 @@
   return Array.from(map.values());
   }
 
+  /*
+  * This function is used to copy any object to another - shallow copy
+  */
   export const copy = (obj: any) => {
   return Object.assign({}, obj);
 }
+

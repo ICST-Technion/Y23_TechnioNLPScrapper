@@ -1,6 +1,6 @@
 import React from 'react';
 import { MAIN_SEARCH_PAGE } from '../Helpers/consts';
-import { AQComponent, AQObject } from './FAQComponent';
+import { AQComponent, FAQObject } from './FAQComponent';
 
 
 export interface FAQsPageProps {
@@ -8,7 +8,9 @@ export interface FAQsPageProps {
 }
 
 export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
-  const [faqs, setFaqs] = React.useState<AQObject[]>([{
+
+
+  const FAQList = [{
     question: 'How do I search on the website?',
     answer: 'You can search by entering keywords into the search bar on the homepage and clicking the run button.',
     open: false
@@ -29,8 +31,14 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
     question: 'Are the statistics updated in real-time?',
     answer: 'Yes, You will always see the most up-to-date information when you view an articles statistics.',
     open: false
-  },]);
+  },]
 
+  const [faqs, setFaqs] = React.useState<FAQObject[]>(FAQList);
+
+
+  /*
+  * This function toggles the open state of the FAQ object at the given index
+  */
   const toggleFAQ = (index: number) => {
     setFaqs(faqs.map((faq, i) => {
       if (i === index) {

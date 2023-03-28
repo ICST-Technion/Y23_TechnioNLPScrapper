@@ -1,7 +1,7 @@
 import React from 'react';
 import { SearchComponent } from '../General Components/searchComponent';
 import axios, {AxiosResponse} from 'axios';
-import { ADVANCED_SEARCH_PAGE, FAQ_PAGE } from '../../Helpers/consts';
+import { ADVANCED_SEARCH_PAGE, FAQ_PAGE, RESULTS_PAGE } from '../../Helpers/consts';
 
 export interface searchPageProps {
     keywords: string[];
@@ -16,7 +16,7 @@ export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, se
         <>
         <button className='FAQs' onClick={()=>{setPageNumber(FAQ_PAGE); console.log("XXDDSS")}}>FAQs</button>
         <button className='run-query-button' onClick={async ()=>{
-          setPageNumber(1);
+          setPageNumber(RESULTS_PAGE);
           const query_body={"Query1": keywords[0]};
           const reactServer='https://technionlp-fe-service.onrender.com'
                 try

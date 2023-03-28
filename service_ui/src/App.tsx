@@ -28,6 +28,9 @@ function App() {
 
   const [pageNumber, setPageNumber] = React.useState<number>(0)
 
+  /*
+  * This function returns the correct page to be displayed, based on the pageNumber state
+  */
   const getPage = () => {
     if(pageNumber === consts.MAIN_SEARCH_PAGE){
       return (

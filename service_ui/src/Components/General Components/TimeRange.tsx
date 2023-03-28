@@ -21,9 +21,11 @@ export interface timeRangeProps {
 
 export const TimeRange: React.FC<timeRangeProps> = ({text, timeRange, setTimeRange}) => {
   const ID = 1;
-  const [showSelector, setShowSelector] = React.useState<Boolean>(true);
   const {afterToday} = DateRangePicker;
 
+  /*
+  * A list of predefined ranged to use on the sides of the calendar
+  */
 const predefinedRanges:RangeType[] = [
     {
       label: 'Today',
@@ -86,6 +88,7 @@ const predefinedRanges:RangeType[] = [
     },
   ];
 
+
     const getDateRangePicker = () => {
         return (
           <div style={{marginLeft:'-3vw'}}>
@@ -106,26 +109,12 @@ const predefinedRanges:RangeType[] = [
           </div>
         )
     }
-    const getTimeLabel = () =>{
-      if(!timeRange){
-        return (
-          <>
-          </>
-        )
-      }
-      const startDay = timeRange![0];
-      const endDay = timeRange![1];
-      return (
-        <label>
-          {`${startDay.toDateString()} - ${endDay.toDateString()}`}
-        </label>
-      )
-    }
+
     
     return(
         <div className='button-pop-component'>
             <Typography variant='body1'> {text} </Typography>
-            {showSelector? getDateRangePicker(): getTimeLabel()}
+            {getDateRangePicker()}
         </div>
     )
 }
