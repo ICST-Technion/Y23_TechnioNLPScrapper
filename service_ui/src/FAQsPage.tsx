@@ -1,12 +1,6 @@
 import React from 'react';
-import { AQComponent } from './FAQ';
+import { AQComponent, AQObject } from './FAQ';
 
-
-export interface AQObject{
-  question: string;
-  answer: string;
-  open: boolean;
-}
 
 export interface FAQsPageProps {
     setPageNumber: React.Dispatch<React.SetStateAction<number>>

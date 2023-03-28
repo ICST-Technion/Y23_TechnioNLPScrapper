@@ -1,6 +1,10 @@
 import React from 'react';
-import { AQObject } from './FAQsPage';
-import ExpandMore from '@mui/icons-material';
+
+export interface AQObject{
+	question: string;
+	answer: string;
+	open: boolean;
+  }
 
 export interface AQComponentProps {
    faq:AQObject;
