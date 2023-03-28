@@ -1,0 +1,105 @@
+import psycopg2
+import sys
+
+sys.path.append('..\\Scrapping')
+from Scrapping.Article import *
+from urllib.parse import urlparse
+
+
+class SQLQuery:
+    def __init__(self):
+        self.db_url = "postgres://ltwwxnaj:BYQgr0k-KgVH98QbpkMfZ1USDpX2XDGU@ella.db.elephantsql.com/ltwwxnaj"
+        # this line allows us to figure out the connection information to our database independent of the actual url
+        url = urlparse(self.db_url)
+        self.database = url.path[1:]
+        self.user = url.username
+        self.password = url.password
+        self.host = url.hostname
+        self.port = url.port
+
+
+    def execute_query(self, sql_query, values=None):
+
+        conn = None
+        try:
+            conn = psycopg2.connect(
+                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+            )
+            cur = conn.cursor()
+            # on multiple rows at once
+            if values is not None:
+                cur.executemany(sql_query, values)
+            else:
+                cur.execute(sql_query)
+            conn.commit()
+            cur.close()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
+
+    def insert_article_to_sql(self, keyword_list):
+        """
+    insert the keyword_list given as parameter to our SQL server
+    :param keyword_list: the rows you want to insert to the database
+    prints an error if there was an issue with insertion
+    note: postgresql automatically converts names to lowercase, to use uppercase
+    we need to add quotation marks ""
+
+    """
+
+        insert_sql = "INSERT INTO Articles(website,keyword,date,count,link,intonation,category) " \
+                     "VALUES(%s,%s,%s,%s,%s,%s,%s);"
+        self.execute_query(insert_sql, keyword_list)
+    def insert_keyword_intonation_to_sql(self,keyword_intonation_list):
+        insert_sql = "INSERT INTO Keywords(keyword,intonation) " \
+                     "VALUES(%s,%s);"
+        self.execute_query(insert_sql, keyword_intonation_list)
+    def select_learned_keywords(self):
+        select_query='SELECT * FROM Keywords'
+        conn = None
+        cur = None
+        try:
+            conn = psycopg2.connect(
+                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+            )
+            cur = conn.cursor()
+            cur.execute(select_query)
+            return cur.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn:
+                cur.close()
+                conn.close()
+    def select_articles_from_sql(self, columns="*", conditions=None):
+        """
+        """
+        if conditions is not None:
+            select_query = f"SELECT {columns} FROM Articles WHERE {conditions}"
+        else:
+            select_query = f"SELECT {columns} FROM Articles"
+        conn = None
+        cur = None
+        try:
+            conn = psycopg2.connect(
+                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+            )
+            cur = conn.cursor()
+            cur.execute(select_query)
+            return cur.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn:
+                cur.close()
+                conn.close()
+
+    def clear_table(self):
+        """
+        clears all records from the table, but table structure remains,
+        unlike DROP and DELETE
+        """
+        clear_query = "TRUNCATE TABLE Articles"
+        self.execute_query(clear_query)
