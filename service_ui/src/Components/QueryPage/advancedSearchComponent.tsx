@@ -4,6 +4,8 @@ import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../Helpers/consts';
 import { mapToArray } from '../../Helpers/helpers';
 import { ButtonWithPopUp } from '../General Components/ButtonWithPopUp';
 import { TimeRange } from '../General Components/TimeRange';
+
+
 export interface AdvancedSearchComponentProps {
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
@@ -43,13 +45,16 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
         setKeywordMap(new Map());
     }
 
+    // update the keyword map based on the keyword string we got from main search bar
     React.useEffect(()=>{
         const keywordArray= keywords[0]?.split(',');
+        const newMap = new Map();
         keywordArray?.forEach((keyword, index) => {
             if(keyword){
-                setKeywordMap(keywordMap.set(index,keyword));
+                newMap.set(index,keyword);
             }
         })
+        setKeywordMap(newMap);
     }
     ,[])
 
