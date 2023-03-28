@@ -12,13 +12,11 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { randomInt } from 'crypto';
 import CircleLoader from "react-spinners/CircleLoader"; 
-import { advancedQueryData, randomIntFromInterval } from '../../helpers';
+import { copy, randomIntFromInterval } from '../../helpers';
 import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { AxiosResponse } from 'axios';
-import { DataObject } from '../../clasees';
 
 
 export interface baseResultsProps {
@@ -93,7 +91,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
           let keywordData = data.filter((row:any) => row.keyword + " " + row.website === item);
           let sum = 0;
           keywordData.forEach((row:any) => sum += row.count);
-          let obj = DataObject.copy(keywordData[0]);
+          let obj = copy(keywordData[0]);
           obj.count = sum;
           keywordCountMap.set(item, obj);
           merged.push(obj);
