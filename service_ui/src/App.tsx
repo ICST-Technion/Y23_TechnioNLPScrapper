@@ -6,7 +6,7 @@ import { FAQsPage } from './FAQsPage';
 import { AdvancedSearch } from './Components/QueryPage/AdvancedSearch';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
-import { advancedQueryData, useQueryConstructor } from './helpers';
+import { advancedQueryData, mapToArray, useQueryConstructor } from './helpers';
 import { AxiosResponse } from 'axios';
 import { AdvancedSearchComponent } from './Components/QueryPage/Components/advancedSearchComponent';
 
@@ -107,6 +107,16 @@ function App() {
           <Logo cssClasses='minimized-logo'/>
           <AdvancedSearchComponent keywords={keywords} setKeywords={setKeywords} idx={0} query={query}
           setAxiosPromise={setAxiosPromise} setPageNumber={setPageNumber}/>
+        </>
+      )
+    }
+    else if(pageNumber === 7){
+      //results page for the new search page
+      return (
+        <>
+          <BaseResults includedKeywords={keywords} 
+          setPageNumber={setPageNumber} axiosPromise={axiosPromise}
+          positiveKeywords={mapToArray(query.advancedQuery.positiveKeywords)} negativeKeywords={mapToArray(query.advancedQuery.negativeKeywords)}/>
         </>
       )
     }

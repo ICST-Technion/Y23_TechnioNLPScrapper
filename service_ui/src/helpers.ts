@@ -135,3 +135,14 @@ export class advancedQueryData{
      }
 
 }
+
+
+     /*
+    * This function is used to convert a map to an array
+    * @param map: The map to convert
+    * @returns: The array
+    * @example: mapToArray(new Map([[1,"a"],[2,"b"]])) => ["a","b"]
+    */
+     export const mapToArray = (map:Map<number, string>) => {
+      return Array.from(map.values());
+     }

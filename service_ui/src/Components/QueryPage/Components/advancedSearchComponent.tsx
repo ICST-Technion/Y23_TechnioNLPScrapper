@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react'
+import { mapToArray } from '../../../helpers';
 import { ButtonWithPopUp } from './ButtonWithPopUp';
 import { TimeRange } from './TimeRange';
 export interface AdvancedSearchComponentProps {
@@ -23,12 +24,12 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
         console.log(keywords[0].split(','));
         const advanced_body={ 
             [`included_keywords${id_title}`]:keywords[0].split(','),
-            [`excluded_keywords${id_title}`]:query.excludedKeywords,
-            [`included_sites${id_title}`]:query.includedWebsites,
-            [`excluded_sites${id_title}`]:query.excludedWebsites,
-            [`date_range${id_title}`]:query.timeRange,
-            [`positive_words${id_title}`]:query.positiveKeywords,
-            [`negative_words${id_title}`]:query.negativeKeywords
+            [`excluded_keywords${id_title}`]:mapToArray(query.advancedQuery.excludedKeywords),
+            [`included_sites${id_title}`]:mapToArray(query.advancedQuery.includedWebsites),
+            [`excluded_sites${id_title}`]:mapToArray(query.advancedQuery.excludedWebsites),
+            [`date_range${id_title}`]:query.advancedQuery.timeRange,
+            [`positive_words${id_title}`]:mapToArray(query.advancedQuery.positiveKeywords),
+            [`negative_words${id_title}`]:mapToArray(query.advancedQuery.negativeKeywords)
                 };
         return advanced_body;
     }
@@ -90,7 +91,7 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
             </div>
         </div>
         <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <button className='run-query-button' onClick={async ()=>{setPageNumber(1);
+        <button className='run-query-button' onClick={async ()=>{setPageNumber(7);
             const merged = {...getAdvancedSearchJson(0)};
             const reactServer='https://technionlp-fe-service.onrender.com'
             try
