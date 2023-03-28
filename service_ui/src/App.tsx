@@ -4,11 +4,11 @@ import { SearchPage } from './Components/QueryPage/SearchPage';
 import { BaseResults } from './Components/Results/BaseResults';
 import { Background } from './Components/Background';
 import { Logo } from './Components/Logo';
-import {mapToArray, useQueryConstructor } from './helpers';
+import {mapToArray, useQueryConstructor } from './Helpers/helpers';
 import { AxiosResponse } from 'axios';
-import { AdvancedSearchComponent } from './Components/QueryPage/Components/advancedSearchComponent';
-import { FAQsPage } from './FAQsPage';
-import * as consts from './consts';
+import { AdvancedSearchComponent } from './Components/QueryPage/advancedSearchComponent';
+import { FAQsPage } from './Extra Pages/FAQsPage';
+import * as consts from './Helpers/consts';
 
 
 function App() {

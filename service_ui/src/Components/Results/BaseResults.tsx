@@ -1,6 +1,5 @@
 import React from 'react';
 import "react-image-gallery/styles/css/image-gallery.css";
-import ImageGallery from 'react-image-gallery';
 import { Background } from '../Background';
 import {
   Chart as ChartJS,
@@ -13,11 +12,11 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import CircleLoader from "react-spinners/CircleLoader"; 
-import { copy, randomIntFromInterval } from '../../helpers';
+import { copy, randomIntFromInterval } from '../../Helpers/helpers';
 import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { AxiosResponse } from 'axios';
-import { MAIN_SEARCH_PAGE } from '../../consts';
+import { MAIN_SEARCH_PAGE } from '../../Helpers/consts';
 
 
 export interface baseResultsProps {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { MAIN_SEARCH_PAGE } from './consts';
-import { AQComponent, AQObject } from './FAQ';
+import { MAIN_SEARCH_PAGE } from '../Helpers/consts';
+import { AQComponent, AQObject } from './FAQComponent';
 
 
 export interface FAQsPageProps {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { SearchComponent } from './Components/searchComponent';
+import { SearchComponent } from '../General Components/searchComponent';
 import axios, {AxiosResponse} from 'axios';
-import { ADVANCED_SEARCH_PAGE, FAQ_PAGE } from '../../consts';
+import { ADVANCED_SEARCH_PAGE, FAQ_PAGE } from '../../Helpers/consts';
 
 export interface searchPageProps {
     keywords: string[];

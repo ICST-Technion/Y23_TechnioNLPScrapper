@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react'
-import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../../consts';
-import { mapToArray } from '../../../helpers';
-import { ButtonWithPopUp } from './ButtonWithPopUp';
-import { TimeRange } from './TimeRange';
+import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../Helpers/consts';
+import { mapToArray } from '../../Helpers/helpers';
+import { ButtonWithPopUp } from '../General Components/ButtonWithPopUp';
+import { TimeRange } from '../General Components/TimeRange';
 export interface AdvancedSearchComponentProps {
     keywords: string[];
     setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
