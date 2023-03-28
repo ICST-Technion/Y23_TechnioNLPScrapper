@@ -17,6 +17,7 @@ import { copy, randomIntFromInterval } from '../../helpers';
 import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { AxiosResponse } from 'axios';
+import { MAIN_SEARCH_PAGE } from '../../consts';
 
 
 export interface baseResultsProps {
@@ -215,7 +216,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
           </Box>
           <TabPanel value={value} index={0}>
           <div className='App flex result' style={{width:'70vw', marginLeft:'15vw'}}>
-            <button className='go-back-button run' onClick={()=>{setPageNumber(0)}}>go back</button>
+            <button className='go-back-button run' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
             <Bar 
             datasetIdKey='trial'
             options={options}
@@ -225,7 +226,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
           </TabPanel>
           <TabPanel value={value} index={1}>
           <div className='App flex result' style={{width:'70vw', marginLeft:'15vw'}}>
-            <button className='go-back-button run' onClick={()=>{setPageNumber(0)}}>go back</button>
+            <button className='go-back-button run' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
             <Bar 
             datasetIdKey='trial'
             options={options}
@@ -235,7 +236,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
           </TabPanel>
           <TabPanel value={value} index={2}>
           <div className='App flex result' style={{width:'70vw', marginLeft:'15vw'}}>
-            <button className='go-back-button run' onClick={()=>{setPageNumber(0)}}>go back</button>
+            <button className='go-back-button run' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
             <Bar 
             datasetIdKey='trial'
             options={options}

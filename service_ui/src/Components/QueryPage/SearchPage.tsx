@@ -1,6 +1,7 @@
 import React from 'react';
 import { SearchComponent } from './Components/searchComponent';
 import axios, {AxiosResponse} from 'axios';
+import { ADVANCED_SEARCH_PAGE, FAQ_PAGE } from '../../consts';
 
 export interface searchPageProps {
     keywords: string[];
@@ -13,7 +14,7 @@ export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, se
 
     return (
         <>
-        <button className='FAQs' onClick={()=>{setPageNumber(2); console.log("XXDDSS")}}>FAQs</button>
+        <button className='FAQs' onClick={()=>{setPageNumber(FAQ_PAGE); console.log("XXDDSS")}}>FAQs</button>
         <button className='run-query-button' onClick={async ()=>{
           setPageNumber(1);
           const query_body={"Query1": keywords[0]};
@@ -28,7 +29,7 @@ export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, se
           }}>Run</button>
           <div className="App">
               <SearchComponent keywords={keywords} setKeywords={setKeywords} idx={0} />
-              <button className='advanced-search-button' onClick={()=>{setPageNumber(3)}}>Advanced Search Options</button>
+              <button className='advanced-search-button' onClick={()=>{setPageNumber(ADVANCED_SEARCH_PAGE)}}>Advanced Search Options</button>
           </div>
         </>
       );

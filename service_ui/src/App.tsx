@@ -8,6 +8,7 @@ import {mapToArray, useQueryConstructor } from './helpers';
 import { AxiosResponse } from 'axios';
 import { AdvancedSearchComponent } from './Components/QueryPage/Components/advancedSearchComponent';
 import { FAQsPage } from './FAQsPage';
+import * as consts from './consts';
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
   const [pageNumber, setPageNumber] = React.useState<number>(0)
 
   const getPage = () => {
-    if(pageNumber === 0){
+    if(pageNumber === consts.MAIN_SEARCH_PAGE){
       return (
         <>
           <Logo />
@@ -37,7 +38,7 @@ function App() {
         </>
       );
     }
-    else if(pageNumber === 1){
+    else if(pageNumber === consts.RESULTS_PAGE){
       return (
         <>
           <BaseResults includedKeywords={keywords} 
@@ -46,14 +47,14 @@ function App() {
         </>
       )
     }
-    else if(pageNumber === 2){
+    else if(pageNumber === consts.FAQ_PAGE){
       return (
         <>
           <FAQsPage setPageNumber={setPageNumber} />
         </>
       )
     }
-    else if(pageNumber === 3) {
+    else if(pageNumber === consts.ADVANCED_SEARCH_PAGE) {
       return (
         <>
           <Logo cssClasses='minimized-logo'/>

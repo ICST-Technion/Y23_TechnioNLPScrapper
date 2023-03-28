@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react'
+import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../../consts';
 import { mapToArray } from '../../../helpers';
 import { ButtonWithPopUp } from './ButtonWithPopUp';
 import { TimeRange } from './TimeRange';
@@ -90,8 +91,8 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
                 <button className='clear-query-button' onClick={()=>handleClear()}>Clear</button>
             </div>
         </div>
-        <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <button className='run-query-button' onClick={async ()=>{setPageNumber(1);
+        <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
+        <button className='run-query-button' onClick={async ()=>{setPageNumber(RESULTS_PAGE);
             const merged = {...getAdvancedSearchJson(0)};
             const reactServer='https://technionlp-fe-service.onrender.com'
             try

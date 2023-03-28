@@ -1,4 +1,5 @@
 import React from 'react';
+import { MAIN_SEARCH_PAGE } from './consts';
 import { AQComponent, AQObject } from './FAQ';
 
 
@@ -44,7 +45,7 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
   
   return (
     <>
-    <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
+    <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
     <div className="App">
     <div className="faqs">
         {faqs.map((faq, i) => (
