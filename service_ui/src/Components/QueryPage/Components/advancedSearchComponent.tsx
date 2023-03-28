@@ -91,7 +91,7 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
             </div>
         </div>
         <button className='go-back-button' onClick={()=>{setPageNumber(0)}}>go back</button>
-        <button className='run-query-button' onClick={async ()=>{setPageNumber(7);
+        <button className='run-query-button' onClick={async ()=>{setPageNumber(1);
             const merged = {...getAdvancedSearchJson(0)};
             const reactServer='https://technionlp-fe-service.onrender.com'
             try
