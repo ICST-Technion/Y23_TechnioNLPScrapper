@@ -130,6 +130,9 @@ returns the date as a string
         """
         return [paragraph.get_text() for paragraph in self.soup.findAll(name='div', string=re.compile(regex))]
 
+
+
+    #TODO: change this to use advanced search
     def count_word_in_webpage(self, word):
         """
         parameters:
@@ -137,6 +140,9 @@ returns the date as a string
         returns number of instances of that word in the text-integer
         """
         return len(self.soup.find_all(string=re.compile(word)))
+
+
+
 
     def most_common_words_in_page(self, num=5):
         """
@@ -154,6 +160,8 @@ returns the date as a string
         total = div_count + paragraph_count
         return total.most_common(num)
 
+
+
     def create_rows_to_database(self, keyword_intonation_list,category='1'):
         """
         given a keyword list, convert it into a format which can be written to the database
@@ -170,3 +178,4 @@ returns the date as a string
             rows.append((self.website, keyword, self.date.strftime("%Y-%m-%d, %H:%M:%S"),
                          str(self.count_word_in_webpage(keyword)), self.link, str(intonation),category))
         return rows
+

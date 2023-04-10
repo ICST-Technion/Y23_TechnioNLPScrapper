@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request, make_response
 from googleapiclient.discovery import build
 # for hebrew and arabic words
 from urllib.parse import quote, unquote
+from AdvancedSearch import parse_google_search_query
 
 # this line allows python to find our module.
 sys.path.append('..\\SQL')
@@ -32,7 +33,8 @@ def get_default_websites():
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
 
-def scrap_links(links_to_scrap,keywords_intonation_list,category='1'):
+def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,category='1'):
+    #TODO: scrap phrases and keywords differently
     '''
     scrapping information about each keyword and website
     then inserting them into the databse
@@ -50,35 +52,50 @@ def scrap_links(links_to_scrap,keywords_intonation_list,category='1'):
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
+                
                 rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,category)
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
-def get_keyword_list_from_query(query):
-    if "\"" in query:
-        #as is, no ""
-        return query.strip('\"')
-    # search separately keywords by space
-    else:
-        return query.split()
+
 def do_search_query(category='1'):
     '''
-    performs a google search query (only keywords, no additional parameter)
-    scraps from the links we found, and updates the database
-    parameters:
-    category: the number of the current category we are scrapping for
+    Performs a Google search query (only keywords, no additional parameter).
+    Scrapes from the links we found and updates the database.
 
+    Parameters:
+    category: the number of the current category we are scraping for
     '''
     query = request.json.get('Query'+category, "")  # assuming Query is the keywords
-    # Encode the query in UTF-8
-    if query!="":
-        encoded_query = quote(query)  # we need this for arabic and hebrew
-        decoded_query = unquote(encoded_query)
-        site_list = get_default_websites()  # TODO: connect this to the included websites Database
-        for website in site_list:
-            result = search_google(decoded_query, website)
-            scrap_links(result,map_keywords_to_intonation(get_keyword_list_from_query(query)),category)
+
+    # Parse the query
+    query_dict = parse_google_search_query(query)
+    keywords = query_dict["keywords"]
+    phrases = query_dict["phrases"]
+    positive_keywords = query_dict["positive_keywords"]
+    negative_keywords = query_dict["negative_keywords"]
+    excluded_keywords = query_dict["excluded_keywords"]
+    site = query_dict["site"]
+    datarange = query_dict["datarange"]
+
+    # Get the list of websites to search
+    site_list = get_default_websites()
+    if site is not None:
+        site_list.append(site)
+
+    # Perform the search and scrape the links for each website
+    for website in site_list:
+        search_results = search_google(query, website)
+        keyword_to_intonation,phrase_to_intonation = map_keywords_to_intonation(
+            keywords=keywords,
+            phrases=phrases,
+            positive_keywords=positive_keywords,
+            negative_keywords=negative_keywords
+        )
+        scrap_links(search_results, keyword_to_intonation,phrase_to_intonation, category)
+
+
 
 # request of regular query
 @app.route('/query', methods=['POST'])
@@ -140,20 +157,34 @@ def is_at_least_one_keyword(category='1'):
     included_keywords = parse_json_and_strip('included_keywords'+category)
     return included_keywords != []
 
-def map_keywords_to_intonation(keywords_list):
+def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_keywords):
     '''
     uses the existing keyword database and queries to map a keyword to the intonation
     (if exists already)
     '''
-    known_keyword_to_intonation=dict(SQLQuery().select_learned_keywords())
+    known_keyword_to_intonation = SQLQuery().select_learned_keywords()
+    phrases_no_quotes = [phrase.strip('"\'') for phrase in phrases]
 
-    keyword_to_intonation=[]
-    for keyword in keywords_list:
-        if keyword in known_keyword_to_intonation.keys():
-            keyword_to_intonation.append((keyword,known_keyword_to_intonation[keyword]))
-        else:
-            keyword_to_intonation.append((keyword,'neutral'))
-    return keyword_to_intonation
+    # Process keywords
+    keyword_to_intonation = [
+        (keyword, known_keyword_to_intonation[keyword] if keyword in known_keyword_to_intonation else 
+         'positive' if keyword in positive_keywords else 
+         'negative' if keyword in negative_keywords else 
+         'neutral')
+        for keyword in keywords_list
+    ]
+
+    # Process phrases
+    phrase_to_intonation = [
+        (phrase, known_keyword_to_intonation[phrase] if phrase in known_keyword_to_intonation else 
+         'positive' if phrase in positive_keywords else 
+         'negative' if phrase in negative_keywords else 
+         'neutral')
+        for phrase in phrases_no_quotes
+    ]
+
+    return keyword_to_intonation, phrase_to_intonation
+
 def advanced_search_query(category='1'):
     '''
     performs scrapping based on all the advanced search parameters.
