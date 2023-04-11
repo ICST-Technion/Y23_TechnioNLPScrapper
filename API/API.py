@@ -52,8 +52,9 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,c
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
-                
-                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,category)
+                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,
+                phrase_intonation_list,
+                category)
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
@@ -182,7 +183,8 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
          'neutral')
         for phrase in phrases_no_quotes
     ]
-
+    #TODO:replace with NLP once we have it
+    SQLQuery().insert_keyword_intonation_to_sql(keyword_to_intonation+phrase_to_intonation)
     return keyword_to_intonation, phrase_to_intonation
 
 def advanced_search_query(category='1'):
@@ -194,7 +196,18 @@ def advanced_search_query(category='1'):
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
 
-    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)
+    query_dict = parse_google_search_query(query)
+    # keywords = query_dict["keywords"]
+    phrases = query_dict["phrases"]
+    # positive_keywords = query_dict["positive_keywords"]
+    # negative_keywords = query_dict["negative_keywords"]
+    # excluded_keywords = query_dict["excluded_keywords"]
+    # site = query_dict["site"]
+    # datarange = query_dict["datarange"]
+
+
+
+    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)+phrases
     websites_to_search = create_parameters_list('Sites'+category, 'excluded_Sites'+category)
     websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
     # assumption: time range would be just two dates separated by comma
@@ -208,7 +221,7 @@ def advanced_search_query(category='1'):
             datetime_range = [datetime.strptime(date_string, "%Y-%m-%d") for date_string in time_range]
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
-
+    
   
 
     #learn the words we got
