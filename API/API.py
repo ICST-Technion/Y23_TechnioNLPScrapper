@@ -184,7 +184,8 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
         for phrase in phrases_no_quotes
     ]
     #TODO:replace with NLP once we have it
-    SQLQuery().insert_keyword_intonation_to_sql(keyword_to_intonation+phrase_to_intonation)
+    filtered_learned_words = [(s1, s2) for s1, s2 in keyword_to_intonation+phrase_to_intonation if string2 != "neutral"]
+    SQLQuery().insert_keyword_intonation_to_sql(filtered_learned_words)
     return keyword_to_intonation, phrase_to_intonation
 
 def advanced_search_query(category='1'):
