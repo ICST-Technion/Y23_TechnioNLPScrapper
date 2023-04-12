@@ -310,7 +310,7 @@ def advanced_search_query(category='1'):
 
 
 
-    positive_json=request.json.get('positive_words' + category, "")
+    positive_json=str(request.json.get('positive_words' + category, ""))
     positive_dict=parse_google_search_query(positive_json)
     positive_words=positive_dict["keywords"]
 
@@ -325,11 +325,12 @@ def advanced_search_query(category='1'):
 
    
 
-    encoded_keywords = [quote(keyword.encode('utf-8')) for keyword in keywords_to_search]
-    decoded_keywords = [unquote(keyword.encode('utf-8')) for keyword in encoded_keywords]
+    # URL-encode the search keywords
+    encoded_keywords, decoded_keywords = url_encode_keywords(keywords_to_search)
     query = ','.join(decoded_keywords)
-    encoded_exclude = [quote(keyword.encode('utf-8')) for keyword in keywords_to_exclude]
-    decoded_exclude = [unquote(keyword.encode('utf-8')) for keyword in encoded_exclude]
+
+    # URL-encode the exclude keywords
+    encoded_exclude, decoded_exclude = url_encode_keywords(keywords_to_exclude)
     exclude_query = ','.join(decoded_exclude)
     
     for website in websites_to_search:
@@ -337,6 +338,20 @@ def advanced_search_query(category='1'):
         scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,category)
     # TODO: specify dates in the google search
 
+def url_encode_keywords(keywords):
+    """
+    URL-encodes a list of keywords using UTF-8 encoding and returns the encoded and decoded values.
+
+    Args:
+        keywords (list): A list of keywords to encode.
+
+    Returns:
+        A tuple containing two lists: the first list contains the URL-encoded and UTF-8 encoded keywords,
+        and the second list contains the decoded keywords.
+    """
+    encoded_keywords = [quote(keyword.encode('utf-8')) for keyword in keywords]
+    decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
+    return encoded_keywords, decoded_keywords
 
 @app.route('/advancedSearch', methods=['POST'])
 def advanced_search():
