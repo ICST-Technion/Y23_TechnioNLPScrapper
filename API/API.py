@@ -184,7 +184,7 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
         for phrase in phrases_no_quotes
     ]
     #TODO:replace with NLP once we have it
-    filtered_learned_words = [(s1, s2) for s1, s2 in keyword_to_intonation+phrase_to_intonation if string2 != "neutral"]
+    filtered_learned_words = [(s1, s2) for s1, s2 in keyword_to_intonation+phrase_to_intonation if s2 != "neutral"]
     SQLQuery().insert_keyword_intonation_to_sql(filtered_learned_words)
     return keyword_to_intonation, phrase_to_intonation
 
@@ -196,21 +196,13 @@ def advanced_search_query(category='1'):
     if not is_at_least_one_keyword():
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
+    keywords_to_search = parse_json_and_strip('included_keywords' + category)
 
-    query_dict = parse_google_search_query(query)
-    # keywords = query_dict["keywords"]
-    phrases = query_dict["phrases"]
-    # positive_keywords = query_dict["positive_keywords"]
-    # negative_keywords = query_dict["negative_keywords"]
-    # excluded_keywords = query_dict["excluded_keywords"]
-    # site = query_dict["site"]
     # datarange = query_dict["datarange"]
 
+    websites_to_search = list(set(parse_json_and_strip('included_sites' + category)) | 
+                              set(get_default_websites()))
 
-
-    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)+phrases
-    websites_to_search = create_parameters_list('Sites'+category, 'excluded_Sites'+category)
-    websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
     # assumption: time range would be just two dates separated by comma
     time_range = parse_json_and_strip('date_range'+category)
     # no dates were passed
@@ -225,16 +217,20 @@ def advanced_search_query(category='1'):
     
   
 
-    #learn the words we got
-    query_executor = SQLQuery()
+
+
     negative_words =parse_json_and_strip('negative_words'+category)
     positive_words =parse_json_and_strip('positive_words'+category)
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
-    query_executor.insert_keyword_intonation_to_sql(words_to_insert)
 
-    keyword_to_intonation=map_keywords_to_intonation(keywords_to_search)
+
+    #TODO: add phrases list here
+    keyword_to_intonation,phrases_to_intonation=map_keywords_to_intonation(keywords_to_search,[],
+                                                                           positive_words,negative_words)
+
+   
 
     encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
     decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
@@ -242,6 +238,9 @@ def advanced_search_query(category='1'):
     encoded_exclude = [quote(keyword) for keyword in keywords_to_exclude]
     decoded_exclude = [unquote(keyword) for keyword in encoded_exclude]
     exclude_query = ','.join(decoded_exclude)
+
+ 
+    
     for website in websites_to_search:
         links_to_scrap = search_google(query, website, exclude_query)
         scrap_links(links_to_scrap,keyword_to_intonation,category)
@@ -258,7 +257,7 @@ def advanced_search():
     otherwise returns ok
     '''
     advanced_search_query('1')
-    # advanced_search_query('2')
+    
     # not adding specified statistics yet, because there is only counter for now
     return make_response("ok", 200)
 
