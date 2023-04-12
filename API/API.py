@@ -310,11 +310,11 @@ def advanced_search_query(category='1'):
 
    
 
-    encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
-    decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
+    encoded_keywords = [quote(keyword.encode('utf-8')) for keyword in keywords_to_search]
+    decoded_keywords = [unquote(keyword.encode('utf-8')) for keyword in encoded_keywords]
     query = ','.join(decoded_keywords)
-    encoded_exclude = [quote(keyword) for keyword in keywords_to_exclude]
-    decoded_exclude = [unquote(keyword) for keyword in encoded_exclude]
+    encoded_exclude = [quote(keyword.encode('utf-8')) for keyword in keywords_to_exclude]
+    decoded_exclude = [unquote(keyword.encode('utf-8')) for keyword in encoded_exclude]
     exclude_query = ','.join(decoded_exclude)
     
     for website in websites_to_search:
