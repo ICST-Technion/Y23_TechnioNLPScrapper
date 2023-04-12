@@ -241,7 +241,10 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
     uses the existing keyword database and queries to map a keyword to the intonation
     (if exists already)
     '''
+    
     known_keyword_to_intonation = SQLQuery().select_learned_keywords()
+    if known_keyword_to_intonation is None:
+        known_keyword_to_intonation = {}
     phrases_no_quotes = [phrase.strip('"\'') for phrase in phrases]
 
     # Process keywords
