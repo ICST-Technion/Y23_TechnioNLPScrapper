@@ -321,7 +321,8 @@ def advanced_search_query(category='1'):
     
     for website in websites_to_search:
         links_to_scrap = search_google(query, website, exclude_query)
-        scrap_links(links_to_scrap,keyword_to_intonation,category)
+        scrap_links(links_to_scrap=links_to_scrap,keyword_to_intonation=keyword_to_intonation,
+                    phrases_to_intonation=phrases_to_intonation,category=category)
     # TODO: specify dates in the google search
 
 
