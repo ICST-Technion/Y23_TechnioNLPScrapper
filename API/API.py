@@ -278,7 +278,8 @@ def advanced_search_query(category='1'):
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
     #returns string
-    keywords_to_search = parse_json_and_strip('included_keywords' + category)
+    keywords_to_search = [parse_json_and_strip('included_keywords' + category)]
+
     # datarange = query_dict["datarange"]
 
     websites_to_search = list(set(parse_json_and_strip('included_sites' + category)) | 
@@ -300,8 +301,8 @@ def advanced_search_query(category='1'):
 
 
 
-    negative_words =parse_json_and_strip('negative_words'+category)
-    positive_words =parse_json_and_strip('positive_words'+category)
+    negative_words =[parse_json_and_strip('negative_words'+category)]
+    positive_words =[parse_json_and_strip('positive_words'+category)]
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
