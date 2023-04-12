@@ -25,7 +25,7 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
         const advanced_body={ 
-            [`included_keywords${id_title}`]:mapToArray(keywordMap),
+            [`included_keywords${id_title}`]:keywords[0].split(','),
             [`excluded_keywords${id_title}`]:mapToArray(query.advancedQuery.excludedKeywords),
             [`included_sites${id_title}`]:mapToArray(query.advancedQuery.includedWebsites),
             [`excluded_sites${id_title}`]:mapToArray(query.advancedQuery.excludedWebsites),
