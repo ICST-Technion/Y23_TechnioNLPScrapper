@@ -303,16 +303,16 @@ def advanced_search_query(category='1'):
 
 
 
-    negative_json=request.json.get('negative_words' + category, "")
-    negative_dict=parse_google_search_query(negative_json)
-    negative_words=negative_dict["keywords"]
+    negative_words=request.json.get('negative_words' + category, "")
+    # negative_dict=parse_google_search_query(negative_json)
+    # negative_words=negative_dict["keywords"]
 
 
 
 
-    positive_json=str(request.json.get('positive_words' + category, ""))
-    positive_dict=parse_google_search_query(positive_json)
-    positive_words=positive_dict["keywords"]
+    positive_words=request.json.get('positive_words' + category, "")
+    # positive_dict=parse_google_search_query(positive_json)
+    # positive_words=positive_dict["keywords"]
 
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
