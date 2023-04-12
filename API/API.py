@@ -167,7 +167,7 @@ def do_search_query(category='1'):
     for website in site_list:
         search_results = search_google(query, website)
         keyword_to_intonation,phrase_to_intonation = map_keywords_to_intonation(
-            keywords=keywords,
+            keywords_list=keywords,
             phrases=phrases,
             positive_keywords=positive_keywords,
             negative_keywords=negative_keywords
