@@ -289,8 +289,7 @@ def advanced_search_query(category='1'):
         return make_response("Searching requires at least one keyword", 400)
     #returns string
     keywords_json=request.json.get('included_keywords' + category, "")
-    keyword_dict=parse_google_search_query(keywords_json)
-    keywords_to_search=keyword_dict["keywords"]
+    keywords_to_search=keywords_json
 
 
     websites_to_search = list(set(parse_json_and_strip('included_sites' + category)) | 
@@ -312,19 +311,21 @@ def advanced_search_query(category='1'):
 
 
 
-
+    negative_words=[]
     negative_json=request.json.get('negative_words' + category, "")
-    negative_dict=parse_google_search_query(negative_json)
-    negative_words=negative_dict["keywords"]
+    if negative_json:
+        negative_words=negative_json
+        
 
 
 
-
+    positive_words=[]
     positive_json=request.json.get('positive_words' + category, "")
-    positive_dict=parse_google_search_query(positive_json)
-    positive_words=positive_dict["keywords"]
+    if positive_json:
+        positive_words=positive_json
 
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
+
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
     SQLQuery().insert_keyword_intonation_to_sql(words_to_insert)
@@ -336,11 +337,11 @@ def advanced_search_query(category='1'):
    
 
     # URL-encode the search keywords
-    encoded_keywords, decoded_keywords = url_encode_keywords(keywords_to_search)
+    _, decoded_keywords = url_encode_keywords(keywords_to_search)
     query = ','.join(decoded_keywords)
 
     # URL-encode the exclude keywords
-    encoded_exclude, decoded_exclude = url_encode_keywords(keywords_to_exclude)
+    _, decoded_exclude = url_encode_keywords(keywords_to_exclude)
     exclude_query = ','.join(decoded_exclude)
     
     for website in websites_to_search:
