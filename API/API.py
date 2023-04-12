@@ -202,7 +202,7 @@ def parse_json_and_strip(json_field):
     field_content = request.json.get(json_field, [])
     if field_content == []:
         return []
-    return [field_content]
+    return field_content
 
 
 def parse_table_rows(rows):
@@ -244,7 +244,7 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
     
     known_keyword_to_intonation = SQLQuery().select_learned_keywords()
     if known_keyword_to_intonation is None:
-        known_keyword_to_intonation = {}
+        known_keyword_to_intonation={}
     phrases_no_quotes = [phrase.strip('"\'') for phrase in phrases]
 
     # Process keywords
