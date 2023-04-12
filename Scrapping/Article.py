@@ -154,6 +154,22 @@ class Article:
 
 
 
+    def most_common_words_in_page(self, num=5):
+        """
+    finds num most common words in the page
+    Returns:
+        a list of the most common words in the webpage- pairs of: (word,count)
+    """
+    # We get the words within paragraphs
+        paragraphs = [s.findAll(string=True) for s in self.soup.findAll('p')]
+        paragraph_count = Counter([x.rstrip(punctuation).lower() for y in paragraphs for x in y])
+    
+    # We get the words within divs
+        divs = [s.findAll(string=True) for s in self.soup.findAll('div')]
+        div_count = Counter([x.rstrip(punctuation).lower() for y in divs for x in y])
+    
+        total = div_count + paragraph_count
+        return total.most_common(num)
 
 
 

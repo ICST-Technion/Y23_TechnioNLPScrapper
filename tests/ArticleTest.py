@@ -46,6 +46,10 @@ class ArticleTests(unittest.TestCase):
         counter = self.example_article.count_word_in_webpage('הר')
         self.assertTrue(21 < counter)
 
+    def test_most_common_words(self):
+        common_list = self.example_article.most_common_words_in_page(7)
+        print(common_list)
+        self.assertEqual(len(common_list), 7)
 
     def test_write_keywords_to_sql(self):
         sql_article = Article('https://www.ynetnews.com/article/hj11i0w19o')
