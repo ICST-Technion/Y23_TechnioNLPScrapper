@@ -41,8 +41,18 @@ def parse_google_search_query(query):
     excluded_keywords = []
     site = None
     datarange = None
-    
+    if not query:
+        return {
+        'phrases': phrases,
+        'positive_keywords': positive_keywords,
+        'negative_keywords': negative_keywords,
+        'excluded_keywords': excluded_keywords,
+        'site': site,
+        'datarange': datarange,
+        'keywords': keywords,
+    }
     # find all phrases in the query and add them to the phrases list
+  
     phrases = re.findall(r'"([^"]+)"', query)
     
     # remove phrases from query
@@ -303,16 +313,16 @@ def advanced_search_query(category='1'):
 
 
 
-    negative_words=request.json.get('negative_words' + category, "")
-    # negative_dict=parse_google_search_query(negative_json)
-    # negative_words=negative_dict["keywords"]
+    negative_json=request.json.get('negative_words' + category, "")
+    negative_dict=parse_google_search_query(negative_json)
+    negative_words=negative_dict["keywords"]
 
 
 
 
-    positive_words=request.json.get('positive_words' + category, "")
-    # positive_dict=parse_google_search_query(positive_json)
-    # positive_words=positive_dict["keywords"]
+    positive_json=request.json.get('positive_words' + category, "")
+    positive_dict=parse_google_search_query(positive_json)
+    positive_words=positive_dict["keywords"]
 
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
