@@ -291,7 +291,7 @@ def advanced_search_query(category='1'):
     keywords_to_search=request.json.get('included_keywords' + category, [])
 
 
-    websites_to_search = list(set(parse_json_and_strip('included_sites' + category)) | 
+    websites_to_search = list(set(request.json.get('included_sites' + category,[])) | 
                               set(get_default_websites()))
     
     # assumption: time range would be just two dates separated by comma
@@ -314,7 +314,7 @@ def advanced_search_query(category='1'):
     negative_words=request.json.get('negative_words' + category, [])
         
 
-    positive_words=request.json.get('positive_words' + category, "")
+    positive_words=request.json.get('positive_words' + category, [])
 
 
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
