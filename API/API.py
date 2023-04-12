@@ -189,7 +189,7 @@ def get_database_query():
 
 def search_google(query, site_list, exclude_query=''):
     service = build("customsearch", "v1", developerKey="AIzaSyAsr-bDeoZiMP4KBzDNkqbFNNl49RLQbWE")
-    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query).execute()
+    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf').execute()
     return result
 
 
@@ -202,7 +202,7 @@ def parse_json_and_strip(json_field):
     field_content = request.json.get(json_field, [])
     if field_content == []:
         return []
-    return field_content
+    return [field_content]
 
 
 def parse_table_rows(rows):
@@ -274,13 +274,13 @@ def advanced_search_query(category='1'):
     if not is_at_least_one_keyword():
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
+    #returns string
     keywords_to_search = parse_json_and_strip('included_keywords' + category)
-
     # datarange = query_dict["datarange"]
 
     websites_to_search = list(set(parse_json_and_strip('included_sites' + category)) | 
                               set(get_default_websites()))
-
+    
     # assumption: time range would be just two dates separated by comma
     time_range = parse_json_and_strip('date_range'+category)
     # no dates were passed
@@ -302,7 +302,7 @@ def advanced_search_query(category='1'):
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
-
+    SQLQuery().insert_keyword_intonation_to_sql(words_to_insert)
 
     #TODO: add phrases list here
     keyword_to_intonation,phrases_to_intonation=map_keywords_to_intonation(keywords_to_search,[],
@@ -316,13 +316,10 @@ def advanced_search_query(category='1'):
     encoded_exclude = [quote(keyword) for keyword in keywords_to_exclude]
     decoded_exclude = [unquote(keyword) for keyword in encoded_exclude]
     exclude_query = ','.join(decoded_exclude)
-
- 
     
     for website in websites_to_search:
         links_to_scrap = search_google(query, website, exclude_query)
-        scrap_links(links_to_scrap=links_to_scrap,keyword_to_intonation=keyword_to_intonation,
-                    phrases_to_intonation=phrases_to_intonation,category=category)
+        scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,category)
     # TODO: specify dates in the google search
 
 
