@@ -278,9 +278,10 @@ def advanced_search_query(category='1'):
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
     #returns string
-    keywords_to_search = [parse_json_and_strip('included_keywords' + category)]
+    keywords_json=request.json.get('included_keywords' + category, "")
+    keyword_dict=parse_google_search_query(keywords_json)
+    keywords_to_search=keyword_dict["keywords"]
 
-    # datarange = query_dict["datarange"]
 
     websites_to_search = list(set(parse_json_and_strip('included_sites' + category)) | 
                               set(get_default_websites()))
@@ -301,8 +302,18 @@ def advanced_search_query(category='1'):
 
 
 
-    negative_words =[parse_json_and_strip('negative_words'+category)]
-    positive_words =[parse_json_and_strip('positive_words'+category)]
+
+    negative_json=request.json.get('negative_words' + category, "")
+    negative_dict=parse_google_search_query(negative_json)
+    negative_words=negative_dict["keywords"]
+
+
+
+
+    positive_json=request.json.get('positive_words' + category, "")
+    positive_dict=parse_google_search_query(positive_json)
+    positive_words=positive_dict["keywords"]
+
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
@@ -314,11 +325,11 @@ def advanced_search_query(category='1'):
 
    
 
-    encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
-    decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
+    encoded_keywords = [quote(bytes(keyword)) for keyword in keywords_to_search]
+    decoded_keywords = [unquote(bytes(keyword)) for keyword in encoded_keywords]
     query = ','.join(decoded_keywords)
-    encoded_exclude = [quote(keyword) for keyword in keywords_to_exclude]
-    decoded_exclude = [unquote(keyword) for keyword in encoded_exclude]
+    encoded_exclude = [quote(bytes(keyword)) for keyword in keywords_to_exclude]
+    decoded_exclude = [unquote(bytes(keyword)) for keyword in encoded_exclude]
     exclude_query = ','.join(decoded_exclude)
     
     for website in websites_to_search:
