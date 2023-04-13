@@ -25,10 +25,6 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
     const getAdvancedSearchJson=(idx:Number)=>{
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
         const advanced_body={ 
             [`included_keywords${id_title}`]:keywordMap,
             [`excluded_keywords${id_title}`]:query.advancedQuery.excludedKeywords,

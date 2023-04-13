@@ -47,7 +47,11 @@ S-second
 
 def parse_date(date_as_string):
     # checking if T is in the string not useful because some websites have IST in date
-    parsed_day = datetime.datetime.fromisoformat(date_as_string[:-1])
+    pattern = r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z'
+    if re.match(pattern, date_as_string):
+        parsed_day = datetime.fromisoformat(date_as_string[:-1])
+    else:
+        parsed_day=datetime.now()    
     return parsed_day
 
 
