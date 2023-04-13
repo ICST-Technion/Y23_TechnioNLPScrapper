@@ -13,7 +13,6 @@ export interface buttonProps {
 export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUpdated}) => {
     const [message, setMessage] = React.useState('');
     const [counter, setCounter] = React.useState<number>(0);
-    
 
     const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setMessage(event.target.value);
