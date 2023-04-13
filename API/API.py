@@ -57,6 +57,16 @@ def parse_google_search_query(query):
     
     # remove phrases from query
     query = re.sub(r'"[^"]+"', '', query)
+
+
+    # find site and datarange components in the query
+    site = re.findall(r'site:\S+', query)
+    datarange = re.findall(r'daterange:\S+', query)
+    
+    # remove site and datarange components from query
+
+    query = re.sub(r'site:\S+', '', query)
+    query = re.sub(r'daterange:\S+', '', query)
     
     # find all positive keywords in the query and add them to the positive_keywords list
     positive_keywords = re.findall(r'\+\+\w+', query)
@@ -76,13 +86,7 @@ def parse_google_search_query(query):
     # remove excluded keywords from query
     query = re.sub(r'-\w+', '', query)
     
-    # find site and datarange components in the query
-    site = re.findall(r'site:\S+', query)
-    datarange = re.findall(r'daterange:\S+', query)
-    
-    # remove site and datarange components from query
-    query = re.sub(r'site:\S+', '', query)
-    query = re.sub(r'daterange:\S+', '', query)
+
     
     # remove any remaining whitespace from query
     query = query.strip()
