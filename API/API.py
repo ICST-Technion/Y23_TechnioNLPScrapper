@@ -144,6 +144,7 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,c
                 phrase_intonation_list,
                 category)
                 insert_query=SQLQuery()
+                print(rows_to_add)
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
@@ -172,16 +173,16 @@ def do_search_query(category='1'):
     site_list = get_default_websites()
     if site is not None:
         site_list.append(site)
-
-    # Perform the search and scrape the links for each website
-    for website in site_list:
-        search_results = search_google(query, website)
-        keyword_to_intonation,phrase_to_intonation = map_keywords_to_intonation(
+    keyword_to_intonation,phrase_to_intonation = map_keywords_to_intonation(
             keywords_list=keywords,
             phrases=phrases,
             positive_keywords=positive_keywords,
             negative_keywords=negative_keywords
         )
+    print(keyword_to_intonation)
+    # Perform the search and scrape the links for each website
+    for website in site_list:
+        search_results = search_google(query, website)
         scrap_links(search_results, keyword_to_intonation,phrase_to_intonation, category)
 
 
@@ -251,15 +252,15 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
     uses the existing keyword database and queries to map a keyword to the intonation
     (if exists already)
     '''
-    
-    known_keyword_to_intonation = SQLQuery().select_learned_keywords()
+    known_keyword_to_intonation = {t[0]: t[1] for t in SQLQuery().select_learned_keywords()}
+    # known_keyword_to_intonation = SQLQuery().select_learned_keywords()
     if known_keyword_to_intonation is None:
         known_keyword_to_intonation={}
     phrases_no_quotes = [phrase.strip('"\'') for phrase in phrases]
 
     # Process keywords
     keyword_to_intonation = [
-        (keyword, known_keyword_to_intonation[keyword] if keyword in known_keyword_to_intonation else 
+        (keyword, known_keyword_to_intonation[keyword] if keyword in known_keyword_to_intonation.keys() else 
          'positive' if keyword in positive_keywords else 
          'negative' if keyword in negative_keywords else 
          'neutral')
