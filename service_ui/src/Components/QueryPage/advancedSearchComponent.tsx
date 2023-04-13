@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import React, { useState } from 'react'
+import React from 'react'
 import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../Helpers/consts';
 import { mapToArray } from '../../Helpers/helpers';
 import { ButtonWithPopUp } from '../General Components/ButtonWithPopUp';
@@ -20,14 +20,14 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
 
     const [keywordMap, setKeywordMap] = React.useState<Map<number,string>>(new Map());
 
-
     //build the json body for the advanced search
     const getAdvancedSearchJson=(idx:Number)=>{
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
+        console.log(keywords[0].split(','));
         const advanced_body={ 
             [`included_keywords${id_title}`]:keywords[0].split(','),
-            [`excluded_keywords${id_title}`]:mapToArray( query.advancedQuery.excludedKeywords),
+            [`excluded_keywords${id_title}`]:mapToArray(query.advancedQuery.excludedKeywords),
             [`included_sites${id_title}`]:mapToArray(query.advancedQuery.includedWebsites),
             [`excluded_sites${id_title}`]:mapToArray(query.advancedQuery.excludedWebsites),
             [`date_range${id_title}`]:query.advancedQuery.timeRange,
