@@ -59,16 +59,16 @@ def parse_google_search_query(query):
     query = re.sub(r'"[^"]+"', '', query)
     
     # find all positive keywords in the query and add them to the positive_keywords list
-    positive_keywords = re.findall(r'\+\+?\w+', query)
+    positive_keywords = re.findall(r'\+\+\w+', query)
     
     # remove positive keywords from query
-    query = re.sub(r'\+\+?\w+', '', query)
+    query = re.sub(r'\+\+\w+', '', query)
     
     # find all negative keywords in the query and add them to the negative_keywords list
-    negative_keywords = re.findall(r'--?\w+', query)
+    negative_keywords = re.findall(r'--\w+', query)
     
     # remove negative keywords from query
-    query = re.sub(r'--?\w+', '', query)
+    query = re.sub(r'--\w+', '', query)
     
     # find all excluded keywords in the query and add them to the excluded_keywords list
     excluded_keywords = re.findall(r'-\w+', query)
@@ -90,6 +90,11 @@ def parse_google_search_query(query):
     # add any remaining words in query to keywords list
     keywords = re.findall(r'\w+', query)
     
+
+    #remove ++,--, and - when adding to the lists
+    positive_keywords = [s[2:] for s in positive_keywords]
+    negative_keywords = [s[2:] for s in negative_keywords]
+    excluded_keywords = [s[1:] for s in excluded_keywords]
     # return dictionary of extracted information
     return {
         'phrases': phrases,
