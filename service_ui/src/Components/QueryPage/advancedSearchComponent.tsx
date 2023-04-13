@@ -26,13 +26,13 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
         const advanced_body={ 
-            [`included_keywords${id_title}`]:keywordMap,
-            [`excluded_keywords${id_title}`]:query.advancedQuery.excludedKeywords,
-            [`included_sites${id_title}`]:query.advancedQuery.includedWebsites,
-            [`excluded_sites${id_title}`]:query.advancedQuery.excludedWebsites,
+            [`included_keywords${id_title}`]:keywords[0].split(','),
+            [`excluded_keywords${id_title}`]:mapToArray( query.advancedQuery.excludedKeywords),
+            [`included_sites${id_title}`]:mapToArray(query.advancedQuery.includedWebsites),
+            [`excluded_sites${id_title}`]:mapToArray(query.advancedQuery.excludedWebsites),
             [`date_range${id_title}`]:query.advancedQuery.timeRange,
-            [`positive_words${id_title}`]:query.advancedQuery.positiveKeywords,
-            [`negative_words${id_title}`]:query.advancedQuery.negativeKeywords
+            [`positive_words${id_title}`]:mapToArray(query.advancedQuery.positiveKeywords),
+            [`negative_words${id_title}`]:mapToArray(query.advancedQuery.negativeKeywords)
                 };
         return advanced_body;
     }
