@@ -47,20 +47,7 @@ S-second
 
 def parse_date(date_as_string):
     # checking if T is in the string not useful because some websites have IST in date
-    if "T" in date_as_string:
-        date_time_list = date_as_string.rsplit("T")
-    else:
-        date_time_list = date_as_string.rsplit(" ")
-    if len(date_time_list) >= 2:
-        date = date_time_list[0]
-        time = date_time_list[1]
-    else:
-        date = "2023-01-01"
-        time = "00:00"
-    year_month_day = date.rsplit("-")
-    hour_minute = time.rsplit(":")
-    parsed_day = datetime(int(year_month_day[0]), int(year_month_day[1]), int(year_month_day[2])
-                          , int(hour_minute[0]), int(hour_minute[1]))
+    parsed_day = datetime.datetime.fromisoformat(date_as_string[:-1])
     return parsed_day
 
 

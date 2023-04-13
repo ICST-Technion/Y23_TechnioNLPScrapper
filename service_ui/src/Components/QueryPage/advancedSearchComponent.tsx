@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import React from 'react'
+import React, { useState } from 'react'
 import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../Helpers/consts';
 import { mapToArray } from '../../Helpers/helpers';
 import { ButtonWithPopUp } from '../General Components/ButtonWithPopUp';
@@ -20,18 +20,23 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
 
     const [keywordMap, setKeywordMap] = React.useState<Map<number,string>>(new Map());
 
+
     //build the json body for the advanced search
     const getAdvancedSearchJson=(idx:Number)=>{
         const id_title=idx.valueOf()+1
         //Numbers can't be used as indices
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         const advanced_body={ 
-            [`included_keywords${id_title}`]:keywords[0].split(','),
-            [`excluded_keywords${id_title}`]:mapToArray(query.advancedQuery.excludedKeywords),
-            [`included_sites${id_title}`]:mapToArray(query.advancedQuery.includedWebsites),
-            [`excluded_sites${id_title}`]:mapToArray(query.advancedQuery.excludedWebsites),
+            [`included_keywords${id_title}`]:keywordMap,
+            [`excluded_keywords${id_title}`]:query.advancedQuery.excludedKeywords,
+            [`included_sites${id_title}`]:query.advancedQuery.includedWebsites,
+            [`excluded_sites${id_title}`]:query.advancedQuery.excludedWebsites,
             [`date_range${id_title}`]:query.advancedQuery.timeRange,
-            [`positive_words${id_title}`]:mapToArray(query.advancedQuery.positiveKeywords),
-            [`negative_words${id_title}`]:mapToArray(query.advancedQuery.negativeKeywords)
+            [`positive_words${id_title}`]:query.advancedQuery.positiveKeywords,
+            [`negative_words${id_title}`]:query.advancedQuery.negativeKeywords
                 };
         return advanced_body;
     }
@@ -98,7 +103,7 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
         <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
         <button className='run-query-button' onClick={async ()=>{setPageNumber(RESULTS_PAGE);
             const merged = {...getAdvancedSearchJson(0)};
-            const reactServer='https://technionlp-fe-service.onrender.com'
+            const reactServer='http://localhost:5000'
             try
             {
                 setAxiosPromise(axios.post(reactServer+'/advancedSearch',merged));
