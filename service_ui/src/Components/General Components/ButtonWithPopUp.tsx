@@ -52,9 +52,6 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
     }
 
     const getPopUpComponent = () =>{
-        // will not need the id statement when we support statistic types or remove it
-        if(ID === 4) return(<div>Currently Only Supports Keyword Counter</div>)
-        else {
             // return the text input and the selected values component
             return(
             <>
@@ -71,7 +68,7 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({ID, text, updated, setUp
                 </div>
             </>
             )
-        }
+
     }
 
     return(
