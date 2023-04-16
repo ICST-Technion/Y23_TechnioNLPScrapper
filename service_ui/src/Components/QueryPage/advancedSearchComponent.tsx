@@ -78,12 +78,12 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
         <div className="flex-column">
             <div className='button-container'>
                 <div className='button-row'>
-                <ButtonWithPopUp ID={5} text='included keywords' updated={keywordMap} setUpdated={setKeywordMapFromChild} />
+                <ButtonWithPopUp ID={4} text='included keywords' updated={keywordMap} setUpdated={setKeywordMapFromChild} />
                 <ButtonWithPopUp ID={0} text='exclude keywords' updated={query.advancedQuery.excludedKeywords} setUpdated={query.setExcludedKeywords} />
                 </div>
                 <div className='button-row'>
-                <ButtonWithPopUp ID={6} text='Positive Keywords' updated={query.advancedQuery.positiveKeywords} setUpdated={query.setPositiveKeywords}/> 
-                <ButtonWithPopUp ID={7} text='Negative Keywords' updated={query.advancedQuery.negativeKeywords} setUpdated={query.setNegativeKeywords}/> 
+                <ButtonWithPopUp ID={5} text='Positive Keywords' updated={query.advancedQuery.positiveKeywords} setUpdated={query.setPositiveKeywords}/> 
+                <ButtonWithPopUp ID={6} text='Negative Keywords' updated={query.advancedQuery.negativeKeywords} setUpdated={query.setNegativeKeywords}/> 
                 </div>
                 <div className='button-row'>
                 <ButtonWithPopUp ID={2} text='Specify Websites' updated={query.advancedQuery.includedWebsites} setUpdated={query.setIncludedWebsites}/> 
@@ -91,7 +91,6 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
                 </div>
                 <div className='button-row'>
                 <TimeRange text=' Time Range' timeRange={query.advancedQuery.timeRange} setTimeRange={query.setTimeRange}/>
-                <ButtonWithPopUp ID={4} text='specify statitcs' updated={query.advancedQuery.specificStatistic} setUpdated={query.setSpecificStatistic}/>
                 </div>
                 <button className='clear-query-button' onClick={()=>handleClear()}>Clear</button>
             </div>

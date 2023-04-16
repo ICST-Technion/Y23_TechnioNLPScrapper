@@ -53,6 +53,7 @@ function App() {
     else if(pageNumber === consts.FAQ_PAGE){
       return (
         <>
+          <Logo cssClasses='minimized-logo2'/>
           <FAQsPage setPageNumber={setPageNumber} />
         </>
       )

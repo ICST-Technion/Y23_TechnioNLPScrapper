@@ -28,8 +28,12 @@
   pointer-events: none;
 }
 .minimized-logo{
-  height: 21vh !important;
+  height: 23vh !important;
   margin-top: -4vh !important;
+}
+.minimized-logo2{
+  height: 25vh !important;
+  margin-top: -6vh !important;
 }
 
 .background{

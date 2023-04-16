@@ -1,3 +1,7 @@
+export const NEGATIVE = 0;
+export const NEUTRAL = 1;
+export const POSITIVE = 2;
+
 
 export function a11yProps(index: number) {
     return {

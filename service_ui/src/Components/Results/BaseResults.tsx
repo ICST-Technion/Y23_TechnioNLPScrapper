@@ -17,7 +17,7 @@ import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { MAIN_SEARCH_PAGE} from '../../Helpers/consts';
-import { a11yProps, options } from './ResultHelpers';
+import { NEGATIVE, NEUTRAL, POSITIVE, a11yProps, options } from './ResultHelpers';
 import { TabPanel } from './TabPanel';
 
 
@@ -113,7 +113,8 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
     const countSumForType = (type:string) => {
       let sum: number = 0;
       datasets.forEach((row) => {type === 'positive' && positiveKeywords?.includes(row.keyword)? sum += row.count :
-       type==='negative' && negativeKeywords?.includes(row.keyword)? sum+= row.count
+       type==='negative' && negativeKeywords?.includes(row.keyword)? sum+= row.count:
+       row.intonation === type ? sum += row.count
       :type==='neutral'? sum+= row.count
       : sum = sum});
       return sum;
@@ -166,7 +167,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
       const websites = merged.map((row) => row.website).filter(onlyUnique);
 
       /*
-      * This function returns the datasets set up for use in the chart, split on website nad keywords
+      * This function returns the datasets set up for use in the chart, split on website and keywords
       */
       const websiteDatasets =() => { 
         let innerData = new Array(websites.length);
@@ -186,6 +187,46 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
         
         return sets;
       }
+      
+      const getMonth=(row:any) =>{
+        let date:string = row.date;
+        let month = +date.slice(5,7);
+        return month;
+      }
+
+      const createMonthDatasets =() =>{
+        let innerData = new Array(3);
+        for (let i = 0; i < 3; i++) {
+          innerData[i] = new Array(12);
+          for(let j = 0; j < 12; j++)
+            innerData[i][j] = 0;
+        }
+        console.log(innerData);
+        datasets.forEach((row) => {
+          let month = getMonth(row);
+          let intonation = row.intonation;
+          if(intonation === "negative") {
+            innerData[NEGATIVE][month] += row.count;
+          }
+          else if(intonation === "neutral") {
+            innerData[NEUTRAL][month] += row.count;
+          }
+          else if(intonation === "positive") {
+            innerData[POSITIVE][month] += row.count;
+          }
+          else { console.log("not any of the normal intonations, my intonation is:" + intonation)}
+        })
+
+        let intonations = ["negative", "neutral", "positive"];
+        let colors = ["(255,0,0,0.5)","(0,0,255,0.5)","(0,255,0,0.5)"]
+        let sets = innerData.map((dataset, idx) => 
+        {
+          return {id: idx, label: intonations[idx], data:dataset,
+          backgroundColor: `rgba` + colors[idx],}
+        })
+        
+        return sets;
+      }
 
       // chart.js data set up for the keyword + website count sum graph
       const data = {
@@ -193,12 +234,14 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
         datasets: websiteDatasets(),
       };
 
-      // chart.js data set up for the all keyword count sum graph
+      // chart.js data set up for the monthly intonation summary graph //new
+      const monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'];
+    
       const data2 = {
-        labels: [...datasets.map((row) => row.keyword)],
-        datasets: [{id: 1, label:"all data", data:datasets.map((row) => row.count),backgroundColor: '#6a91dc',}]
+        labels: monthLabels ,
+        datasets: createMonthDatasets(),
       };
-      
+
       // ------ END DATA SETUP ------ //
       
     return (
@@ -207,9 +250,9 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="keyword count sum graph" {...a11yProps(0)} />
+              <Tab label="keyword-website graph" {...a11yProps(0)} />
               <Tab label="intonation graph" {...a11yProps(1)} />
-              <Tab label="full keyword graph" {...a11yProps(1)} />
+              <Tab label="monthly intonation graph" {...a11yProps(1)} />
             </Tabs>
           </Box>
 
@@ -234,7 +277,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
               />
             </div>
           </TabPanel>
-
+          
           <TabPanel value={value} index={2}>
             <div className='App flex result' style={{width:'70vw', marginLeft:'15vw'}}>
               <button className='go-back-button run' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
@@ -245,6 +288,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
               />
             </div>
           </TabPanel>
+
         </Box>
       </>
     );
