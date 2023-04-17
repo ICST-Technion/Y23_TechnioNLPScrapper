@@ -11,11 +11,13 @@ export interface searchPageProps {
 }
 
 export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
+    
+    React.useEffect(() => { console.log(keywords); }, [keywords]);
 
     return (
         <>
-        <button className='FAQs' onClick={()=>{setPageNumber(FAQ_PAGE); console.log("XXDDSS")}}>FAQs</button>
-        <button className='run-query-button' onClick={async ()=>{
+        <button id="FAQ" className='FAQs' onClick={()=>{setPageNumber(FAQ_PAGE); console.log("XXDDSS")}}>FAQs</button>
+        <button id="run" className='run-query-button' disabled={keywords[0].length === 0}  onClick={async ()=>{
           setPageNumber(RESULTS_PAGE);
           const query_body={"Query1": keywords[0]};
           const reactServer='https://technionlp-fe-service.onrender.com'
@@ -29,7 +31,7 @@ export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, se
           }}>Run</button>
           <div className="App">
               <SearchComponent keywords={keywords} setKeywords={setKeywords} idx={0} />
-              <button className='advanced-search-button' onClick={()=>{setPageNumber(ADVANCED_SEARCH_PAGE)}}>Advanced Search Options</button>
+              <button id="advancedSearch" className='advanced-search-button' onClick={()=>{setPageNumber(ADVANCED_SEARCH_PAGE)}}>Advanced Search Options</button>
           </div>
         </>
       );

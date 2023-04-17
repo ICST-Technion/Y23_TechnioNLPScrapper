@@ -9,6 +9,10 @@ import { AxiosResponse } from 'axios';
 import { AdvancedSearchComponent } from './Components/QueryPage/advancedSearchComponent';
 import { FAQsPage } from './Extra Pages/FAQsPage';
 import * as consts from './Helpers/consts';
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Cookies from 'universal-cookie';
 
 
 function App() {
@@ -20,11 +24,42 @@ function App() {
   const [queryState, setQueryState] = React.useState<any>();
   //create the constructed query, and save the value
   const query = useQueryConstructor(queryState, setQueryState, 1);
+  const cookies = new Cookies();
 
   // during only the first load of the page, create a new query object, which will initialize the queryState
   React.useEffect(() => {
     query.createNewQuery();
+    if(!cookies.get('firstTime')){
+      setEnabled(true);
+    }
   },[])
+
+  const [enabled,setEnabled] = React.useState(false)
+  const [initialStep,setInitialStep] = React.useState(0)
+  
+  const onExit = () => {
+    cookies.set('firstTime', 'false', { path: '/' });
+    setEnabled(false)  
+  }
+  const steps = [
+      {
+        element: '#FAQ',
+        intro: 'You can use this button for help',
+        position: 'right',
+      },
+      {
+        element: '#searchbar',
+        intro: 'You write in your query into this button \n The seachbar also supports common google search shortcuts',
+      },
+      {
+        element: '#advancedSearch',
+        intro: 'You can use this button to get redirected to a page with advanced settings',
+      },
+      {
+        element: '#run',
+        intro: 'You can use this button run the query',
+      },
+  ];
 
   const [pageNumber, setPageNumber] = React.useState<number>(0)
 
@@ -36,6 +71,13 @@ function App() {
       return (
         <>
           <Logo />
+          <HelpOutlineIcon className='help-icon' onClick={()=>{setEnabled(true)}}/>
+          <Steps
+              enabled={enabled}
+              steps={steps}
+              initialStep={initialStep}
+              onExit={onExit}
+            />
           <SearchPage keywords={keywords} setKeywords={setKeywords}
            setPageNumber={setPageNumber} setAxiosPromise={setAxiosPromise}/>
         </>
