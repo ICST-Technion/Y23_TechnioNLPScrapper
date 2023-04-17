@@ -12,6 +12,7 @@ export interface searchPageProps {
 
 export const SearchPage: React.FC<searchPageProps> = ({keywords, setKeywords, setPageNumber, setAxiosPromise}) => {
     
+
     React.useEffect(() => { console.log(keywords); }, [keywords]);
 
     return (

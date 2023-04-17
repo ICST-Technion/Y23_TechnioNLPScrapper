@@ -53,7 +53,7 @@ function App() {
       },
       {
         element: '#advancedSearch',
-        intro: 'You can use this button to get redirected to a page with advanced settings',
+        intro: 'You can use this button to get redirected to a page with advanced search options',
       },
       {
         element: '#run',
