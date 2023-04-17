@@ -115,7 +115,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
       datasets.forEach((row) => {type === 'positive' && positiveKeywords?.includes(row.keyword)? sum += row.count :
        type==='negative' && negativeKeywords?.includes(row.keyword)? sum+= row.count:
        row.intonation === type ? sum += row.count
-      :type==='neutral'? sum+= row.count
       : sum = sum});
       return sum;
     }
