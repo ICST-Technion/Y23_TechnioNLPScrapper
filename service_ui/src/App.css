@@ -207,9 +207,9 @@
 
 .help-icon{
   position: fixed;
-  top: 4.5vh;
+  top: 5vh;
   left:9.5vw;
-  height: 3vh;
+  height: 3vh !important;
 }
 
 .FAQs, .go-back-button{
