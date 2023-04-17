@@ -200,6 +200,12 @@
   top: 9vh;
 }
 
+.help-icon{
+  position: fixed;
+  top: 5vh;
+  left:9.5vw;
+}
+
 .FAQs, .go-back-button{
   position: fixed;
   top: 5vh;
