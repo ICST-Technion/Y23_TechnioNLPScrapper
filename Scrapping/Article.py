@@ -47,20 +47,11 @@ S-second
 
 def parse_date(date_as_string):
     # checking if T is in the string not useful because some websites have IST in date
-    if "T" in date_as_string:
-        date_time_list = date_as_string.rsplit("T")
+    pattern = r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z'
+    if re.match(pattern, date_as_string):
+        parsed_day = datetime.fromisoformat(date_as_string[:-1])
     else:
-        date_time_list = date_as_string.rsplit(" ")
-    if len(date_time_list) >= 2:
-        date = date_time_list[0]
-        time = date_time_list[1]
-    else:
-        date = "2023-01-01"
-        time = "00:00"
-    year_month_day = date.rsplit("-")
-    hour_minute = time.rsplit(":")
-    parsed_day = datetime(int(year_month_day[0]), int(year_month_day[1]), int(year_month_day[2])
-                          , int(hour_minute[0]), int(hour_minute[1]))
+        parsed_day=datetime.now()    
     return parsed_day
 
 
@@ -102,26 +93,24 @@ class Article:
         self.date = parse_date(self.extract_date())
 
     def extract_date(self):
-        '''
-tries to search in common tags in the articles where the date is found
-if can't fund the date, raises exception
-returns the date as a string
-'''
-        date_property = self.soup.head.find("meta", property="article:published_time")
+        """
+    Tries to search in common tags in the articles where the date is found.
+    If it can't find the date, raises an exception.
+    Returns the date as a string.
+    """
+        tags_to_check = [
+        self.soup.head.find("meta", property=prop) for prop in
+        ["article:published_time", "article:published", "og:published_time"]
+    ] + [self.soup.time]
+
+        date_property = next((tag.get("content") for tag in tags_to_check if tag is not None), None)
+
         if date_property is not None:
-            return date_property.get("content")
-        date_property = self.soup.head.find("meta", property="article:published")
-        if date_property is not None:
-            return date_property.get("content")
-        date_property = self.soup.time
-        if date_property is not None:
-            return date_property.get('datetime')
-        date_property = self.soup.head.find("meta", property="og:published_time")
-        if date_property is not None:
-            return date_property.get("content")
-            # we don't know how to extract
+            return date_property
+
+    # we don't know how to extract
         return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-        # raise Exception('Extraction of date unknown')
+
 
     def find_text_by_regex(self, regex):
         """
@@ -130,43 +119,53 @@ returns the date as a string
         """
         return [paragraph.get_text() for paragraph in self.soup.findAll(name='div', string=re.compile(regex))]
 
+
+
+
     def count_word_in_webpage(self, word):
+        
         """
         parameters:
         word- the word we want to count, string
+        includes instances of the word within other words,
+        for example if the word is "in" , will be counted in "instance"
         returns number of instances of that word in the text-integer
         """
         return len(self.soup.find_all(string=re.compile(word)))
 
-    def most_common_words_in_page(self, num=5):
+    def count_phrase_in_webpage(self, phrase):
         """
-        finds num most common words in the page
-        Returns:
-            a list of the most common words in the webpage- pairs of: (word,count)
+        parameters:
+        phrase- the phrase we want to count, string
+        counts only if the phrase is the entire word
+        returns number of instances of that word in the text-integer
         """
-        # We get the words within paragraphs
+        pattern = re.compile(r'\b{}\b'.format(re.escape(phrase)))
+        return len(self.soup.find_all(string=pattern))
 
-        paragraphs = (''.join(s.findAll(string=True)) for s in self.soup.findAll('p'))
-        paragraph_count = Counter((x.rstrip(punctuation).lower() for y in paragraphs for x in y.split()))
-        # We get the words within divs
-        divs = (''.join(s.findAll(string=True)) for s in self.soup.findAll('div'))
-        div_count = Counter((x.rstrip(punctuation).lower() for y in divs for x in y.split()))
-        total = div_count + paragraph_count
-        return total.most_common(num)
 
-    def create_rows_to_database(self, keyword_intonation_list,category='1'):
+
+
+
+
+
+    def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):
         """
-        given a keyword list, convert it into a format which can be written to the database
-        :param keyword_intonation_list:
-        list of tuples, each tuple is (keyword,intonation)
-        keyword- string
-        intonation- True: positive, False:negative
-        :return: a list of the tuples :
-         (website name, the keyword, date of the article, the number of times the keyword shows up in the article,
-        the link to the article, the intonation of the keyword)
-        """
-        rows = []
-        for keyword, intonation in keyword_intonation_list:
-            rows.append((self.website, keyword, self.date.strftime("%Y-%m-%d, %H:%M:%S"),
-                         str(self.count_word_in_webpage(keyword)), self.link, str(intonation),category))
+    given a keyword list, convert it into a format which can be written to the database
+    :param keyword_intonation_list:
+    list of tuples, each tuple is (keyword,intonation)
+    keyword- string
+    intonation- True: positive, False:negative
+    :return: a list of the tuples :
+     (website name, the keyword, date of the article, the number of times the keyword shows up in the article,
+    the link to the article, the intonation of the keyword)
+    """
+        date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
+        rows = [(self.website, keyword, date_str, str(self.count_word_in_webpage(keyword)), self.link, str(intonation), category)
+            for keyword, intonation in keyword_intonation_list]
+        rows += [(self.website, phrase, date_str, str(self.count_phrase_in_webpage(phrase)), self.link, str(intonation), category)
+             for phrase, intonation in phrases_intonation_list]
         return rows
+
+
+

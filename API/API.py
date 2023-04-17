@@ -10,7 +10,105 @@ from urllib.parse import quote, unquote
 # this line allows python to find our module.
 sys.path.append('..\\SQL')
 from SQL.SqlQueries import *
+import re
 
+def parse_google_search_query(query):
+    """
+    Parses a Google search query and returns a dictionary with the
+    different search components separated into lists.
+    
+    Supported search components:
+        - Keywords
+        - Phrases (enclosed in quotes)
+        - Excluded words (preceded by '-')
+        - Positive words (preceded by '++')
+        - Negative words (preceded by '--')
+        - Sites (preceded by 'site:')
+        - Date range (specified as 'after:' or 'before:')
+    
+    Args:
+        query (str): The Google search query to parse.
+    
+    Returns:
+        dict: A dictionary with the different search components separated
+        into lists.
+    """
+
+
+    phrases = []
+    positive_keywords = []
+    negative_keywords = []
+    excluded_keywords = []
+    site = None
+    datarange = None
+    if not query:
+        return {
+        'phrases': phrases,
+        'positive_keywords': positive_keywords,
+        'negative_keywords': negative_keywords,
+        'excluded_keywords': excluded_keywords,
+        'site': site,
+        'datarange': datarange,
+        'keywords': keywords,
+    }
+    # find all phrases in the query and add them to the phrases list
+  
+    phrases = re.findall(r'"([^"]+)"', query)
+    
+    # remove phrases from query
+    query = re.sub(r'"[^"]+"', '', query)
+
+
+    # find site and datarange components in the query
+    site = re.findall(r'site:\S+', query)
+    datarange = re.findall(r'daterange:\S+', query)
+    
+    # remove site and datarange components from query
+
+    query = re.sub(r'site:\S+', '', query)
+    query = re.sub(r'daterange:\S+', '', query)
+    
+    # find all positive keywords in the query and add them to the positive_keywords list
+    positive_keywords = re.findall(r'\+\+\w+', query)
+    
+    # remove positive keywords from query
+    query = re.sub(r'\+\+\w+', '', query)
+    
+    # find all negative keywords in the query and add them to the negative_keywords list
+    negative_keywords = re.findall(r'--\w+', query)
+    
+    # remove negative keywords from query
+    query = re.sub(r'--\w+', '', query)
+    
+    # find all excluded keywords in the query and add them to the excluded_keywords list
+    excluded_keywords = re.findall(r'-\w+', query)
+    
+    # remove excluded keywords from query
+    query = re.sub(r'-\w+', '', query)
+    
+
+    
+    # remove any remaining whitespace from query
+    query = query.strip()
+    
+    # add any remaining words in query to keywords list
+    keywords = re.findall(r'\w+', query)
+    
+
+    #remove ++,--, and - when adding to the lists
+    positive_keywords = [s[2:] for s in positive_keywords]
+    negative_keywords = [s[2:] for s in negative_keywords]
+    excluded_keywords = [s[1:] for s in excluded_keywords]
+    # return dictionary of extracted information
+    return {
+        'phrases': phrases,
+        'positive_keywords': positive_keywords,
+        'negative_keywords': negative_keywords,
+        'excluded_keywords': excluded_keywords,
+        'site': site[0].replace('site:', '') if site else None,
+        'datarange': datarange[0].replace('daterange:', '') if datarange else None,
+        'keywords': keywords,
+    }
 # creating a Flask app
 app = Flask(__name__)
 
@@ -32,7 +130,8 @@ def get_default_websites():
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
 
-def scrap_links(links_to_scrap,keywords_intonation_list,category='1'):
+def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,category='1'):
+    #TODO: scrap phrases and keywords differently
     '''
     scrapping information about each keyword and website
     then inserting them into the databse
@@ -50,35 +149,52 @@ def scrap_links(links_to_scrap,keywords_intonation_list,category='1'):
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
-                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,category)
+                rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,
+                phrase_intonation_list,
+                category)
                 insert_query=SQLQuery()
+                print(rows_to_add)
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
-def get_keyword_list_from_query(query):
-    if "\"" in query:
-        #as is, no ""
-        return query.strip('\"')
-    # search separately keywords by space
-    else:
-        return query.split()
+
 def do_search_query(category='1'):
     '''
-    performs a google search query (only keywords, no additional parameter)
-    scraps from the links we found, and updates the database
-    parameters:
-    category: the number of the current category we are scrapping for
+    Performs a Google search query (only keywords, no additional parameter).
+    Scrapes from the links we found and updates the database.
 
+    Parameters:
+    category: the number of the current category we are scraping for
     '''
     query = request.json.get('Query'+category, "")  # assuming Query is the keywords
-    # Encode the query in UTF-8
-    if query!="":
-        encoded_query = quote(query)  # we need this for arabic and hebrew
-        decoded_query = unquote(encoded_query)
-        site_list = get_default_websites()  # TODO: connect this to the included websites Database
-        for website in site_list:
-            result = search_google(decoded_query, website)
-            scrap_links(result,map_keywords_to_intonation(get_keyword_list_from_query(query)),category)
+
+    # Parse the query
+    query_dict = parse_google_search_query(query)
+    keywords = query_dict["keywords"]
+    phrases = query_dict["phrases"]
+    positive_keywords = query_dict["positive_keywords"]
+    negative_keywords = query_dict["negative_keywords"]
+    excluded_keywords = query_dict["excluded_keywords"]
+    site = query_dict["site"]
+    datarange = query_dict["datarange"]
+
+    # Get the list of websites to search
+    site_list = get_default_websites()
+    if site is not None:
+        site_list.append(site)
+    keyword_to_intonation,phrase_to_intonation = map_keywords_to_intonation(
+            keywords_list=keywords,
+            phrases=phrases,
+            positive_keywords=positive_keywords,
+            negative_keywords=negative_keywords
+        )
+    print(keyword_to_intonation)
+    # Perform the search and scrape the links for each website
+    for website in site_list:
+        search_results = search_google(query, website)
+        scrap_links(search_results, keyword_to_intonation,phrase_to_intonation, category)
+
+
 
 # request of regular query
 @app.route('/query', methods=['POST'])
@@ -140,20 +256,39 @@ def is_at_least_one_keyword(category='1'):
     included_keywords = parse_json_and_strip('included_keywords'+category)
     return included_keywords != []
 
-def map_keywords_to_intonation(keywords_list):
+def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_keywords):
     '''
     uses the existing keyword database and queries to map a keyword to the intonation
     (if exists already)
     '''
-    known_keyword_to_intonation=dict(SQLQuery().select_learned_keywords())
+    known_keyword_to_intonation = {t[0]: t[1] for t in SQLQuery().select_learned_keywords()}
+    # known_keyword_to_intonation = SQLQuery().select_learned_keywords()
+    if known_keyword_to_intonation is None:
+        known_keyword_to_intonation={}
+    phrases_no_quotes = [phrase.strip('"\'') for phrase in phrases]
 
-    keyword_to_intonation=[]
-    for keyword in keywords_list:
-        if keyword in known_keyword_to_intonation.keys():
-            keyword_to_intonation.append((keyword,known_keyword_to_intonation[keyword]))
-        else:
-            keyword_to_intonation.append((keyword,'neutral'))
-    return keyword_to_intonation
+    # Process keywords
+    keyword_to_intonation = [
+        (keyword, known_keyword_to_intonation[keyword] if keyword in known_keyword_to_intonation.keys() else 
+         'positive' if keyword in positive_keywords else 
+         'negative' if keyword in negative_keywords else 
+         'neutral')
+        for keyword in keywords_list
+    ]
+
+    # Process phrases
+    phrase_to_intonation = [
+        (phrase, known_keyword_to_intonation[phrase] if phrase in known_keyword_to_intonation else 
+         'positive' if phrase in positive_keywords else 
+         'negative' if phrase in negative_keywords else 
+         'neutral')
+        for phrase in phrases_no_quotes
+    ]
+    #TODO:replace with NLP once we have it
+    filtered_learned_words = [(s1, s2) for s1, s2 in keyword_to_intonation+phrase_to_intonation if s2 != "neutral"]
+    SQLQuery().insert_keyword_intonation_to_sql(filtered_learned_words)
+    return keyword_to_intonation, phrase_to_intonation
+
 def advanced_search_query(category='1'):
     '''
     performs scrapping based on all the advanced search parameters.
@@ -162,10 +297,13 @@ def advanced_search_query(category='1'):
     if not is_at_least_one_keyword():
         # return bad request error
         return make_response("Searching requires at least one keyword", 400)
+    #returns string
+    keywords_to_search=request.json.get('included_keywords' + category, [])
 
-    keywords_to_search = create_parameters_list('included_keywords'+category, 'excluded_keywords'+category)
-    websites_to_search = create_parameters_list('Sites'+category, 'excluded_Sites'+category)
-    websites_to_search=list(set(websites_to_search) | set(get_default_websites()))
+
+    websites_to_search = list(set(request.json.get('included_sites' + category,[])) | 
+                              set(get_default_websites()))
+    
     # assumption: time range would be just two dates separated by comma
     time_range = parse_json_and_strip('date_range'+category)
     # no dates were passed
@@ -177,31 +315,57 @@ def advanced_search_query(category='1'):
             datetime_range = [datetime.strptime(date_string, "%Y-%m-%d") for date_string in time_range]
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
-
+    
   
 
-    #learn the words we got
-    query_executor = SQLQuery()
-    negative_words =parse_json_and_strip('negative_words'+category)
-    positive_words =parse_json_and_strip('positive_words'+category)
+
+
+  
+    negative_words=request.json.get('negative_words' + category, [])
+        
+
+    positive_words=request.json.get('positive_words' + category, [])
+
+
     keywords_to_exclude =parse_json_and_strip('excluded_keywords'+category)
+
     words_to_insert=[(word,'negative') for word in negative_words]
     words_to_insert.extend([(word,'positive') for word in positive_words])
-    query_executor.insert_keyword_intonation_to_sql(words_to_insert)
+    SQLQuery().insert_keyword_intonation_to_sql(words_to_insert)
 
-    keyword_to_intonation=map_keywords_to_intonation(keywords_to_search)
+    #TODO: add phrases list here
+    keyword_to_intonation,phrases_to_intonation=map_keywords_to_intonation(keywords_to_search,[],
+                                                                           positive_words,negative_words)
 
-    encoded_keywords = [quote(keyword) for keyword in keywords_to_search]
-    decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
+   
+
+    # URL-encode the search keywords
+    _, decoded_keywords = url_encode_keywords(keywords_to_search)
     query = ','.join(decoded_keywords)
-    encoded_exclude = [quote(keyword) for keyword in keywords_to_exclude]
-    decoded_exclude = [unquote(keyword) for keyword in encoded_exclude]
+
+    # URL-encode the exclude keywords
+    _, decoded_exclude = url_encode_keywords(keywords_to_exclude)
     exclude_query = ','.join(decoded_exclude)
+    
     for website in websites_to_search:
         links_to_scrap = search_google(query, website, exclude_query)
-        scrap_links(links_to_scrap,keyword_to_intonation,category)
+        scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,category)
     # TODO: specify dates in the google search
 
+def url_encode_keywords(keywords):
+    """
+    URL-encodes a list of keywords using UTF-8 encoding and returns the encoded and decoded values.
+
+    Args:
+        keywords (list): A list of keywords to encode.
+
+    Returns:
+        A tuple containing two lists: the first list contains the URL-encoded and UTF-8 encoded keywords,
+        and the second list contains the decoded keywords.
+    """
+    encoded_keywords = [quote(keyword.encode('utf-8')) for keyword in keywords]
+    decoded_keywords = [unquote(keyword) for keyword in encoded_keywords]
+    return encoded_keywords, decoded_keywords
 
 @app.route('/advancedSearch', methods=['POST'])
 def advanced_search():
@@ -213,7 +377,7 @@ def advanced_search():
     otherwise returns ok
     '''
     advanced_search_query('1')
-    # advanced_search_query('2')
+    
     # not adding specified statistics yet, because there is only counter for now
     return make_response("ok", 200)
 
