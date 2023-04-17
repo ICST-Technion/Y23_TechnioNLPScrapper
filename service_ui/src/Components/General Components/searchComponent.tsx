@@ -11,7 +11,7 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({keywords, setKe
 
    return(<>
    <div className='search-button'>
-        <TextField className='search-bar'
+        <TextField id="searchbar" className='search-bar'
             label={'Search Keywords Separated by Space'}
             value={keywords[idx]}
             helperText={!keywords[idx]?.length ? 'At Least One Keyword is Required' : ''}
