@@ -11,7 +11,7 @@ export function a11yProps(index: number) {
   }
 
 // chart.js options
-export const options = {
+export const optionsStacked = {
     plugins: {
         title: {
         display: true,
@@ -27,4 +27,21 @@ export const options = {
         stacked: true,
         },
     },
+};
+export const options = {
+  plugins: {
+      title: {
+      display: true,
+      text: 'Chart.js Bar Chart',
+      },
+  },
+  responsive: true,
+  scales: {
+      x: {
+      stacked: false,
+      },
+      y: {
+      stacked: false,
+      },
+  },
 };

@@ -17,7 +17,7 @@ import { Box, Typography } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { MAIN_SEARCH_PAGE} from '../../Helpers/consts';
-import { NEGATIVE, NEUTRAL, POSITIVE, a11yProps, options } from './ResultHelpers';
+import { NEGATIVE, NEUTRAL, POSITIVE, a11yProps, options, optionsStacked } from './ResultHelpers';
 import { TabPanel } from './TabPanel';
 
 
@@ -271,7 +271,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({includedKeywords, setPa
               <button className='go-back-button run' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
               <Bar 
               datasetIdKey='trial'
-              options={options}
+              options={optionsStacked}
               data={intonationData}
               />
             </div>
