@@ -122,3 +122,42 @@
   return Object.assign({}, obj);
 }
 
+
+export function parseString(str: string) {
+  const words = [];
+  let currentPhrase = '';
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === '"') {
+      // If we encounter a quote, we keep adding characters to the
+      // currentPhrase string until we encounter the next quote.
+      i++;
+      while (str[i] !== '"' && i < str.length) {
+        currentPhrase += str[i];
+        i++;
+      }
+
+      // Add the phrase to the list of words and reset the currentPhrase
+      // string for the next phrase.
+      if (currentPhrase !== '') {
+        words.push(currentPhrase);
+        currentPhrase = '';
+      }
+    } else if (str[i] !== ' ') {
+      // If the character is not a space, we keep adding characters to
+      // the current word until we encounter a space or the end of the string.
+      let currentWord = str[i];
+      i++;
+      while (str[i] !== ' ' && i < str.length) {
+        currentWord += str[i];
+        i++;
+      }
+
+      // Add the word to the list of words.
+      words.push(currentWord);
+    }
+  }
+
+  return words;
+}
+

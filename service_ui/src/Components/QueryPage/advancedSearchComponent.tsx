@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react'
 import { MAIN_SEARCH_PAGE, RESULTS_PAGE } from '../../Helpers/consts';
-import { mapToArray } from '../../Helpers/helpers';
+import { mapToArray, parseString } from '../../Helpers/helpers';
 import { ButtonWithPopUp } from '../General Components/ButtonWithPopUp';
 import { TimeRange } from '../General Components/TimeRange';
+
 
 
 export interface AdvancedSearchComponentProps {
@@ -47,9 +48,9 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
 
     // update the keyword map based on the keyword string we got from main search bar
     React.useEffect(()=>{
-        const keywordArray= keywords[0]?.split(',');
+        let words = parseString(keywords[0]);
         const newMap = new Map();
-        keywordArray?.forEach((keyword, index) => {
+        words.forEach((keyword, index) => {
             if(keyword){
                 newMap.set(index,keyword);
             }
@@ -68,8 +69,15 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
     const setKeywordMapFromChild:React.Dispatch<React.SetStateAction<Map<number, string>>> = (newMap) => {
         console.log("on update keywordMap 1");
         setKeywordMap(newMap);
-        const newKeywords = Array.from(keywordMap.values()).join(',');
-        setKeywordsFromChildByIndex(0, newKeywords);
+        let newKeywords: string[] = [];
+        keywordMap.forEach((value, key) => {
+            if(value.includes(' ')){
+                newKeywords.push(`"${value}"`);
+            }
+            else newKeywords.push(value);
+        });
+        const newString = newKeywords.join(' ');
+        setKeywordsFromChildByIndex(0, newString);
     }
 
     //similar to the other search component, except it bases everything off of the query object
@@ -96,7 +104,7 @@ export const AdvancedSearchComponent: React.FC<AdvancedSearchComponentProps> = (
             </div>
         </div>
         <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
-        <button className='run-query-button' onClick={async ()=>{setPageNumber(RESULTS_PAGE);
+        <button className='run-query-button' disabled={keywords[0].length === 0} onClick={async ()=>{setPageNumber(RESULTS_PAGE);
             const merged = {...getAdvancedSearchJson(0)};
             const reactServer='https://technionlp-fe-service.onrender.com'
             try
