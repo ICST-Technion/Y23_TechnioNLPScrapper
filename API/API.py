@@ -153,7 +153,6 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,c
                 phrase_intonation_list,
                 category)
                 insert_query=SQLQuery()
-                print(rows_to_add)
                 insert_query.insert_article_to_sql(rows_to_add)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
@@ -305,14 +304,14 @@ def advanced_search_query(category='1'):
                               set(get_default_websites()))
     
     # assumption: time range would be just two dates separated by comma
-    time_range = parse_json_and_strip('date_range'+category)
+    time_range =request.json.get('date_range' + category, [])
     # no dates were passed
     if not time_range:
         # either default range or just not searching by range at all
         datetime_range = [datetime(year=datetime.now().year - 1, month=1, day=1), datetime.now()]
     else:
         try:
-            datetime_range = [datetime.strptime(date_string, "%Y-%m-%d") for date_string in time_range]
+            datetime_range = [datetime.fromisoformat(date_string[:-1]) for date_string in time_range]
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
     
