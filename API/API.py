@@ -206,10 +206,10 @@ def get_database_query():
     # do_search_query('2')
     return make_response("OK", 200)  
 
-
-def search_google(query, site_list, exclude_query=''):
+#The 'y' in the date range restricts the search to the articles published in the past year
+def search_google(query, site_list, exclude_query='', date_range = 'y'):
     service = build("customsearch", "v1", developerKey="AIzaSyAsr-bDeoZiMP4KBzDNkqbFNNl49RLQbWE")
-    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf').execute()
+    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf',  sort='date:r', dateRestrict=date_range).execute()
     return result
 
 
@@ -346,11 +346,26 @@ def advanced_search_query(category='1'):
     # URL-encode the exclude keywords
     _, decoded_exclude = url_encode_keywords(keywords_to_exclude)
     exclude_query = ','.join(decoded_exclude)
+    #print("date format is "+ datetime_range[0].strftime('%Y-%m-%d'))
+
+    formatted_range = time_range_format(datetime_range)
     
     for website in websites_to_search:
-        links_to_scrap = search_google(query, website, exclude_query)
+        links_to_scrap = search_google(query, website, exclude_query, formatted_range)
         scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,category)
-    # TODO: specify dates in the google search
+
+def time_range_format(datetime_range):
+    """
+    turn the list of datetime objects into the format of "d[YYYY-MM-DD TO YYYY-MM-DD]".
+
+    Args:
+        datetime_range (list): A list of two dates in the format "YYYY-MM-DD".
+
+    Returns: 
+        A string of both dates in the format "d[YYYY-MM-DD TO YYYY-MM-DD]".
+    """
+    formatted_range = f"d[{datetime_range[0].strftime('%Y-%m-%d')} TO {datetime_range[1].strftime('%Y-%m-%d')}]"
+    return formatted_range
 
 def url_encode_keywords(keywords):
     """
