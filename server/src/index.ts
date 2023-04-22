@@ -108,6 +108,15 @@ app.post('/register', async (req: Request, res: Response) => {
   signupRoute(req, res);
 });
 
+app.get('/autoLogin', async (req: Request, res: Response) => {
+  const token = protectedRoute(req, res);
+  if(token === consts.ERROR_401 || typeof(token) === "string"){
+    return;
+  }
+
+  //if we reach here then we have a token and the user is logged in
+  res.status(200).send({username: token.username, role: token.role});
+});
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404).send('Page not found');
