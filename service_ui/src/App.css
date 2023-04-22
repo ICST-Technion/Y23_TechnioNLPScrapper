@@ -456,3 +456,9 @@ background-color: #8d6cdf !important;
   right: 5vw;
   z-index: 100;
 }
+.register{
+  position:fixed;
+  top: 9vh;
+  right: 5vw;
+  z-index: 100;
+}

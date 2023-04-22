@@ -17,7 +17,10 @@ import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
 
 export interface SignInProps {
-   setSignedIn:React.Dispatch<React.SetStateAction<boolean>>;
+   setSignedIn:React.Dispatch<React.SetStateAction<{
+    username: string;
+    role: string;
+}>>
 }
 
 export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
@@ -55,7 +58,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               alert("Successfully logged in!");
               const cookies = new Cookies();
               cookies.set("token", res.data.token);
-              setSignedIn(true);
+              setSignedIn({username: res.data.username, role: res.data.role});
           }
           catch(err: any){
               let message = ""

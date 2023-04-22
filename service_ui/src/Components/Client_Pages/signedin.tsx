@@ -12,12 +12,14 @@ import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Cookies from "universal-cookie";
+import Typography from "@mui/material/Typography";
 
 export interface SignedInMainPageProps {
-  signOut: () => void;
+  username: string;
+  role: string;
 }
 
-export const SignedInMainPage: React.FC<SignedInMainPageProps> = (signOut) => {
+export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, role}) => {
   const [keywords, setKeywords] = React.useState<string[]>(["", ""]);
   const [axiosPromise, setAxiosPromise] =
     React.useState<Promise<AxiosResponse<any, any>>>();
@@ -87,6 +89,9 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = (signOut) => {
             initialStep={initialStep}
             onExit={onExit}
           />
+          <Typography id="hello" variant="h5" className="centered" marginTop={-3} marginBottom={3}>
+            Hello {username}!
+          </Typography>
           <SearchPage
             keywords={keywords}
             setKeywords={setKeywords}

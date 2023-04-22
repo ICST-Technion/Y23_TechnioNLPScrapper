@@ -9,13 +9,14 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios, { Axios, AxiosError } from 'axios';
 import { FE_SERVER } from './Helpers/consts';
+import { basicAxiosInstance } from './Helpers/helpers';
 
 
 export interface SignUpProps {
-   
+   setRegistered:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SignUp: React.FC<SignUpProps> = () => {
+export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
 
   const theme = createTheme();
 
@@ -42,13 +43,18 @@ export const SignUp: React.FC<SignUpProps> = () => {
     }
     else{
         try{
-            let res = await axios.post(FE_SERVER + "/register", {
-                email: email,
-                password: password,
-                username: username
+            let res = await basicAxiosInstance({
+                method:"post",
+                url:"/register",
+                data: {
+                  email: email,
+                  password: password,
+                  username: username
+              }
             })
             setErrormsg("");
             alert("Account created successfully!");
+            setRegistered(false);
         }
         catch(err: any){
             let message = "";
