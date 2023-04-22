@@ -6,7 +6,8 @@ import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
 import { testUserManagement } from './tests/DBfunctions.test.js';
-import { loginRoute, signupRoute } from './user_management/autherntication.js';
+import { loginRoute, protectedRoute, signupRoute } from './user_management/autherntication.js';
+import { setErrorResponse } from './helpers.js';
 dotenv.config();
 
 const port = process.env.PORT || 5000;
@@ -75,9 +76,22 @@ app.post('/login', async (req: Request, res: Response) => {
   loginRoute(req, res);
 });
 
-app.post('/signup', async (req: Request, res: Response) => {
+app.post('/register', async (req: Request, res: Response) => {
+  const token = protectedRoute(req, res);
+  if(token === consts.ERROR_401 || typeof(token) === "string")
+    return;
+
+  //if we reach here then we have a token and the user is logged in
+
+  //if the user is not an admin then we return an error
+  if(token.role !== consts.ADMIN){
+     setErrorResponse(consts.ERROR_403, "You are not authorized to register new users", res);
+     return;
+  }
+
   signupRoute(req, res);
 });
+
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404).send('Page not found');

@@ -35,7 +35,7 @@ const verifyJWT = (token: string) => {
 };
 
 // Middelware for all protected routes. You need to expend it, implement premissions and handle with errors.
-export const protectedRout = (req: Request, res: Response) => {
+export const protectedRoute = (req: Request, res: Response) => {
   let authHeader = req.headers["authorization"] as string;
 
   // authorization header needs to look like that: Bearer <JWT>.
@@ -103,7 +103,7 @@ export const loginRoute = async (req: Request, res: Response) => {
 
   // Create JWT token.
   // This token contain the userId in the data section.
-  const token = jwt.sign({ id: userDBRes }, secretKey, {
+  const token = jwt.sign({ username: userDBRes.username, role: userDBRes.role }, secretKey, {
     expiresIn: 86400, // expires in 24 hours
   });
 
