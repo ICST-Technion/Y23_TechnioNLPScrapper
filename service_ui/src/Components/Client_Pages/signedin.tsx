@@ -34,7 +34,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = (signOut) => {
     if (!cookies.get("firstTime")) {
       setEnabled(true);
     }
-  });
+  },[]);
 
   const [enabled, setEnabled] = React.useState(false);
   const [initialStep, setInitialStep] = React.useState(0);
