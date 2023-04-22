@@ -4,6 +4,15 @@ export const ERROR_403 = 403;
 export const ERROR_404 = 404;  
 export const ERROR_500 = 500;
 
+export class DBerr {
+    status: number;
+    message: string;
+    constructor(status: number, message: string) {
+        this.status = status;
+        this.message = message;
+    }
+}
+
 export const LOGIN = "POST /user/login";
 export const SIGNUP = "POST /user/signup";
 export const UPD_PRIV = "PUT /user/updatePriviledges";

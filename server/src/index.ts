@@ -5,6 +5,7 @@ import {client} from "./elephantsql.js"
 import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
+import { testUserManagement } from './tests/DBfunctions.test.js';
 dotenv.config();
 
 const port = process.env.PORT || 5000;
@@ -15,8 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-const userDB = await connectToDB();
-
+let userDB;
 
 async function clearTable() {
   const body={}
@@ -74,10 +74,13 @@ app.all('*', (req: Request, res: Response) => {
   res.status(404).send('Page not found');
 });
 
-app.listen(port, () =>
+app.listen(port, async () =>
 {
   console.log(`Server running! port ${port}`);
-  if(userDB == consts.ERROR_500) {
-    console.log("Error connecting to DB");
+  try{
+    userDB = await connectToDB();
+  }
+  catch(err: any) {
+    console.log(err);
   }
 });

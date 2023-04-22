@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node ./dist/index.js",
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\" --compiler typescript/bin/tsc",
-    "test": "node scripts/test.js"
+    "test": "node ./dist/tests/test.js"
   },
   "keywords": [],
   "author": "jouwana",
