@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FE_SERVER } from "./consts";
 import Cookies from "universal-cookie";
-const cookie = new Cookies();
+export const cookie = new Cookies();
 
 export const basicAxiosInstance = axios.create({
   //added the cors-anywhere thing as we dont have "Options" set, and we get error. fix later.

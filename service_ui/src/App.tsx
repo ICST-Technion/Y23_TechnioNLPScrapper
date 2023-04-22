@@ -4,6 +4,7 @@ import { Background } from "./Components/Background";
 import { Logo } from "./Components/Logo";
 import { SignedInMainPage } from "./Components/Client_Pages/signedin";
 import { SignIn } from "./SignIn";
+import { cookie } from "./Helpers/helpers";
 
 function App() {
   const [signedIn, setSignedIn] = React.useState(false);
@@ -15,6 +16,7 @@ function App() {
     if (signedIn) {
       return (
         <>
+          <button className="sign-out" onClick={() => { cookie.remove("token"); setSignedIn(false)}}>Sign Out</button>
           <SignedInMainPage signOut={() => setSignedIn(true)} />
         </>
       );
