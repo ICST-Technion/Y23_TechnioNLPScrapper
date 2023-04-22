@@ -8,6 +8,7 @@ import { connectToDB } from './user_management/DBfunctions.js';
 import { loginRoute, signupRoute } from './user_management/authentication.js';
 import { setErrorResponse } from './helpers.js';
 import { protectedRoute } from './user_management/authorization.js';
+import cookieParser from 'cookie-parser'
 dotenv.config();
 
 const port = process.env.PORT || 5000;
@@ -17,6 +18,7 @@ const app:Express = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser())
 
 let userDB: typeof import("mongoose");
 
@@ -34,7 +36,11 @@ async function clearTable() {
 
 app.post('/query', async (req: Request, res: Response) => {
   try {
-
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+  
+    //if we reach here then we have a token and the user is logged in
     const response = await axios.post(consts.api_address+consts.query_request,req.body)
     console.log(response);
     const results = await client.query('SELECT * FROM "public"."articles"');
@@ -49,6 +55,11 @@ app.post('/query', async (req: Request, res: Response) => {
 
 app.post('/advancedSearch', async (req: Request, res: Response) => {
   try {
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+  
+    //if we reach here then we have a token and the user is logged in
     const response = await axios.post(consts.api_address+consts.advanced_search_request,req.body)
     console.log(response);
     const results = await client.query('SELECT * FROM "public"."articles"');
@@ -63,6 +74,11 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
 
 app.get('/rows', async (req: Request, res: Response) => {
   try {
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+  
+    //if we reach here then we have a token and the user is logged in
     const results = await client.query('SELECT * FROM "public"."articles"');
     res.send({data: results.rows});
     clearTable();

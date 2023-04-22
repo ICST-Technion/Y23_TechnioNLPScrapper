@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
+import Cookies from 'universal-cookie';
 
 export interface SignInProps {
    setSignedIn:React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,6 +53,8 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               })
               setErrormsg("");
               alert("Successfully logged in!");
+              const cookies = new Cookies();
+              cookies.set("token", res.data.token);
               setSignedIn(true);
           }
           catch(err: any){

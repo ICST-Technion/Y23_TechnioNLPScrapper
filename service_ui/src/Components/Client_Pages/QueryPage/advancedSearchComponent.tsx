@@ -5,7 +5,7 @@ import {
   MAIN_SEARCH_PAGE,
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
-import { mapToArray, parseString } from "../../../Helpers/helpers";
+import { basicAxiosInstance, mapToArray, parseString } from "../../../Helpers/helpers";
 import { ButtonWithPopUp } from "../General Components/ButtonWithPopUp";
 import { TimeRange } from "../General Components/TimeRange";
 
@@ -174,11 +174,8 @@ export const AdvancedSearchComponent: React.FC<
           onClick={async () => {
             setPageNumber(RESULTS_PAGE);
             const merged = { ...getAdvancedSearchJson(0) };
-            const reactServer = FE_SERVER;
             try {
-              setAxiosPromise(
-                axios.post(reactServer + "/advancedSearch", merged)
-              );
+              setAxiosPromise(basicAxiosInstance({method:"post", url:"/advancedSearch", data:merged}));
             } catch (err) {
               console.log(err);
             }

@@ -7,6 +7,7 @@ import {
   FE_SERVER,
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
+import { basicAxiosInstance } from "../../../Helpers/helpers";
 
 export interface searchPageProps {
   keywords: string[];
@@ -44,9 +45,8 @@ export const SearchPage: React.FC<searchPageProps> = ({
         onClick={async () => {
           setPageNumber(RESULTS_PAGE);
           const query_body = { Query1: keywords[0] };
-          const reactServer = FE_SERVER;
           try {
-            setAxiosPromise(axios.post(reactServer + "/query", query_body));
+            setAxiosPromise(basicAxiosInstance({method:"post", url:"/query", data:query_body}));
           } catch (err) {
             console.log(err);
           }

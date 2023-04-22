@@ -13,9 +13,9 @@ const GetToken = (req: Request) => {
         return req.headers.authorization.split(' ')[1]
     }
     // Then try to get from cookie
-    else if (req.cookies && req.cookies.token !== undefined) {
-        return req.cookies.token;
-    }
+    // else if (req.cookies && req.cookies.token !== undefined) {
+    //     return req.cookies.token;
+    // }
     // No token found
     return "";
 }

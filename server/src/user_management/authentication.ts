@@ -13,6 +13,7 @@ import { DBerr, setErrorResponse } from "../helpers.js";
 import { assert } from "console";
 const secretKey = process.env.SECRET_KEY || "your_secret_key";
 
+
 export const loginRoute = async (req: Request, res: Response) => {
   const credentials = req.body;
 
@@ -61,15 +62,11 @@ export const loginRoute = async (req: Request, res: Response) => {
   });
 
   res.status(200)
-  .cookie("token", token, {
-      httpOnly: true,
-      secure: false, //change to true later, needs https
-      sameSite: "none",
-    })
   .send(
     JSON.stringify({
       username: userDBRes.username,
       role: userDBRes.role,
+      token: token,
     })
   );
 };
