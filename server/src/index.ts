@@ -2,12 +2,12 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import {client} from "./elephantsql.js"
-import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
-import { testUserManagement } from './tests/DBfunctions.test.js';
-import { loginRoute, protectedRoute, signupRoute } from './user_management/autherntication.js';
+import { loginRoute, signupRoute } from './user_management/authentication.js';
 import { setErrorResponse } from './helpers.js';
+import { protectedRoute } from './user_management/authorization.js';
 dotenv.config();
 
 const port = process.env.PORT || 5000;

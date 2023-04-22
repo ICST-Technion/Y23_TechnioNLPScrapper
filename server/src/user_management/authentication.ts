@@ -9,56 +9,9 @@ import {
   getUserByEmail,
   getUserByUsername,
 } from "./DBfunctions.js";
-import { DBerr, checkInvalidJsonBody, setErrorResponse } from "../helpers.js";
+import { DBerr, setErrorResponse } from "../helpers.js";
 import { assert } from "console";
 const secretKey = process.env.SECRET_KEY || "your_secret_key";
-
-export const verifyTokenHeader = (
-  authHeader: string[] | undefined
-): boolean => {
-  if (authHeader === undefined) return false;
-  if (authHeader.length !== 2) return false;
-  if (authHeader[0] !== "Bearer") return false;
-  if (authHeader[1] === null) return false;
-  return true;
-};
-
-// Verify JWT token
-const verifyJWT = (token: string) => {
-  try {
-    return jwt.verify(token, secretKey);
-    // Read more here: https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback
-    // Read about the diffrence between jwt.verify and jwt.decode.
-  } catch (err) {
-    return false;
-  }
-};
-
-// Middelware for all protected routes. You need to expend it, implement premissions and handle with errors.
-export const protectedRoute = (req: Request, res: Response) => {
-  let authHeader = req.headers["authorization"] as string;
-
-  // authorization header needs to look like that: Bearer <JWT>.
-  // So, we just take to <JWT>.
-
-  let authHeaderSplited: any = authHeader && authHeader.split(" ");
-  const token = verifyTokenHeader(authHeaderSplited) && authHeaderSplited[1];
-
-  if (!token) {
-    setErrorResponse(ERROR_401, "No token.", res);
-    return ERROR_401;
-  }
-
-  // Verify JWT token
-  const user = verifyJWT(token);
-  if (!user) {
-    setErrorResponse(ERROR_401, "Failed to verify JWT.", res);
-    return ERROR_401;
-  }
-
-  // We are good!
-  return user;
-};
 
 export const loginRoute = async (req: Request, res: Response) => {
   const credentials = req.body;
@@ -107,9 +60,16 @@ export const loginRoute = async (req: Request, res: Response) => {
     expiresIn: 86400, // expires in 24 hours
   });
 
-  res.status(200).send(
+  res.status(200)
+  .cookie("token", token, {
+      httpOnly: true,
+      secure: false, //change to true later, needs https
+      sameSite: "none",
+    })
+  .send(
     JSON.stringify({
-      token: token,
+      username: userDBRes.username,
+      role: userDBRes.role,
     })
   );
 };
