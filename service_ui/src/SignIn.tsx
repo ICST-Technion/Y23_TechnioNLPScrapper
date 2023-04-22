@@ -127,8 +127,8 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
             </Typography>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  Forgot password?
+                <Link variant="body2">
+                  Forgot password? Contact an admin
                 </Link>
               </Grid>
             </Grid>
