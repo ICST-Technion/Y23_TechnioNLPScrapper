@@ -1,12 +1,34 @@
 import { assert } from "console";
 import { ERROR_400, USER, ADMIN } from "../consts.js";
 import * as DBfunc from "../user_management/DBfunctions.js";
+import { DBerr } from "../helpers.js";
 
+const checkUsernameAndPassword = async (username:string, password:string) => {
+  try {
+      const user:any = await DBfunc.getUserByUsername(username);
+      return password === user.password;
+  }
+  catch(err: any) {
+      console.log(err.message);
+      throw new DBerr (ERROR_400, err.message);
+  }
+}
+
+const checkEmailAndPassword = async (email:string, password:string) => {
+  try {
+      const user:any = await DBfunc.getUserByEmail(email);
+      return password === user.password;
+  }
+  catch(err: any) {
+      console.log(err.message);
+      throw new DBerr (ERROR_400, err.message);
+  }
+}
 
 const setUpDB = async () => {
     try{
       // !!!!!!!! write in the admin and password to connect to the database !!!!!!!!!!
-      await DBfunc.connectToDB();
+      await DBfunc.connectToDB('technioNLP-admin','k6ckrd0Zx0P2nYXn');
     }
     catch(err){
       throw err;
@@ -24,7 +46,7 @@ const ManageByUsername = async () => {
     assert(user.username === addition.username);
     console.log("user found by username successfully")
 
-    if(await DBfunc.checkUsernameAndPassword(addition.username, addition.password) === false){
+    if(await checkUsernameAndPassword(addition.username, addition.password) === false){
       throw new Error("user password not checked successfully");
     }
     console.log("user password checked successfully")
@@ -68,7 +90,7 @@ const ManageByEmail = async () => {
     assert(user.email === addition.email);
     console.log("user found by email successfully")
 
-    if(await DBfunc.checkEmailAndPassword(addition.email, addition.password) === false){
+    if(await checkEmailAndPassword(addition.email, addition.password) === false){
       throw new Error("user password not checked successfully");
     }
     console.log("user password checked successfully")
@@ -132,7 +154,7 @@ const testValidations = async () => {
 
   try{
     await DBfunc.addUser("example@email.com", "testtest", "12345678");
-    if(await DBfunc.checkEmailAndPassword("example@email.com", "wrongpassword") === false)
+    if(await checkEmailAndPassword("example@email.com", "wrongpassword") === false)
       throw new Error("invalid password caught successfully");
 
     assert(false,"should not be able to check password with invalid password");
@@ -145,7 +167,7 @@ const testValidations = async () => {
 
   try{
     await DBfunc.addUser("example@email.com", "testtest", "12345678");
-    if(await DBfunc.checkUsernameAndPassword("testtest", "wrongpassword") === false)
+    if(await checkUsernameAndPassword("testtest", "wrongpassword") === false)
       throw new Error("invalid password caught successfully");
     assert(false,"should not be able to check password with invalid password");
     await DBfunc.deleteUserByEmail("example@email.com");

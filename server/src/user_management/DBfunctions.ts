@@ -1,6 +1,8 @@
 import userDB from "./models/user.js";
-import { ERROR_400, ERROR_500, USER, DBerr } from "../consts.js"
+import { ERROR_400, ERROR_500, USER} from "../consts.js"
 import mongoose from "mongoose";
+import { DBerr } from "../helpers.js";
+import * as bcrypt from "bcrypt";
 
 export const connectToDB = async (admin:string|undefined = process.env.USERDB_ADMIN, pass:string|undefined = process.env.USERDB_PASSWORD) => {
     try {
@@ -69,7 +71,7 @@ export const addUser = async (email:string ,username:string, password:string) =>
         //these will throw error if user was not found, which is what we want
         if(await checkEmailExists(email)) throw new DBerr(ERROR_400, "email already exists");
         if(await checkUsernameExists(username)) throw new DBerr(ERROR_400, "username already exists");
-
+     
         const client = new userDB({
             email: email,
             username: username,
@@ -183,30 +185,3 @@ export const deleteUserByUsername = async (username:string) => {
     }
 }
 
-export const checkUsernameAndPassword = async (username:string, password:string) => {
-    try {
-        const user:any = await getUserByUsername(username);
-        if(user.password === password) {
-            return true;
-        }
-        else return false;
-    }
-    catch(err: any) {
-        console.log(err.message);
-        throw new DBerr (ERROR_400, err.message);
-    }
-}
-
-export const checkEmailAndPassword = async (email:string, password:string) => {
-    try {
-        const user:any = await getUserByEmail(email);
-        if(user.password === password) {
-            return true;
-        }
-        else return false;
-    }
-    catch(err: any) {
-        console.log(err.message);
-        throw new DBerr (ERROR_400, err.message);
-    }
-}
