@@ -6,6 +6,7 @@ import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
 import { testUserManagement } from './tests/DBfunctions.test.js';
+import { loginRoute, signupRoute } from './user_management/autherntication.js';
 dotenv.config();
 
 const port = process.env.PORT || 5000;
@@ -16,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-let userDB;
+let userDB: typeof import("mongoose");
 
 async function clearTable() {
   const body={}
@@ -68,6 +69,14 @@ app.get('/rows', async (req: Request, res: Response) => {
     console.log(err);
     res.status(500).send(err);
 }
+});
+
+app.post('/login', async (req: Request, res: Response) => {
+  loginRoute(req, res);
+});
+
+app.post('/signup', async (req: Request, res: Response) => {
+  signupRoute(req, res);
 });
 
 app.all('*', (req: Request, res: Response) => {

@@ -28,7 +28,7 @@ const checkEmailAndPassword = async (email:string, password:string) => {
 const setUpDB = async () => {
     try{
       // !!!!!!!! write in the admin and password to connect to the database !!!!!!!!!!
-      await DBfunc.connectToDB('technioNLP-admin','k6ckrd0Zx0P2nYXn');
+      await DBfunc.connectToDB();
     }
     catch(err){
       throw err;
