@@ -5,7 +5,7 @@ import * as DBfunc from "../user_management/DBfunctions.js";
 
 const setUpDB = async () => {
     try{
-      //write in the admin and password to connect to the database
+      // !!!!!!!! write in the admin and password to connect to the database !!!!!!!!!!
       await DBfunc.connectToDB();
     }
     catch(err){
@@ -23,6 +23,11 @@ const ManageByUsername = async () => {
     const user:any = await DBfunc.getUserByUsername(addition.username);
     assert(user.username === addition.username);
     console.log("user found by username successfully")
+
+    if(await DBfunc.checkUsernameAndPassword(addition.username, addition.password) === false){
+      throw new Error("user password not checked successfully");
+    }
+    console.log("user password checked successfully")
 
     role = await DBfunc.getUserRoleByUsername(addition.username);
     assert(role === USER)
@@ -63,6 +68,11 @@ const ManageByEmail = async () => {
     assert(user.email === addition.email);
     console.log("user found by email successfully")
 
+    if(await DBfunc.checkEmailAndPassword(addition.email, addition.password) === false){
+      throw new Error("user password not checked successfully");
+    }
+    console.log("user password checked successfully")
+
     role = await DBfunc.getUserRoleByEmail(addition.email);
     assert(role===USER);
     console.log("user role found by email successfully")
@@ -92,13 +102,70 @@ const ManageByEmail = async () => {
   }
 }
 
+const testValidations = async () => {
+  try{
+    await DBfunc.addUser("testing", "testing", "12345678");
+    assert(false,"should not be able to add user with invalid email");
+  }
+  catch(err:any){
+    assert(err.status === ERROR_400);
+    console.log("invalid email caught successfully")
+  }
+
+  try{
+    await DBfunc.addUser("test@example.com", "test", "12345678");
+    assert(false,"should not be able to add user with invalid username");
+  }
+  catch(err:any){
+    assert(err.status === ERROR_400);
+    console.log("invalid username caught successfully")
+  }
+
+  try{
+    await DBfunc.addUser("test@example.com", "testtest", "1234567");
+    assert(false,"should not be able to add user with invalid password");
+  }
+  catch(err:any){
+    assert(err.status === ERROR_400);
+    console.log("invalid password caught successfully")
+  }
+
+  try{
+    await DBfunc.addUser("example@email.com", "testtest", "12345678");
+    if(await DBfunc.checkEmailAndPassword("example@email.com", "wrongpassword") === false)
+      throw new Error("invalid password caught successfully");
+
+    assert(false,"should not be able to check password with invalid password");
+    await DBfunc.deleteUserByEmail("example@email.com")
+  }
+  catch(err:any){
+    console.log("wrong password for email caught successfully")
+    await DBfunc.deleteUserByEmail("example@email.com")
+  }
+
+  try{
+    await DBfunc.addUser("example@email.com", "testtest", "12345678");
+    if(await DBfunc.checkUsernameAndPassword("testtest", "wrongpassword") === false)
+      throw new Error("invalid password caught successfully");
+    assert(false,"should not be able to check password with invalid password");
+    await DBfunc.deleteUserByEmail("example@email.com");
+  }
+  catch(err:any){
+    console.log("wrong password for username caught successfully")
+    await DBfunc.deleteUserByEmail("example@email.com")
+  }
+
+}
+
+
 export const testUserManagement = async () => {
   try{
     await setUpDB();
     await ManageByUsername();
     await ManageByEmail();
+    await testValidations();
   }
-  catch(err){
-    console.log("TEST FAILED: " + err);
+  catch(err:any){
+    console.log("TEST FAILED: " + err.message);
   }
 }

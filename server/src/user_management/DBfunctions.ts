@@ -182,3 +182,31 @@ export const deleteUserByUsername = async (username:string) => {
         throw new DBerr (ERROR_400, err.message);
     }
 }
+
+export const checkUsernameAndPassword = async (username:string, password:string) => {
+    try {
+        const user:any = await getUserByUsername(username);
+        if(user.password === password) {
+            return true;
+        }
+        else return false;
+    }
+    catch(err: any) {
+        console.log(err.message);
+        throw new DBerr (ERROR_400, err.message);
+    }
+}
+
+export const checkEmailAndPassword = async (email:string, password:string) => {
+    try {
+        const user:any = await getUserByEmail(email);
+        if(user.password === password) {
+            return true;
+        }
+        else return false;
+    }
+    catch(err: any) {
+        console.log(err.message);
+        throw new DBerr (ERROR_400, err.message);
+    }
+}
