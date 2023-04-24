@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  TimeScale,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
@@ -22,10 +23,14 @@ import {
   NEUTRAL,
   POSITIVE,
   a11yProps,
+  createTimeIntonationSet,
+  onlyUnique,
   options,
   optionsStacked,
+  websiteDatasets,
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
+import 'chartjs-adapter-date-fns';
 
 export interface baseResultsProps {
   includedKeywords: string[];
@@ -82,7 +87,8 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    TimeScale
   );
 
   /*
@@ -115,11 +121,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
     setMerged(merged);
   };
-
-  // removes duplicates
-  function onlyUnique(value: any, index: any, self: string | any[]) {
-    return self.indexOf(value) === index;
-  }
 
   // returns the sum of the count of the keywords based on intonation type we sent
   const countSumForType = (type: string) => {
@@ -202,115 +203,18 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       ],
     };
 
-    // set up keyword data and filtered to only unique keywords
-    const keywords = merged.map((row) => row.keyword).filter(onlyUnique);
-    const websites = merged.map((row) => row.website).filter(onlyUnique);
-
-    /*
-     * This function returns the datasets set up for use in the chart, split on website and keywords
-     */
-    const websiteDatasets = () => {
-      let innerData = new Array(websites.length);
-      for (let i = 0; i < websites.length; i++) {
-        innerData[i] = new Array(keywords.length);
-      }
-
-      websites.forEach((website, idx) => {
-        merged.forEach((row) => {
-          if (row.website === website)
-            innerData[idx][keywords.indexOf(row.keyword)] = row.count;
-        });
-        console.log(innerData);
-      });
-      let sets = innerData.map((dataset, idx) => {
-        return {
-          id: idx,
-          label: websites[idx],
-          data: dataset,
-          backgroundColor: `rgba(${randomIntFromInterval(
-            0,
-            255
-          )},${randomIntFromInterval(0, 255)},${randomIntFromInterval(
-            0,
-            255
-          )},0.5)`,
-        };
-      });
-
-      return sets;
-    };
-
-    const getMonth = (row: any) => {
-      let date: string = row.date;
-      let month = +date.slice(5, 7);
-      return month;
-    };
-
-    const createMonthDatasets = () => {
-      let innerData = new Array(3);
-      for (let i = 0; i < 3; i++) {
-        innerData[i] = new Array(12);
-        for (let j = 0; j < 12; j++) innerData[i][j] = 0;
-      }
-      console.log(innerData);
-      datasets.forEach((row) => {
-        let month = getMonth(row);
-        let intonation = row.intonation;
-        if (intonation === "negative") {
-          innerData[NEGATIVE][month-1] += row.count;
-        } else if (intonation === "neutral") {
-          innerData[NEUTRAL][month-1] += row.count;
-        } else if (intonation === "positive") {
-          innerData[POSITIVE][month-1] += row.count;
-        } else {
-          console.log(
-            "not any of the normal intonations, my intonation is:" + intonation
-          );
-        }
-      });
-
-      let intonations = ["negative", "neutral", "positive"];
-      let colors = ["(255,0,0,0.5)", "(0,0,255,0.5)", "(0,255,0,0.5)"];
-      let sets = innerData.map((dataset, idx) => {
-        return {
-          id: idx,
-          label: intonations[idx],
-          data: dataset,
-          backgroundColor: `rgba` + colors[idx],
-        };
-      });
-
-      return sets;
-    };
-
-    // chart.js data set up for the keyword + website count sum graph
-    const data = {
+    const keywordWebsiteData = {
       labels: [...merged.map((row) => row.keyword).filter(onlyUnique)],
-      datasets: websiteDatasets(),
+      datasets: websiteDatasets(merged),
     };
 
-    // chart.js data set up for the monthly intonation summary graph //new
-    const monthLabels = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const data2 = {
-      labels: monthLabels,
-      datasets: createMonthDatasets(),
+    const timedData = {
+      datasets: createTimeIntonationSet(datasets, "year"),
     };
 
     // ------ END DATA SETUP ------ //
+
+
 
     return (
       <>
@@ -341,7 +245,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               >
                 go back
               </button>
-              <Bar datasetIdKey="trial" options={options} data={data} />
+              <Bar datasetIdKey="trial" options={options} data={keywordWebsiteData} />
             </div>
           </TabPanel>
 
@@ -379,7 +283,23 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               >
                 go back
               </button>
-              <Bar datasetIdKey="trial" options={options} data={data2} />
+              <Bar datasetIdKey="trial" options={
+                {
+                  responsive: true,
+                  scales:{
+                    x:{
+                      type: 'time',
+                      time: {
+                        unit: 'year'
+                      },
+                      stacked: false,
+                    },
+                    y:{
+                      stacked: false,
+                    }
+                  }
+                }
+              } data={timedData} />
             </div>
           </TabPanel>
         </Box>
@@ -387,3 +307,5 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     );
   }
 };
+
+

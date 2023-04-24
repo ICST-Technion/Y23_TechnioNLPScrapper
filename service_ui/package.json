@@ -61,6 +61,7 @@
   "devDependencies": {
     "@types/react-date-range": "^1.4.4",
     "@types/react-image-gallery": "^1.2.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "react-bootstrap": "^2.7.0"
   }
 }
