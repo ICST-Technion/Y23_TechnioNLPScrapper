@@ -462,3 +462,8 @@ background-color: #8d6cdf !important;
   right: 5vw;
   z-index: 100;
 }
+
+input, select, textarea, label, span, p {
+  text-align: start;
+  unicode-bidi: plaintext;
+}
