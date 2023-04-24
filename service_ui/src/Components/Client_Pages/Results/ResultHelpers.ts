@@ -248,14 +248,13 @@ const groupByTimeAndIntonation = (
 
 // Function to get the start of the week for a given ISO date string
 const getWeekStart = (date: string): string => {
-  const d = new Date(date);
-  const dayOfWeek = d.getUTCDay();
-  const diff = d.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-  const startOfWeek = new Date(
-    Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff)
-  );
-  return startOfWeek.toISOString();
-};
+  const datestring = new Date(date); // Convert the date string to a date object
+  const dayOfWeek = datestring.getUTCDay(); // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
+  const daysSinceSunday = dayOfWeek === 0 ? 0 : dayOfWeek; // Calculate number of days since Sunday
+  const startOfWeek = new Date(datestring); // Copy the date object
+  startOfWeek.setUTCDate(datestring.getUTCDate() - daysSinceSunday); // Set the date to the Sunday of that week
+  return startOfWeek.toISOString().slice(0, 10) + " 00:00:00"; 
+}
 
 // Function to get the start of the month for a given ISO date string
 const getMonthStart = (date: string): string => {
@@ -263,12 +262,46 @@ const getMonthStart = (date: string): string => {
   const startOfMonth = new Date(
     Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)
   );
-  return startOfMonth.toISOString();
+  return startOfMonth.toISOString().slice(0, 10) + " 00:00:00";
 };
 
 // Function to get the start of the year for a given ISO date string
 const getYearStart = (date: string): string => {
   const d = new Date(date);
   const startOfYear = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return startOfYear.toISOString();
+  return startOfYear.toISOString().slice(0, 10) + " 00:00:00";
 };
+
+
+export function getDate10DaysAgo(): string {
+  const date = new Date();
+  date.setDate(date.getDate() - 10);
+  return date.toISOString().slice(0, 10) + " 00:00:00";
+}
+
+export function getStartOf10thPreviousWeek(): string {
+  const currentDate = new Date();
+  const daysAgo = 10 * 7;
+  const startOfWeek = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() - currentDate.getDay() + 1 - daysAgo
+  );
+  startOfWeek.setHours(0, 0, 0, 0);
+  return startOfWeek.toISOString().substring(0, 10);
+}
+
+export function getStartOf10thPreviousMonth(): string {
+  const today = new Date();
+  const tenMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 10, 1, 0, 0, 0);
+  const year = tenMonthsAgo.getFullYear();
+  const month = tenMonthsAgo.getMonth() + 1 < 10 ? `0${tenMonthsAgo.getMonth() + 1}` : `${tenMonthsAgo.getMonth() + 1}`;
+  return `${year}-${month}-01 00:00:00`;
+}
+
+export function getStartOf10thPreviousYear(): string {
+  const today = new Date();
+  const tenYearsAgo = new Date(today.getFullYear() - 10, 0, 1, 0, 0, 0);
+  const year = tenYearsAgo.getFullYear();
+  return `${year}-01-01 00:00:00`;
+}

@@ -19,16 +19,16 @@ import { Tabs, Tab } from "@mui/material";
 import { AxiosResponse } from "axios";
 import { MAIN_SEARCH_PAGE } from "../../../Helpers/consts";
 import {
-  NEGATIVE,
-  NEUTRAL,
-  POSITIVE,
   a11yProps,
   countSumForType,
   createTimeIntonationSet,
+  getDate10DaysAgo,
+  getStartOf10thPreviousMonth,
+  getStartOf10thPreviousWeek,
+  getStartOf10thPreviousYear,
   mergeKeywords,
   onlyUnique,
   options,
-  optionsStacked,
   unitType,
   websiteDatasets,
 } from "./ResultHelpers";
@@ -55,6 +55,11 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const [merged, setMerged] = React.useState<any[]>([]);
   const [value, setValue] = React.useState(0);
   const [timeFrame, setTimeFrame] = React.useState<unitType>("week");
+  const timeFrameLimits = new Map<unitType, string>();
+  timeFrameLimits.set("day", getDate10DaysAgo());
+  timeFrameLimits.set("week", getStartOf10thPreviousWeek());
+  timeFrameLimits.set("month", getStartOf10thPreviousMonth());
+  timeFrameLimits.set("year", getStartOf10thPreviousYear());
   /*
    * This function gets the data from the server, and sets the datasets state
    */
@@ -250,6 +255,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                       time: {
                         unit: timeFrame,
                       },
+                      min: timeFrameLimits.get(timeFrame),
                       stacked: false,
                     },
                     y: {
