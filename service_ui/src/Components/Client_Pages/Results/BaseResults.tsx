@@ -177,7 +177,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     const intonationData = {
       labels: [
         "negative intonation sum",
-        "nuetral intonation",
+        "neutral intonation",
         "positive intonation sum",
       ],
       datasets: [
@@ -189,7 +189,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         },
         {
           id: 2,
-          label: "nuetral intonation",
+          label: "neutral intonation",
           data: [0, countSumForType("neutral"), 0],
           backgroundColor: "#5e17eb",
         },
