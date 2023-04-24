@@ -449,3 +449,16 @@ background-color: #8d6cdf !important;
   box-shadow: 0 3px 30px #39cdf1ce !important;
 
 }
+
+.sign-out{
+  position:fixed;
+  top: 5vh;
+  right: 5vw;
+  z-index: 100;
+}
+.register{
+  position:fixed;
+  top: 9vh;
+  right: 5vw;
+  z-index: 100;
+}
