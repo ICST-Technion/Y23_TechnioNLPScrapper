@@ -6,6 +6,7 @@ import { SignedInMainPage } from "./Components/Client_Pages/signedin";
 import { SignIn } from "./SignIn";
 import { basicAxiosInstance, cookie } from "./Helpers/helpers";
 import { SignUp } from "./SignUp";
+import Button from "@mui/material/Button";
 
 function App() {
 
@@ -43,8 +44,8 @@ function App() {
     if (signedIn !== undefined && signedIn.username !== undefined && signedIn.username !== "") {
       return (
         <>
-          <button className="sign-out" onClick={() => { cookie.remove("token"); setSignedIn(emptyUser); setRegister(false);}}>Sign Out</button>
-          <button className="register" onClick={() => { setRegister(true)}} hidden={signedIn.role !== "admin" || register}> register new user</button>
+          <Button className="sign-out" onClick={() => { cookie.remove("token"); setSignedIn(emptyUser); setRegister(false);}}>Sign Out</Button>
+          <Button className="register" onClick={() => { setRegister(true)}} hidden={signedIn.role !== "admin" || register}> register new user</Button>
           {register? <><Logo /><SignUp setRegistered={setRegister}/></>
           :<SignedInMainPage username={signedIn.username} role={signedIn.role}/>
           }
