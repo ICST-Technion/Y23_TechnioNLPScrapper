@@ -14,7 +14,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
 import { copy, randomIntFromInterval } from "../../../Helpers/helpers";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
 import { AxiosResponse } from "axios";
 import { MAIN_SEARCH_PAGE } from "../../../Helpers/consts";
@@ -29,6 +29,7 @@ import {
   onlyUnique,
   options,
   optionsStacked,
+  unitType,
   websiteDatasets,
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
@@ -53,7 +54,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const [datasets, setDatasets] = React.useState<any[]>([]);
   const [merged, setMerged] = React.useState<any[]>([]);
   const [value, setValue] = React.useState(0);
-
+  const [timeFrame, setTimeFrame] = React.useState<unitType>("week");
   /*
    * This function gets the data from the server, and sets the datasets state
    */
@@ -179,7 +180,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     };
 
     const timedData = {
-      datasets: createTimeIntonationSet(datasets, "year"),
+      datasets: createTimeIntonationSet(datasets, timeFrame),
     };
 
     // ------ END DATA SETUP ------ //
@@ -232,7 +233,12 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           </TabPanel>
 
           <TabPanel value={value} index={2}>
-            
+            <Container className="timeFrames">
+              <Button onClick={() => setTimeFrame("day")}>daily</Button>
+              <Button onClick={() => setTimeFrame("week")}>weekly</Button>
+              <Button onClick={() => setTimeFrame("month")}>monthly</Button>
+              <Button onClick={() => setTimeFrame("year")}>yearly</Button>
+            </Container>
               <Bar
                 datasetIdKey="trial"
                 className="fit"
@@ -242,7 +248,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                     x: {
                       type: "time",
                       time: {
-                        unit: "year",
+                        unit: timeFrame,
                       },
                       stacked: false,
                     },

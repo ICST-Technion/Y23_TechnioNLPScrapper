@@ -331,18 +331,21 @@ background-color: #8d6cdf !important;
   justify-content: center;
   align-items: center;
   width: 70vw;
+  max-width: 70vw;
   margin-left: 15vw;
-  height: 85vh;
+  min-height: 85vh;
 }
 
 .result div[role=tabpanel]{
   width: inherit;
   height: inherit;
+  max-width: inherit;
 }
 
 .result div[role=tabpanel] div{
-  height: 75vh;
+  min-height: 75vh;
   width: inherit;
+  max-width: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -352,13 +355,40 @@ background-color: #8d6cdf !important;
 .result div[role=tabpanel] p{
   height: inherit;
   width: inherit;
+  max-width: 60vw;
   text-align: center;
-  padding-top: 3vh;
+}
+
+.result div[role=tabpanel] div :has(.timeFrames){
+  min-height: 75vh;
+  max-width: 60vw;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: -4vw;
+}
+
+.timeFrames{
+  min-height: 20vh !important;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-top: -25vh;
+}
+
+.timeFrames button{
+  color: #4d13c2;
+  justify-content: left;
+  text-align:center;
+  width: 100%;
 }
 
 .result div[role=tabpanel] p canvas{
   display: inline;
 }
+
 
 .Loading-Page{ 
   text-align: center;

@@ -5,6 +5,8 @@ export const NEGATIVE = 0;
 export const NEUTRAL = 1;
 export const POSITIVE = 2;
 
+export type unitType = false | "week" | "millisecond" | "second" | "minute" | "hour" | "day" | "month" | "quarter" | "year" | undefined;
+
 const intonations: string[] = ["neutral", "positive", "negative"];
 type IntonationMap = Map<string, Map<string, number>>;
 
@@ -172,7 +174,7 @@ function createIntonationMap(): IntonationMap {
 * @param timeFrame - the time frame to group by: 'day', 'week', 'month' or 'year'
 * @returns a new dataset grouped by time and intonation
 */
-export const createTimeIntonationSet = (dataset: any[], timeFrame: string) => {
+export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => {
   let innerData = new Array(3);
   for (let i = 0; i < 3; i++) {
     innerData[i] = new Array();
@@ -222,7 +224,7 @@ export const createTimeIntonationSet = (dataset: any[], timeFrame: string) => {
 */
 const groupByTimeAndIntonation = (
   data: any[],
-  timeFrame: string
+  timeFrame: unitType
 ): IntonationMap => {
   const matrix: IntonationMap = createIntonationMap();
 
