@@ -295,11 +295,6 @@ background-color: #8d6cdf !important;
   width:18vw;
 }
 
-.graphs{
-  width: 24vw;
-  height: auto;
-}
-
 .flex{
   display: flex;
   flex-direction: column;
@@ -351,11 +346,18 @@ background-color: #8d6cdf !important;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .result div[role=tabpanel] p{
-  height: max-content;
-  width: max-content;
+  height: inherit;
+  width: inherit;
+  text-align: center;
+  padding-top: 3vh;
+}
+
+.result div[role=tabpanel] p canvas{
+  display: inline;
 }
 
 .Loading-Page{ 
