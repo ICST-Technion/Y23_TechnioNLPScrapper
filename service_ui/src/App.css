@@ -484,16 +484,18 @@ background-color: #8d6cdf !important;
 }
 
 .sign-out{
-  position:fixed;
+  position:fixed !important;
   top: 5vh;
   right: 5vw;
   z-index: 100;
+  color: #4d13c2 !important;
 }
 .register{
-  position:fixed;
-  top: 9vh;
-  right: 5vw;
+  position: fixed !important;
+  top: 5vh;
+  right: 12vw;
   z-index: 100;
+  color: #4d13c2 !important;
 }
 
 input, select, textarea, label, span, p {

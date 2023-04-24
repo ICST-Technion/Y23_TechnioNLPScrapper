@@ -195,9 +195,9 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="keyword-website graph" {...a11yProps(0)} />
-              <Tab label="intonation graph" {...a11yProps(1)} />
-              <Tab label="monthly intonation graph" {...a11yProps(1)} />
+              <Tab label="Keyword-Website Graph" {...a11yProps(0)} />
+              <Tab label="Intonation Summary Graph" {...a11yProps(1)} />
+              <Tab label="Timed Intonation Graph" {...a11yProps(1)} />
             </Tabs>
           </Box>
           <div
