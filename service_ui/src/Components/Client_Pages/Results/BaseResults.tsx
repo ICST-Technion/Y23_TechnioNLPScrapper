@@ -112,10 +112,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   // if there is no data, return a message
   else if (datasets.length === 0) {
     return (
-      <div
-        className="App flex result"
-        style={{ width: "70vw", marginLeft: "15vw" }}
-      >
+      <div className="App flex result">
         <button
           className="go-back-button run"
           onClick={() => {
@@ -202,11 +199,8 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               <Tab label="monthly intonation graph" {...a11yProps(1)} />
             </Tabs>
           </Box>
-
-          <TabPanel value={value} index={0}>
-            <div
+          <div
               className="App flex result"
-              style={{ width: "70vw", marginLeft: "15vw" }}
             >
               <button
                 className="go-back-button run"
@@ -216,50 +210,32 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               >
                 go back
               </button>
+
+          <TabPanel value={value} index={0} >
+
               <Bar
                 datasetIdKey="trial"
                 options={options}
                 data={keywordWebsiteData}
+                className="fit"
               />
-            </div>
           </TabPanel>
 
           <TabPanel value={value} index={1}>
-            <div
-              className="App flex result"
-              style={{ width: "70vw", marginLeft: "15vw" }}
-            >
-              <button
-                className="go-back-button run"
-                onClick={() => {
-                  setPageNumber(MAIN_SEARCH_PAGE);
-                }}
-              >
-                go back
-              </button>
+
               <Bar
                 datasetIdKey="trial"
                 options={options}
                 data={intonationData}
+                className="fit"
               />
-            </div>
           </TabPanel>
 
           <TabPanel value={value} index={2}>
-            <div
-              className="App flex result"
-              style={{ width: "70vw", marginLeft: "15vw" }}
-            >
-              <button
-                className="go-back-button run"
-                onClick={() => {
-                  setPageNumber(MAIN_SEARCH_PAGE);
-                }}
-              >
-                go back
-              </button>
+            
               <Bar
                 datasetIdKey="trial"
+                className="fit"
                 options={{
                   responsive: true,
                   scales: {
@@ -277,8 +253,9 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                 }}
                 data={timedData}
               />
-            </div>
+            
           </TabPanel>
+          </div>
         </Box>
       </>
     );

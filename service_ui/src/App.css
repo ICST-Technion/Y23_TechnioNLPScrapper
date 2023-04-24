@@ -335,26 +335,27 @@ background-color: #8d6cdf !important;
   padding-top: 8vh;
   justify-content: center;
   align-items: center;
+  width: 70vw;
+  margin-left: 15vw;
+  height: 85vh;
 }
 
-.result .image-gallery {
-  width: 45%;
-  max-height: 85vh;
-  height: auto;
+.result div[role=tabpanel]{
+  width: inherit;
+  height: inherit;
 }
 
-.result .image-gallery-slide img {
-  width: 100%;
-  height: auto;
-  max-height: 50vh;
-  object-fit:contain;
-  overflow: hidden;
-  object-position: center center;
+.result div[role=tabpanel] div{
+  height: 75vh;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.result .fullscreen .image-gallery-slide img {
-  max-height: 100vh;
-  width: auto;
+.result div[role=tabpanel] p{
+  height: max-content;
+  width: max-content;
 }
 
 .Loading-Page{ 
