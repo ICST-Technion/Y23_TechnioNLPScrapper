@@ -23,14 +23,16 @@ import {
   NEUTRAL,
   POSITIVE,
   a11yProps,
+  countSumForType,
   createTimeIntonationSet,
+  mergeKeywords,
   onlyUnique,
   options,
   optionsStacked,
   websiteDatasets,
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
-import 'chartjs-adapter-date-fns';
+import "chartjs-adapter-date-fns";
 
 export interface baseResultsProps {
   includedKeywords: string[];
@@ -62,7 +64,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       setDatasets(data);
       console.log(data);
       setLoading(false);
-      if (data.length > 0) mergeKeywords(data);
+      if (data.length > 0) setMerged(mergeKeywords(data));
     } catch (err) {
       alert(err);
       setPageNumber(MAIN_SEARCH_PAGE);
@@ -90,52 +92,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     Legend,
     TimeScale
   );
-
-  /*
-   * This function returns the data for the chart.js bar chart
-   * it merges the keywords from the different articles into website based keywords
-   */
-  const mergeKeywords = (data1: any) => {
-    let merged: any = [];
-    let keywordCountMap = new Map();
-    let data = [...data1];
-
-    // get all the keywords and their website
-    let keywords = data.map((row: any) => row.keyword + " " + row.website);
-
-    // for all the keywords, get the sum of the count and add it to the merged array based on website
-    keywords.forEach((item) => {
-      // if keyword is in the map that means we already processed it
-      if (!keywordCountMap.has(item)) {
-        let keywordData = data.filter(
-          (row: any) => row.keyword + " " + row.website === item
-        );
-        let sum = 0;
-        keywordData.forEach((row: any) => (sum += row.count));
-        let obj = copy(keywordData[0]);
-        obj.count = sum;
-        keywordCountMap.set(item, obj);
-        merged.push(obj);
-      }
-    });
-
-    setMerged(merged);
-  };
-
-  // returns the sum of the count of the keywords based on intonation type we sent
-  const countSumForType = (type: string) => {
-    let sum: number = 0;
-    datasets.forEach((row) => {
-      type === "positive" && positiveKeywords?.includes(row.keyword)
-        ? (sum += row.count)
-        : type === "negative" && negativeKeywords?.includes(row.keyword)
-          ? (sum += row.count)
-          : row.intonation === type
-            ? (sum += row.count)
-            : (sum = sum);
-    });
-    return sum;
-  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -176,28 +132,45 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
     //set up intonation data
     const intonationData = {
-      labels: [
-        "negative intonation sum",
-        "neutral intonation",
-        "positive intonation sum",
-      ],
+      labels: ["intonation"],
       datasets: [
         {
           id: 1,
           label: "negative intonation",
-          data: [countSumForType("negative"), 0, 0],
+          data: [
+            countSumForType(
+              datasets,
+              "negative",
+              positiveKeywords,
+              negativeKeywords
+            ),
+          ],
           backgroundColor: "#6a91dc",
         },
         {
           id: 2,
           label: "neutral intonation",
-          data: [0, countSumForType("neutral"), 0],
+          data: [
+            countSumForType(
+              datasets,
+              "neutral",
+              positiveKeywords,
+              negativeKeywords
+            ),
+          ],
           backgroundColor: "#5e17eb",
         },
         {
           id: 3,
           label: "positive intonation",
-          data: [0, 0, countSumForType("positive")],
+          data: [
+            countSumForType(
+              datasets,
+              "positive",
+              positiveKeywords,
+              negativeKeywords
+            ),
+          ],
           backgroundColor: "#4aeddd",
         },
       ],
@@ -213,8 +186,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     };
 
     // ------ END DATA SETUP ------ //
-
-
 
     return (
       <>
@@ -245,7 +216,11 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               >
                 go back
               </button>
-              <Bar datasetIdKey="trial" options={options} data={keywordWebsiteData} />
+              <Bar
+                datasetIdKey="trial"
+                options={options}
+                data={keywordWebsiteData}
+              />
             </div>
           </TabPanel>
 
@@ -264,7 +239,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               </button>
               <Bar
                 datasetIdKey="trial"
-                options={optionsStacked}
+                options={options}
                 data={intonationData}
               />
             </div>
@@ -283,23 +258,25 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               >
                 go back
               </button>
-              <Bar datasetIdKey="trial" options={
-                {
+              <Bar
+                datasetIdKey="trial"
+                options={{
                   responsive: true,
-                  scales:{
-                    x:{
-                      type: 'time',
+                  scales: {
+                    x: {
+                      type: "time",
                       time: {
-                        unit: 'year'
+                        unit: "year",
                       },
                       stacked: false,
                     },
-                    y:{
+                    y: {
                       stacked: false,
-                    }
-                  }
-                }
-              } data={timedData} />
+                    },
+                  },
+                }}
+                data={timedData}
+              />
             </div>
           </TabPanel>
         </Box>
@@ -307,5 +284,3 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     );
   }
 };
-
-
