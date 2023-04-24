@@ -257,11 +257,11 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         let month = getMonth(row);
         let intonation = row.intonation;
         if (intonation === "negative") {
-          innerData[NEGATIVE][month] += row.count;
+          innerData[NEGATIVE][month-1] += row.count;
         } else if (intonation === "neutral") {
-          innerData[NEUTRAL][month] += row.count;
+          innerData[NEUTRAL][month-1] += row.count;
         } else if (intonation === "positive") {
-          innerData[POSITIVE][month] += row.count;
+          innerData[POSITIVE][month-1] += row.count;
         } else {
           console.log(
             "not any of the normal intonations, my intonation is:" + intonation
