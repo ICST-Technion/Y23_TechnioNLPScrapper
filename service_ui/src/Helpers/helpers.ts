@@ -3,7 +3,7 @@ import { FE_SERVER } from "./consts";
 import Cookies from "universal-cookie";
 export const cookie = new Cookies();
 
-export const basicAxiosInstance = axios.create({
+export const basicAxiosInstance = () => axios.create({
   //added the cors-anywhere thing as we dont have "Options" set, and we get error. fix later.
   baseURL:
     FE_SERVER,

@@ -46,7 +46,7 @@ export const SearchPage: React.FC<searchPageProps> = ({
           setPageNumber(RESULTS_PAGE);
           const query_body = { Query1: keywords[0] };
           try {
-            setAxiosPromise(basicAxiosInstance({method:"post", url:"/query", data:query_body}));
+            setAxiosPromise(basicAxiosInstance()({method:"post", url:"/query", data:query_body}));
           } catch (err) {
             console.log(err);
           }

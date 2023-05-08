@@ -19,7 +19,7 @@ function App() {
     const token = cookie.get("token");
     if (token) {
       try{
-        let res = await basicAxiosInstance({method: "GET", url: "/autologin"})
+        let res = await basicAxiosInstance()({method: "GET", url: "/autologin"})
         console.log(res.data)
         setSignedIn(res.data);
         return signedIn;
