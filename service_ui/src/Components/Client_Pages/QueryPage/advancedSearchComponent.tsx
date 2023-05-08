@@ -8,6 +8,7 @@ import {
 import { basicAxiosInstance, mapToArray, parseString } from "../../../Helpers/helpers";
 import { ButtonWithPopUp } from "../General Components/ButtonWithPopUp";
 import { TimeRange } from "../General Components/TimeRange";
+import { CLEAR, EXCLUDED_KEYWORDS, EXCLUDE_KEYWORDS, EXCLUDE_WEBSITES, GO_BACK, NEGATIVE_KEYWORDS, POSITIVE_KEYWORDS, RUN, SPECIFY_WEBSITES, TIME_RANGE } from "../../../Helpers/texts";
 
 export interface AdvancedSearchComponentProps {
   keywords: string[];
@@ -106,13 +107,13 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={4}
-                text="included keywords"
+                text={EXCLUDED_KEYWORDS[0]}
                 updated={keywordMap}
                 setUpdated={setKeywordMapFromChild}
               />
               <ButtonWithPopUp
                 ID={0}
-                text="exclude keywords"
+                text={EXCLUDE_KEYWORDS[0]}
                 updated={query.advancedQuery.excludedKeywords}
                 setUpdated={query.setExcludedKeywords}
               />
@@ -120,13 +121,13 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={5}
-                text="Positive Keywords"
+                text={POSITIVE_KEYWORDS[0]}
                 updated={query.advancedQuery.positiveKeywords}
                 setUpdated={query.setPositiveKeywords}
               />
               <ButtonWithPopUp
                 ID={6}
-                text="Negative Keywords"
+                text={NEGATIVE_KEYWORDS[0]}
                 updated={query.advancedQuery.negativeKeywords}
                 setUpdated={query.setNegativeKeywords}
               />
@@ -134,20 +135,20 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={2}
-                text="Specify Websites"
+                text={SPECIFY_WEBSITES[0]}
                 updated={query.advancedQuery.includedWebsites}
                 setUpdated={query.setIncludedWebsites}
               />
               <ButtonWithPopUp
                 ID={3}
-                text="Exclude Websites"
+                text={EXCLUDE_WEBSITES[0]}
                 updated={query.advancedQuery.excludedWebsites}
                 setUpdated={query.setExcludedWebsites}
               />
             </div>
             <div className="button-row">
               <TimeRange
-                text=" Time Range"
+                text={TIME_RANGE[0]}
                 timeRange={query.advancedQuery.timeRange}
                 setTimeRange={query.setTimeRange}
               />
@@ -156,7 +157,7 @@ export const AdvancedSearchComponent: React.FC<
               className="clear-query-button"
               onClick={() => handleClear()}
             >
-              Clear
+              {CLEAR[0]}
             </button>
           </div>
         </div>
@@ -166,7 +167,7 @@ export const AdvancedSearchComponent: React.FC<
             setPageNumber(MAIN_SEARCH_PAGE);
           }}
         >
-          go back
+          {GO_BACK[0]}
         </button>
         <button
           className="run-query-button"
@@ -181,7 +182,7 @@ export const AdvancedSearchComponent: React.FC<
             }
           }}
         >
-          Run
+          {RUN[0]}
         </button>
       </div>
     </>

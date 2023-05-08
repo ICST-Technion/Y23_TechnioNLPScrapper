@@ -1,6 +1,7 @@
 import React from 'react';
 import { MAIN_SEARCH_PAGE } from '../Helpers/consts';
 import { AQComponent, FAQObject } from './FAQComponent';
+import { ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5, QUESTION1, QUESTION2, QUESTION3, QUESTION4, QUESTION5 } from '../Helpers/texts';
 
 
 export interface FAQsPageProps {
@@ -11,25 +12,25 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
 
 
   const FAQList = [{
-    question: 'How do I search on the website?',
-    answer: 'You can search by entering keywords into the search bar on the homepage and clicking the run button.',
+    question: QUESTION1[0],
+    answer: ANSWER1[0],
     open: false
   },{
-    question: 'Are there any advanced search options?',
-    answer: 'Yes, You can click on the advanced search options button which shows the diffrent ways to elevate the search such as filtering by date.',
+    question: QUESTION2[0],
+    answer: ANSWER2[0],
     open: false
   },
   {
-    question: 'Is it possible to search in a specific language?',
-    answer: 'Yes, you can search in any language you want.',
+    question: QUESTION3[0],
+    answer: ANSWER3[0],
     open: false
   }, {
-    question: 'Can I view the statistics for articles in different languages?',
-    answer: 'Yes, You can by searching the keywords in that language.',
+    question: QUESTION4[0],
+    answer: ANSWER4[0],
     open: false
   },{
-    question: 'Are the statistics updated in real-time?',
-    answer: 'Yes, You will always see the most up-to-date information when you view an articles statistics.',
+    question: QUESTION5[0],
+    answer: ANSWER5[0],
     open: false
   },]
 

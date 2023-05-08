@@ -13,6 +13,7 @@ import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Cookies from "universal-cookie";
 import Typography from "@mui/material/Typography";
+import { ADVANCED_SEARCH_TUT, FAQS_TUT, HELP_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
 
 export interface SignedInMainPageProps {
   username: string;
@@ -48,27 +49,25 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const steps = [
     {
       element: "#FAQ",
-      intro: "You can use this button for help",
+      intro: FAQS_TUT[0],
       position: "right",
     },
     {
       element: "#help",
-      intro: "You can click this button to open the tour again",
+      intro: HELP_TUT[0],
       position: "right",
     },
     {
       element: "#searchbar",
-      intro:
-        "You write in your query into this button \n The seachbar also supports common google search shortcuts",
+      intro: SEARCH_BAR_TUT[0],
     },
     {
       element: "#advancedSearch",
-      intro:
-        "You can use this button to get redirected to a page with advanced search options",
+      intro: ADVANCED_SEARCH_TUT[0],
     },
     {
       element: "#run",
-      intro: "You can use this button run the query",
+      intro: RUN_TUT[0],
     },
   ];
 

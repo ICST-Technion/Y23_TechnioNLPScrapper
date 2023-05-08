@@ -1,5 +1,6 @@
 import { TextField } from "@mui/material";
 import React from "react";
+import { SEARCH_BAR_INFO, SEARCH_BAR_VALIDATION } from "../../../Helpers/texts";
 export interface SearchComponentProps {
   keywords: string[];
   setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
@@ -17,10 +18,10 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
         <div id="searchbar">
           <TextField
             className="search-bar"
-            label={"Search Keywords Separated by Space"}
+            label={SEARCH_BAR_INFO[0]}
             value={keywords[idx]}
             helperText={
-              !keywords[idx]?.length ? "At Least One Keyword is Required" : ""
+              !keywords[idx]?.length ? SEARCH_BAR_VALIDATION[0] : ""
             }
             onChange={(e) => {
               const text = e.target.value;

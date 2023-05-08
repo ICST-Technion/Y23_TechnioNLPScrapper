@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
+import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR } from './Helpers/texts';
 
 export interface SignInProps {
    setSignedIn:React.Dispatch<React.SetStateAction<{
@@ -36,15 +37,15 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
       const password = data.get('password');
       if(email === "" || password === ""
       || email === null ||password === null){
-          setErrormsg("Please fill out all fields");
+          setErrormsg(EMPTY_FIELD_VALIDATION_ERROR[0]);
           return;
       }
       else if(password!.toString()?.length < 8){
-          setErrormsg("Password must be at least 8 characters");
+          setErrormsg(PASSWORD_VALIDATION_ERROR[0]);
           return;
       }
       else if(email!.toString().length < 4){
-          setErrormsg("Username or email must be at least 4 characters");
+          setErrormsg(USERNAME_EMAIL_VALIDATION_ERROR[0]);
           return;
       }
       else{
@@ -55,7 +56,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
                   username: email
               })
               setErrormsg("");
-              alert("Successfully logged in!");
+              alert(SUCCESSFUL_SIGN_IN[0]);
               const cookies = new Cookies();
               cookies.set("token", res.data.token);
               setSignedIn({username: res.data.username, role: res.data.role});
@@ -67,7 +68,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               else if(err.message)
                   message = err.message;
               else
-                  message = "Unknown error";
+                  message = UNKNOWN_ERROR[0];
   
               setErrormsg(message);
               return;

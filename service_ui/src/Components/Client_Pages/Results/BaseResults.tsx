@@ -34,6 +34,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
+import { GO_BACK } from "../../../Helpers/texts";
 
 export interface baseResultsProps {
   includedKeywords: string[];
@@ -131,7 +132,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
             setPageNumber(MAIN_SEARCH_PAGE);
           }}
         >
-          go back
+          {GO_BACK[0]}
         </button>
         <div>no data</div>
       </div>
@@ -220,7 +221,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                   setPageNumber(MAIN_SEARCH_PAGE);
                 }}
               >
-                go back
+                {GO_BACK[0]}
               </button>
 
           <TabPanel value={value} index={0} >
