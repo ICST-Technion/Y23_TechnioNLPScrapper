@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { Background } from "./Components/Background";
 import { Logo } from "./Components/Logo";
-import { SignedInMainPage } from "./Components/Client_Pages/signedin";
+import { SignedInMainPage } from "./Components/Client_Pages/clientMain";
 import { SignIn } from "./SignIn";
 import { basicAxiosInstance, cookie } from "./Helpers/helpers";
 import { SignUp } from "./SignUp";

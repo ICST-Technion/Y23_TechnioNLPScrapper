@@ -52,6 +52,11 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
       position: "right",
     },
     {
+      element: "#help",
+      intro: "You can click this button to open the tour again",
+      position: "right",
+    },
+    {
       element: "#searchbar",
       intro:
         "You write in your query into this button \n The seachbar also supports common google search shortcuts",
@@ -79,6 +84,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
           <Logo />
           <HelpOutlineIcon
             className="help-icon"
+            id="help"
             onClick={() => {
               setEnabled(true);
             }}
