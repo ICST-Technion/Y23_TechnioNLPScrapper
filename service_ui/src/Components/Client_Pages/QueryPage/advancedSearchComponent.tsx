@@ -175,7 +175,7 @@ export const AdvancedSearchComponent: React.FC<
             setPageNumber(RESULTS_PAGE);
             const merged = { ...getAdvancedSearchJson(0) };
             try {
-              setAxiosPromise(basicAxiosInstance({method:"post", url:"/advancedSearch", data:merged}));
+              setAxiosPromise(basicAxiosInstance()({method:"post", url:"/advancedSearch", data:merged}));
             } catch (err) {
               console.log(err);
             }

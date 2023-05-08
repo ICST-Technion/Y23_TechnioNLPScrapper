@@ -43,7 +43,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
     }
     else{
         try{
-            let res = await basicAxiosInstance({
+            let res = await basicAxiosInstance()({
                 method:"post",
                 url:"/register",
                 data: {
