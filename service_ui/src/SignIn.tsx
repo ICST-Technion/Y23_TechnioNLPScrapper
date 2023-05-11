@@ -127,7 +127,11 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
             </Typography>
             <Grid container>
               <Grid item>
-                <Link variant="body2">
+                <Link variant="body2" href="mailto:TechnioNLP@gmail.com
+                    ?subject=Registration Request
+                    &body=tell us who you are, your desired username, email and password.
+                    otherwise the username and password will be randomly generated based
+                    requestors email address">
                   Forgot password? Contact an admin
                 </Link>
               </Grid>
