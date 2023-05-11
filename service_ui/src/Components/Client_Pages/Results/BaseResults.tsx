@@ -13,10 +13,10 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
-import { copy, randomIntFromInterval } from "../../../Helpers/helpers";
+import { cookie, copy, randomIntFromInterval } from "../../../Helpers/helpers";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { MAIN_SEARCH_PAGE } from "../../../Helpers/consts";
 import {
   a11yProps,
@@ -71,7 +71,13 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       console.log(data);
       setLoading(false);
       if (data.length > 0) setMerged(mergeKeywords(data));
-    } catch (err) {
+    } catch (err: any) {
+      if (err && err.response && err.response.status === 401)
+      {
+         alert("Session Expired, Please log in again");
+         cookie.remove("token");
+         window.location.reload();
+      }
       alert(err);
       setPageNumber(MAIN_SEARCH_PAGE);
     }

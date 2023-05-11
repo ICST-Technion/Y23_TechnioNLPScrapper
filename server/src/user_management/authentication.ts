@@ -58,7 +58,7 @@ export const loginRoute = async (req: Request, res: Response) => {
   // Create JWT token.
   // This token contain the userId in the data section.
   const token = jwt.sign({ username: userDBRes.username, role: userDBRes.role }, secretKey, {
-    expiresIn: 86400, // expires in 24 hours
+    expiresIn: 86400 * 30, // expires in 24 hours * 30 = 30 days
   });
 
   res.status(200)
