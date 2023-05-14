@@ -1,4 +1,6 @@
 # TechnioNLPScrapper
+
+## About the project
 A Technion CS Software-Project "NLP Web-Scrapper Platform" for Sikkuy-Aufoq.
 The primary objective of the project is to offer a comprehensive 
 framework for searching news articles using specified keywords,
@@ -67,7 +69,10 @@ We use Render's logs to keep track of bugs during processing requests.
 
 <!-- Add the script to set up to run and clean the project -->
 
-npm run build
+to start the project, download the files,
+navigate to the service_ui folder
+and run the command:
 
-npm start
+
+`npm start`
 
