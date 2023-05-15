@@ -8,6 +8,7 @@ import { basicAxiosInstance, cookie, getLanguage } from "./Helpers/helpers";
 import { SignUp } from "./SignUp";
 import Button from "@mui/material/Button";
 import { REGISTER, SINGOUT } from "./Helpers/texts";
+import CircleLoader from "react-spinners/CircleLoader";
 
 function App() {
 
@@ -56,7 +57,7 @@ function App() {
           }
         </>
       );
-    } else {
+    } else if(signedIn == emptyUser) {
       return (
         <>
           <Logo cssClasses="logo" />
@@ -64,12 +65,18 @@ function App() {
         </>
       );
     }
+    else {
+      return( 
+      <div className="Loading-Page">
+      <CircleLoader color={"#5e17eb"} loading={true} size={180} />
+     </div>
+     )}
   };
 
   return (
     <>
       <Background setChanged={setChanged}/>
-      {signedIn === undefined? <></> : getPage()}
+       {getPage()}
     </>
   );
 }
