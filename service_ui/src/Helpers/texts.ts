@@ -4,6 +4,10 @@ export const PASSWORD_VALIDATION_ERROR = ["Password must be at least 8 character
 export const USERNAME_EMAIL_VALIDATION_ERROR = ["Username or email must be at least 4 characters","שם משתמש או מייל חייבים להיות באורך 4 תווים לפחות"]
 export const SUCCESSFUL_SIGN_IN = ["Successfully logged in!","!התחברת בהצלחה"]
 export const UNKNOWN_ERROR = ["Unknown error","שגיאה לא ידועה"]
+export const WELCOME = ["Welcome!", "!ברוכים הבאים"]
+export const SIGNIN = ["Please Sign In to Continue", "בבקשה להתחבר כדי להמשיך לאתר"]
+export const FORGOTPASSWORD = ["Forgot password? Contact an admin","שכחת את הסיסמא? פנה למנהל" ]
+export const SIGNINN = ["Sign In", "התחבר"]
 
 //SIGNUP
 export const USERNAME_VALIDATION_ERROR = ["Username must be at least 4 characters", "שם המשתמש חייב להיות בן 4 תווים לפחות"]
@@ -31,7 +35,7 @@ export const HELP_TUT = ["You can click this button to open the tour again", "ת
 export const SEARCH_BAR_TUT = ["You write in your query into this button \n The seachbar also supports common google search shortcuts","Google סרגל החיפוש תומך גם בקיצורי דרך נפוצים לחיפוש \n אתה כותב את השאילתה שלך לתוך הכפתור הזה"]
 export const ADVANCED_SEARCH_TUT = ["You can use this button to get redirected to a page with advanced search options", "תוכל להשתמש בלחצן זה כדי להפנות מחדש לדף עם אפשרויות חיפוש מתקדמות"]
 export const RUN_TUT = ["You can use this button run the query", "תוכל להשתמש בלחצן זה להפעיל את השאילתה"]
-
+export const HELLO = ["Hello, ", "!שלום ,"]
 //searchComponnent 
 export const SEARCH_BAR_INFO = ["Search Keywords Separated by Space", "חפש מילות מפתח מופרדות ברווח"]
 export const SEARCH_BAR_VALIDATION =["At Least One Keyword is Required", "דרושה לפחות מילת מפתח אחת"]
@@ -50,3 +54,7 @@ export const ANSWER5= ['Yes, You will always see the most up-to-date information
 
 //BaseResults
 export const SESSION_EXPIRE = ['Session Expired, Please log in again', " החיבור פג תוקף, נא להיכנס שוב"]
+
+//App
+export const SINGOUT = ["Sign Out", "התנתק"]
+export const REGISTER = ["register new user", "הוספת משתמש חדש"]

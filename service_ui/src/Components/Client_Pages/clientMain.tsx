@@ -13,7 +13,7 @@ import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Cookies from "universal-cookie";
 import Typography from "@mui/material/Typography";
-import { ADVANCED_SEARCH_TUT, FAQS_TUT, HELP_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
+import { ADVANCED_SEARCH_TUT, FAQS_TUT, HELLO, HELP_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
 
 export interface SignedInMainPageProps {
   username: string;
@@ -96,7 +96,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
             onExit={onExit}
           />
           <Typography id="hello" variant="h5" className="centered" marginTop={-3} marginBottom={3}>
-            Hello {username}!
+            {HELLO[language]}{username}
           </Typography>
           <SearchPage
             keywords={keywords}

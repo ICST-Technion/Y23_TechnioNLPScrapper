@@ -132,6 +132,14 @@
   font-weight: 500;
 }
 
+.button-pop-component p.heb{
+  width: 9vw;
+}
+
+.button-pop-component.time p.heb{
+  width: 7vw;
+}
+
 .select-button{
   width: 18vw;
   height: 4vh;

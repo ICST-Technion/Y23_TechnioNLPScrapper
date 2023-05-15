@@ -10,6 +10,8 @@ import endOfMonth from "date-fns/endOfMonth";
 import addMonths from "date-fns/addMonths";
 import { RangeType } from "rsuite/esm/DateRangePicker";
 import { Typography } from "@mui/material";
+import { getLanguage } from "../../../Helpers/helpers";
+import { ENGLISH } from "../../../Helpers/consts";
 
 export interface timeRangeProps {
   text: string;
@@ -117,11 +119,21 @@ export const TimeRange: React.FC<timeRangeProps> = ({
       </div>
     );
   };
-
+  const language = getLanguage();
+  if(language == ENGLISH){
   return (
-    <div className="button-pop-component">
+    <div className="button-pop-component time">
       <Typography variant="body1"> {text} </Typography>
       {getDateRangePicker()}
     </div>
-  );
+  );}
+  else{
+    return (
+      <div className="button-pop-component time">
+        {getDateRangePicker()}
+        <Typography variant="body1"  className="heb"> {text} </Typography>
+      </div>
+    );
+
+  }
 };

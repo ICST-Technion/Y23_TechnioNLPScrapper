@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
-import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR } from './Helpers/texts';
+import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN } from './Helpers/texts';
 import { getLanguage } from './Helpers/helpers';
 
 export interface SignInProps {
@@ -91,10 +91,11 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Welcome!
+            {WELCOME[language]}
           </Typography>
           <Typography component="h1" variant="h5">
-            Please Sign In to Continue
+
+            {SIGNIN[language]}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -123,7 +124,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {SIGNINN[language]}
             </Button>
             <Typography component="h5" variant="body1" color="red" hidden={Errormsg.length === 0}>
                 {Errormsg}
@@ -135,7 +136,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
                     &body=tell us who you are, your desired username, email and password.
                     otherwise the username and password will be randomly generated based
                     requestors email address">
-                  Forgot password? Contact an admin
+                  {FORGOTPASSWORD[language]}
                 </Link>
               </Grid>
             </Grid>
