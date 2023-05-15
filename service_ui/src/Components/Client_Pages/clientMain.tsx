@@ -3,7 +3,7 @@ import { SearchPage } from "./QueryPage/SearchPage";
 import { BaseResults } from "./Results/BaseResults";
 import { Background } from "../Background";
 import { Logo } from "../Logo";
-import { mapToArray, useQueryConstructor } from "../../Helpers/helpers";
+import { cookie, getLanguage, mapToArray, useQueryConstructor } from "../../Helpers/helpers";
 import { AxiosResponse } from "axios";
 import { AdvancedSearchComponent } from "./QueryPage/advancedSearchComponent";
 import { FAQsPage } from "../../Extra Pages/FAQsPage";
@@ -13,6 +13,7 @@ import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Cookies from "universal-cookie";
 import Typography from "@mui/material/Typography";
+import { ADVANCED_SEARCH_TUT, FAQS_TUT, HELLO, HELP_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
 
 export interface SignedInMainPageProps {
   username: string;
@@ -28,12 +29,13 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [queryState, setQueryState] = React.useState<any>();
   //create the constructed query, and save the value
   const query = useQueryConstructor(queryState, setQueryState, 1);
-  const cookies = new Cookies();
+
+  const language = getLanguage();
 
   // during only the first load of the page, create a new query object, which will initialize the queryState
   React.useEffect(() => {
     query.createNewQuery();
-    if (!cookies.get("firstTime")) {
+    if (!cookie.get("firstTime")) {
       setEnabled(true);
     }
   },[]);
@@ -42,33 +44,31 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [initialStep, setInitialStep] = React.useState(0);
 
   const onExit = () => {
-    cookies.set("firstTime", "false", { path: "/" });
+    cookie.set("firstTime", "false", { path: "/" });
     setEnabled(false);
   };
   const steps = [
     {
       element: "#FAQ",
-      intro: "You can use this button for help",
+      intro: FAQS_TUT[language],
       position: "right",
     },
     {
       element: "#help",
-      intro: "You can click this button to open the tour again",
+      intro: HELP_TUT[language],
       position: "right",
     },
     {
       element: "#searchbar",
-      intro:
-        "You write in your query into this button \n The seachbar also supports common google search shortcuts",
+      intro: SEARCH_BAR_TUT[language],
     },
     {
       element: "#advancedSearch",
-      intro:
-        "You can use this button to get redirected to a page with advanced search options",
+      intro: ADVANCED_SEARCH_TUT[language],
     },
     {
       element: "#run",
-      intro: "You can use this button run the query",
+      intro: RUN_TUT[language],
     },
   ];
 
@@ -96,7 +96,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
             onExit={onExit}
           />
           <Typography id="hello" variant="h5" className="centered" marginTop={-3} marginBottom={3}>
-            Hello {username}!
+            {HELLO[language]}{username}
           </Typography>
           <SearchPage
             keywords={keywords}
@@ -146,7 +146,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
 
   return (
     <>
-      <Background />
+      
       {getPage()}
     </>
   );

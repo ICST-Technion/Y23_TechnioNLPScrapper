@@ -132,6 +132,14 @@
   font-weight: 500;
 }
 
+.button-pop-component p.heb{
+  width: 9vw;
+}
+
+.button-pop-component.time p.heb{
+  width: 7vw;
+}
+
 .select-button{
   width: 18vw;
   height: 4vh;
@@ -498,7 +506,11 @@ background-color: #8d6cdf !important;
   color: #4d13c2 !important;
 }
 
-input, select, textarea, label, span, p {
+input, select, textarea, label, span, p, .faq-answer, .faq-question {
   text-align: start;
   unicode-bidi: plaintext;
+}
+
+.faq-question {
+  justify-content: center !important;
 }

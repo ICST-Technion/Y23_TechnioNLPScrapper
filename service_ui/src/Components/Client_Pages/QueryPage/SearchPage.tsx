@@ -7,7 +7,8 @@ import {
   FE_SERVER,
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
-import { basicAxiosInstance } from "../../../Helpers/helpers";
+import { basicAxiosInstance, getLanguage } from "../../../Helpers/helpers";
+import { ADVANCED_SEARCH_OPTIONS, FAQS, RUN } from "../../../Helpers/texts";
 
 export interface searchPageProps {
   keywords: string[];
@@ -26,6 +27,8 @@ export const SearchPage: React.FC<searchPageProps> = ({
     console.log(keywords);
   }, [keywords]);
 
+  const language = getLanguage();
+
   return (
     <>
       <button
@@ -36,7 +39,7 @@ export const SearchPage: React.FC<searchPageProps> = ({
           console.log("XXDDSS");
         }}
       >
-        FAQs
+        {FAQS[language]}
       </button>
       <button
         id="run"
@@ -52,7 +55,7 @@ export const SearchPage: React.FC<searchPageProps> = ({
           }
         }}
       >
-        Run
+        {RUN[language]}
       </button>
       <div className="App">
         <SearchComponent
@@ -67,7 +70,7 @@ export const SearchPage: React.FC<searchPageProps> = ({
             setPageNumber(ADVANCED_SEARCH_PAGE);
           }}
         >
-          Advanced Search Options
+          {ADVANCED_SEARCH_OPTIONS[language]}
         </button>
       </div>
     </>

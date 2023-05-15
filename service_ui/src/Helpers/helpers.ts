@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FE_SERVER } from "./consts";
+import { ENGLISH, FE_SERVER } from "./consts";
 import Cookies from "universal-cookie";
 export const cookie = new Cookies();
 
@@ -12,7 +12,17 @@ export const basicAxiosInstance = () => axios.create({
   },
 });
  
- 
+ export const getLanguage:() => number = () => {
+  if(!cookie.get("language")){
+    cookie.set("language", ENGLISH)
+    return ENGLISH;
+  }
+  return cookie.get("language")
+ }
+
+ export const setLanguage = (language: number) => {
+  cookie.set("language", language);
+ } 
  
  /*
   * This function is used to generate a random number between two numbers (inclusive)

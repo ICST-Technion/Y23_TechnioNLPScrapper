@@ -2,6 +2,8 @@ import { Typography } from "@mui/material";
 import React from "react";
 import "rsuite/dist/rsuite.min.css";
 import { SelectedValues } from "./SelectedValues";
+import { getLanguage } from "../../../Helpers/helpers";
+import { ENGLISH } from "../../../Helpers/consts";
 
 export interface buttonProps {
   ID: number;
@@ -77,11 +79,21 @@ export const ButtonWithPopUp: React.FC<buttonProps> = ({
       </>
     );
   };
-
-  return (
+  const language = getLanguage();
+  if(language == ENGLISH){
+    return (
     <div className="button-pop-component">
       <Typography variant="body1"> {text} </Typography>
       {getPopUpComponent()}
     </div>
-  );
+  );}
+
+  else{
+    return (
+    <div className="button-pop-component">
+    {getPopUpComponent()}
+    <Typography variant="body1" className="heb"> {text} </Typography>
+    </div>
+  );}
+  
 };

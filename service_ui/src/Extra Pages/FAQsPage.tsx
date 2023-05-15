@@ -1,6 +1,8 @@
 import React from 'react';
-import { MAIN_SEARCH_PAGE } from '../Helpers/consts';
+import { ENGLISH, HEBREW, MAIN_SEARCH_PAGE } from '../Helpers/consts';
 import { AQComponent, FAQObject } from './FAQComponent';
+import { ANSWER1, ANSWER2, ANSWER3, ANSWER4, ANSWER5, GO_BACK, QUESTION1, QUESTION2, QUESTION3, QUESTION4, QUESTION5 } from '../Helpers/texts';
+import { getLanguage } from '../Helpers/helpers';
 
 
 export interface FAQsPageProps {
@@ -9,38 +11,62 @@ export interface FAQsPageProps {
 
 export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
 
-
-  const FAQList = [{
-    question: 'How do I search on the website?',
-    answer: 'You can search by entering keywords into the search bar on the homepage and clicking the run button.',
+  const language:number = getLanguage();
+  const FAQList_E = [{
+    question: QUESTION1[ENGLISH],
+    answer: ANSWER1[ENGLISH],
     open: false
   },{
-    question: 'Are there any advanced search options?',
-    answer: 'Yes, You can click on the advanced search options button which shows the diffrent ways to elevate the search such as filtering by date.',
+    question: QUESTION2[ENGLISH],
+    answer: ANSWER2[ENGLISH],
     open: false
   },
   {
-    question: 'Is it possible to search in a specific language?',
-    answer: 'Yes, you can search in any language you want.',
+    question: QUESTION3[ENGLISH],
+    answer: ANSWER3[ENGLISH],
     open: false
   }, {
-    question: 'Can I view the statistics for articles in different languages?',
-    answer: 'Yes, You can by searching the keywords in that language.',
+    question: QUESTION4[ENGLISH],
+    answer: ANSWER4[ENGLISH],
     open: false
   },{
-    question: 'Are the statistics updated in real-time?',
-    answer: 'Yes, You will always see the most up-to-date information when you view an articles statistics.',
+    question: QUESTION5[ENGLISH],
+    answer: ANSWER5[ENGLISH],
     open: false
   },]
 
-  const [faqs, setFaqs] = React.useState<FAQObject[]>(FAQList);
+  const FAQList_H = [{
+    question: QUESTION1[HEBREW],
+    answer: ANSWER1[HEBREW],
+    open: false
+  },{
+    question: QUESTION2[HEBREW],
+    answer: ANSWER2[HEBREW],
+    open: false
+  },
+  {
+    question: QUESTION3[HEBREW],
+    answer: ANSWER3[HEBREW],
+    open: false
+  }, {
+    question: QUESTION4[HEBREW],
+    answer: ANSWER4[HEBREW],
+    open: false
+  },{
+    question: QUESTION5[HEBREW],
+    answer: ANSWER5[HEBREW],
+    open: false
+  },]
+
+  const [faqs_E, setFaqs_E] = React.useState<FAQObject[]>(FAQList_E);
+  const [faqs_H, setFaqs_H] = React.useState<FAQObject[]>(FAQList_H);
 
 
   /*
   * This function toggles the open state of the FAQ object at the given index
   */
-  const toggleFAQ = (index: number) => {
-    setFaqs(faqs.map((faq, i) => {
+  const toggleFAQ_E = (index: number) => {
+    setFaqs_E(faqs_E.map((faq, i) => {
       if (i === index) {
         faq.open = !faq.open
       } else {
@@ -50,15 +76,29 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
     }))
   }
 
-  
+  const toggleFAQ_H = (index: number) => {
+    setFaqs_H(faqs_H.map((faq, i) => {
+      if (i === index) {
+        faq.open = !faq.open
+      } else {
+        faq.open = false;
+      }
+      return faq;
+    }))
+  }
+
   return (
     <>
-    <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>go back</button>
+    <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>{GO_BACK[language]}</button>
     <div className="App">
     <div className="faqs">
-        {faqs.map((faq, i) => (
-          <AQComponent key={i} faq={faq} index={i} toggleFAQ={toggleFAQ} />
-        ))}
+        {language == HEBREW ? faqs_H.map((faq, i) => (
+          <AQComponent key={i} faq={faq} index={i} toggleFAQ={toggleFAQ_H} />
+          ))
+          : faqs_E.map((faq, i) => (
+            <AQComponent key={i} faq={faq} index={i} toggleFAQ={toggleFAQ_E} />
+            ))
+        }
       </div>
     </div>
   </>

@@ -9,7 +9,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios, { Axios, AxiosError } from 'axios';
 import { FE_SERVER } from './Helpers/consts';
-import { basicAxiosInstance } from './Helpers/helpers';
+import { basicAxiosInstance, getLanguage } from './Helpers/helpers';
+import { EMPTY_FIELD_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_UP, UNKNOWN_ERROR, USERNAME_VALIDATION_ERROR } from './Helpers/texts';
 
 
 export interface SignUpProps {
@@ -17,6 +18,8 @@ export interface SignUpProps {
 }
 
 export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
+
+  const language = getLanguage();
 
   const theme = createTheme();
 
@@ -30,15 +33,15 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
     const username = data.get('username');
     if(email === "" || password === "" || username === ""
     || email === null ||password === null || username === null){
-        setErrormsg("Please fill out all fields");
+        setErrormsg(EMPTY_FIELD_VALIDATION_ERROR[language]);
         return;
     }
     else if(password!.toString()?.length < 8){
-        setErrormsg("Password must be at least 8 characters");
+        setErrormsg(PASSWORD_VALIDATION_ERROR[language]);
         return;
     }
     else if(username!.toString().length < 4){
-        setErrormsg("Username must be at least 4 characters");
+        setErrormsg(USERNAME_VALIDATION_ERROR[language]);
         return;
     }
     else{
@@ -53,7 +56,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
               }
             })
             setErrormsg("");
-            alert("Account created successfully!");
+            alert(SUCCESSFUL_SIGN_UP[language]);
             setRegistered(false);
         }
         catch(err: any){
@@ -63,7 +66,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
             else if(err.message)
                 message = err.message;
             else
-                message = "Unknown error";
+                message = UNKNOWN_ERROR[language];
 
             setErrormsg(message);
             return;

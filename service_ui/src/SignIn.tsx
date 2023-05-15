@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
+import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN } from './Helpers/texts';
+import { getLanguage } from './Helpers/helpers';
 
 export interface SignInProps {
    setSignedIn:React.Dispatch<React.SetStateAction<{
@@ -25,6 +27,7 @@ export interface SignInProps {
 
 export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
 
+    const language = getLanguage();
     const theme = createTheme();
 
     const [Errormsg, setErrormsg] = React.useState<string>("");
@@ -36,15 +39,15 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
       const password = data.get('password');
       if(email === "" || password === ""
       || email === null ||password === null){
-          setErrormsg("Please fill out all fields");
+          setErrormsg(EMPTY_FIELD_VALIDATION_ERROR[language]);
           return;
       }
       else if(password!.toString()?.length < 8){
-          setErrormsg("Password must be at least 8 characters");
+          setErrormsg(PASSWORD_VALIDATION_ERROR[language]);
           return;
       }
       else if(email!.toString().length < 4){
-          setErrormsg("Username or email must be at least 4 characters");
+          setErrormsg(USERNAME_EMAIL_VALIDATION_ERROR[language]);
           return;
       }
       else{
@@ -55,7 +58,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
                   username: email
               })
               setErrormsg("");
-              alert("Successfully logged in!");
+              alert(SUCCESSFUL_SIGN_IN[language]);
               const cookies = new Cookies();
               cookies.set("token", res.data.token);
               setSignedIn({username: res.data.username, role: res.data.role});
@@ -67,7 +70,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               else if(err.message)
                   message = err.message;
               else
-                  message = "Unknown error";
+                  message = UNKNOWN_ERROR[language];
   
               setErrormsg(message);
               return;
@@ -88,10 +91,11 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Welcome!
+            {WELCOME[language]}
           </Typography>
           <Typography component="h1" variant="h5">
-            Please Sign In to Continue
+
+            {SIGNIN[language]}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -120,7 +124,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {SIGNINN[language]}
             </Button>
             <Typography component="h5" variant="body1" color="red" hidden={Errormsg.length === 0}>
                 {Errormsg}
@@ -132,7 +136,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
                     &body=tell us who you are, your desired username, email and password.
                     otherwise the username and password will be randomly generated based
                     requestors email address">
-                  Forgot password? Contact an admin
+                  {FORGOTPASSWORD[language]}
                 </Link>
               </Grid>
             </Grid>

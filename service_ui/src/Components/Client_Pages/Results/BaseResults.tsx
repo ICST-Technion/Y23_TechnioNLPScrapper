@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
-import { cookie, copy, randomIntFromInterval } from "../../../Helpers/helpers";
+import { cookie, copy, getLanguage, randomIntFromInterval } from "../../../Helpers/helpers";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
@@ -34,6 +34,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
+import { GO_BACK, SESSION_EXPIRE } from "../../../Helpers/texts";
 
 export interface baseResultsProps {
   includedKeywords: string[];
@@ -50,6 +51,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   positiveKeywords,
   negativeKeywords,
 }) => {
+  const language = getLanguage();
   const [loading, setLoading] = React.useState(false);
   const [datasets, setDatasets] = React.useState<any[]>([]);
   const [merged, setMerged] = React.useState<any[]>([]);
@@ -74,7 +76,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     } catch (err: any) {
       if (err && err.response && err.response.status === 401)
       {
-         alert("Session Expired, Please log in again");
+         alert(SESSION_EXPIRE[language]);
          cookie.remove("token");
          window.location.reload();
       }
@@ -113,7 +115,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   if (loading) {
     return (
       <>
-        <Background />
+        
         <div className="Loading-Page">
           <CircleLoader color={"#5e17eb"} loading={loading} size={180} />
         </div>
@@ -131,7 +133,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
             setPageNumber(MAIN_SEARCH_PAGE);
           }}
         >
-          go back
+          {GO_BACK[language]}
         </button>
         <div>no data</div>
       </div>
@@ -198,7 +200,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
     return (
       <>
-        <Background />
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -220,7 +221,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                   setPageNumber(MAIN_SEARCH_PAGE);
                 }}
               >
-                go back
+                {GO_BACK[language]}
               </button>
 
           <TabPanel value={value} index={0} >
