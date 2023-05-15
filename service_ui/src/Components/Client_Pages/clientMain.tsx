@@ -3,7 +3,7 @@ import { SearchPage } from "./QueryPage/SearchPage";
 import { BaseResults } from "./Results/BaseResults";
 import { Background } from "../Background";
 import { Logo } from "../Logo";
-import { mapToArray, useQueryConstructor } from "../../Helpers/helpers";
+import { cookie, getLanguage, mapToArray, useQueryConstructor } from "../../Helpers/helpers";
 import { AxiosResponse } from "axios";
 import { AdvancedSearchComponent } from "./QueryPage/advancedSearchComponent";
 import { FAQsPage } from "../../Extra Pages/FAQsPage";
@@ -29,12 +29,13 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [queryState, setQueryState] = React.useState<any>();
   //create the constructed query, and save the value
   const query = useQueryConstructor(queryState, setQueryState, 1);
-  const cookies = new Cookies();
+
+  const language = getLanguage();
 
   // during only the first load of the page, create a new query object, which will initialize the queryState
   React.useEffect(() => {
     query.createNewQuery();
-    if (!cookies.get("firstTime")) {
+    if (!cookie.get("firstTime")) {
       setEnabled(true);
     }
   },[]);
@@ -43,31 +44,31 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [initialStep, setInitialStep] = React.useState(0);
 
   const onExit = () => {
-    cookies.set("firstTime", "false", { path: "/" });
+    cookie.set("firstTime", "false", { path: "/" });
     setEnabled(false);
   };
   const steps = [
     {
       element: "#FAQ",
-      intro: FAQS_TUT[0],
+      intro: FAQS_TUT[language],
       position: "right",
     },
     {
       element: "#help",
-      intro: HELP_TUT[0],
+      intro: HELP_TUT[language],
       position: "right",
     },
     {
       element: "#searchbar",
-      intro: SEARCH_BAR_TUT[0],
+      intro: SEARCH_BAR_TUT[language],
     },
     {
       element: "#advancedSearch",
-      intro: ADVANCED_SEARCH_TUT[0],
+      intro: ADVANCED_SEARCH_TUT[language],
     },
     {
       element: "#run",
-      intro: RUN_TUT[0],
+      intro: RUN_TUT[language],
     },
   ];
 
@@ -145,7 +146,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
 
   return (
     <>
-      <Background />
+      
       {getPage()}
     </>
   );

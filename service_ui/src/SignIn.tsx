@@ -16,6 +16,7 @@ import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
 import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR } from './Helpers/texts';
+import { getLanguage } from './Helpers/helpers';
 
 export interface SignInProps {
    setSignedIn:React.Dispatch<React.SetStateAction<{
@@ -26,6 +27,7 @@ export interface SignInProps {
 
 export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
 
+    const language = getLanguage();
     const theme = createTheme();
 
     const [Errormsg, setErrormsg] = React.useState<string>("");
@@ -37,15 +39,15 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
       const password = data.get('password');
       if(email === "" || password === ""
       || email === null ||password === null){
-          setErrormsg(EMPTY_FIELD_VALIDATION_ERROR[0]);
+          setErrormsg(EMPTY_FIELD_VALIDATION_ERROR[language]);
           return;
       }
       else if(password!.toString()?.length < 8){
-          setErrormsg(PASSWORD_VALIDATION_ERROR[0]);
+          setErrormsg(PASSWORD_VALIDATION_ERROR[language]);
           return;
       }
       else if(email!.toString().length < 4){
-          setErrormsg(USERNAME_EMAIL_VALIDATION_ERROR[0]);
+          setErrormsg(USERNAME_EMAIL_VALIDATION_ERROR[language]);
           return;
       }
       else{
@@ -56,7 +58,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
                   username: email
               })
               setErrormsg("");
-              alert(SUCCESSFUL_SIGN_IN[0]);
+              alert(SUCCESSFUL_SIGN_IN[language]);
               const cookies = new Cookies();
               cookies.set("token", res.data.token);
               setSignedIn({username: res.data.username, role: res.data.role});
@@ -68,7 +70,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               else if(err.message)
                   message = err.message;
               else
-                  message = UNKNOWN_ERROR[0];
+                  message = UNKNOWN_ERROR[language];
   
               setErrormsg(message);
               return;

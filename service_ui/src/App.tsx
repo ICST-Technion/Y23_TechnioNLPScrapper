@@ -14,6 +14,9 @@ function App() {
   const [signedIn, setSignedIn] = React.useState<any>(undefined);
   const [register, setRegister] = React.useState(false);
 
+  //only for reneder on cookie change
+  const [changed, setChanged] = React.useState(false);
+
   const getUserFromCookie = async () => {
     console.log("getting user from cookie");
     const token = cookie.get("token");
@@ -63,7 +66,7 @@ function App() {
 
   return (
     <>
-      <Background />
+      <Background setChanged={setChanged}/>
       {signedIn === undefined? <></> : getPage()}
     </>
   );

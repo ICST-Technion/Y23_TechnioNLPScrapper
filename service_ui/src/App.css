@@ -498,7 +498,11 @@ background-color: #8d6cdf !important;
   color: #4d13c2 !important;
 }
 
-input, select, textarea, label, span, p {
+input, select, textarea, label, span, p, .faq-answer, .faq-question {
   text-align: start;
   unicode-bidi: plaintext;
+}
+
+.faq-question {
+  justify-content: center !important;
 }

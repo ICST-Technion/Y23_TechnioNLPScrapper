@@ -5,7 +5,7 @@ import {
   MAIN_SEARCH_PAGE,
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
-import { basicAxiosInstance, mapToArray, parseString } from "../../../Helpers/helpers";
+import { basicAxiosInstance, getLanguage, mapToArray, parseString } from "../../../Helpers/helpers";
 import { ButtonWithPopUp } from "../General Components/ButtonWithPopUp";
 import { TimeRange } from "../General Components/TimeRange";
 import { CLEAR, EXCLUDED_KEYWORDS, EXCLUDE_KEYWORDS, EXCLUDE_WEBSITES, GO_BACK, NEGATIVE_KEYWORDS, POSITIVE_KEYWORDS, RUN, SPECIFY_WEBSITES, TIME_RANGE } from "../../../Helpers/texts";
@@ -26,6 +26,7 @@ export const AdvancedSearchComponent: React.FC<
     new Map()
   );
 
+  const language = getLanguage();
   //build the json body for the advanced search
   const getAdvancedSearchJson = (idx: Number) => {
     const id_title = idx.valueOf() + 1;
@@ -107,13 +108,13 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={4}
-                text={EXCLUDED_KEYWORDS[0]}
+                text={EXCLUDED_KEYWORDS[language]}
                 updated={keywordMap}
                 setUpdated={setKeywordMapFromChild}
               />
               <ButtonWithPopUp
                 ID={0}
-                text={EXCLUDE_KEYWORDS[0]}
+                text={EXCLUDE_KEYWORDS[language]}
                 updated={query.advancedQuery.excludedKeywords}
                 setUpdated={query.setExcludedKeywords}
               />
@@ -121,13 +122,13 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={5}
-                text={POSITIVE_KEYWORDS[0]}
+                text={POSITIVE_KEYWORDS[language]}
                 updated={query.advancedQuery.positiveKeywords}
                 setUpdated={query.setPositiveKeywords}
               />
               <ButtonWithPopUp
                 ID={6}
-                text={NEGATIVE_KEYWORDS[0]}
+                text={NEGATIVE_KEYWORDS[language]}
                 updated={query.advancedQuery.negativeKeywords}
                 setUpdated={query.setNegativeKeywords}
               />
@@ -135,20 +136,20 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={2}
-                text={SPECIFY_WEBSITES[0]}
+                text={SPECIFY_WEBSITES[language]}
                 updated={query.advancedQuery.includedWebsites}
                 setUpdated={query.setIncludedWebsites}
               />
               <ButtonWithPopUp
                 ID={3}
-                text={EXCLUDE_WEBSITES[0]}
+                text={EXCLUDE_WEBSITES[language]}
                 updated={query.advancedQuery.excludedWebsites}
                 setUpdated={query.setExcludedWebsites}
               />
             </div>
             <div className="button-row">
               <TimeRange
-                text={TIME_RANGE[0]}
+                text={TIME_RANGE[language]}
                 timeRange={query.advancedQuery.timeRange}
                 setTimeRange={query.setTimeRange}
               />
@@ -157,7 +158,7 @@ export const AdvancedSearchComponent: React.FC<
               className="clear-query-button"
               onClick={() => handleClear()}
             >
-              {CLEAR[0]}
+              {CLEAR[language]}
             </button>
           </div>
         </div>
@@ -167,7 +168,7 @@ export const AdvancedSearchComponent: React.FC<
             setPageNumber(MAIN_SEARCH_PAGE);
           }}
         >
-          {GO_BACK[0]}
+          {GO_BACK[language]}
         </button>
         <button
           className="run-query-button"
@@ -182,7 +183,7 @@ export const AdvancedSearchComponent: React.FC<
             }
           }}
         >
-          {RUN[0]}
+          {RUN[language]}
         </button>
       </div>
     </>
