@@ -16,22 +16,35 @@ data, helping Sikkuy-Aufoq gauge the effectiveness of their campaigns.
 
 ## Project File Structure
 
+* server- This folder contains the web server implementation
+  for our project. 
+  It serves as the intermediary between the frontend and the backend API,
+  enabling communication and exchange of the search results.
+  The server utilizes Axios, a popular JavaScript library,
+  to handle HTTP requests and responses efficiently.
+  
 
-* API- this file contains a server API for our project, 
+* service_ui- contains the UI the user interface components . 
+  It includes various components such as the search bars, 
+  charts, and other visual elements that enable users to 
+  interact with our project.
+  
+
+* API- this folder contains a server API for our project, 
   its purpose is to communicate 
 between the frontend and the backend, return the results
 of the keyword search in articles to the frontend
 
 
-* Scrapping- this file contains the code in our projects 
+* Scrapping- this folder contains the code in our projects 
   which collects and parses information about keyword and sentiment
   from news articles, and stores it in a database.
 
 
-* SQL-this file contains the code which handles connecting to our SQL database and
-handling SQL queries
+* SQL-this folder contains the code which handles connecting to our SQL database and
+handling SQL queries for the API
   
-* tests- this file contains the backend tests.
+* tests- this folder contains the backend tests.
 
 ## Backend
 
@@ -44,7 +57,7 @@ It is built using Python.
 ### API
 The API file is the main file of our backend. 
 It contains the server API for our project and is responsible 
-for handling requests between frontend and backend and returning responses.
+for handling requests between the web server and the backend and returning responses.
 It communicates with the frontend using 
 Flask. The API file also interacts with the SQL database to 
 retrieve or store data as required.
@@ -63,16 +76,36 @@ We use Render's logs to keep track of bugs during processing requests.
 <!-- Add explanation for NLP when we add it-->
 
 ## Frontend
-<!-- Explanation for the frontend of the project-->
+Using React.js and typescript, we aimed to design a 
+user-friendly and easy to use UI for the client,
+taking into consideration the client’s requests for a clear and concise UI.
+For registered users, the frontend allows them to run
+a sentiment analysis search by typing into a search bar,
+or using advanced search options such as date and specific sources 
+for more specification.
+Giving them back detailed charts to showcase the 
+sentiment and numerical differences between keywords,
+websites, and in different time ranges
 
 ## Setup instructions
 
-<!-- Add the script to set up to run and clean the project -->
+1. Download the project files.
 
-to start the project, download the files,
-navigate to the service_ui folder
-and run the command:
+2. Start the Python API by navigating to the "API" folder and running the appropriate Python script.
 
+3. Start the server by navigating to the "server" folder and running the necessary server script.
+
+4. Navigate to the "service_ui" folder.
+
+5. Run the following command in your terminal:
 
 `npm start`
 
+This will start the website and make it accessible in your local environment.
+
+Alternatively, you can access the website directly in:
+
+[TechnioNLPScrapper](https://jouwana.github.io/TechnioNLPScrapper/)
+
+
+Please make sure you have the necessary dependencies installed and any required environment configurations set up before running the project locally.
