@@ -1,17 +1,14 @@
 import React from "react";
 import { SearchPage } from "./QueryPage/SearchPage";
 import { BaseResults } from "./Results/BaseResults";
-import { Background } from "../Background";
 import { Logo } from "../Logo";
 import { cookie, getLanguage, mapToArray, useQueryConstructor } from "../../Helpers/helpers";
 import { AxiosResponse } from "axios";
 import { AdvancedSearchComponent } from "./QueryPage/advancedSearchComponent";
-import { FAQsPage } from "../../Extra Pages/FAQsPage";
 import * as consts from "../../Helpers/consts";
 import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import Cookies from "universal-cookie";
 import Typography from "@mui/material/Typography";
 import { ADVANCED_SEARCH_TUT, FAQS, FAQS_TUT, HELLO, HELP_TUT, LANGUAGE_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
 
@@ -54,17 +51,10 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
     {
       element: "#"+languageStrings,
       intro: LANGUAGE_TUT[language],
-      position: "right",
     },
     {
       element: "#"+FAQS[language],
       intro: FAQS_TUT[language],
-      position: "right",
-    },
-    {
-      element: "#help",
-      intro: HELP_TUT[language],
-      position: "right",
     },
     {
       element: "#searchbar",
@@ -77,6 +67,10 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
     {
       element: "#run",
       intro: RUN_TUT[language],
+    },
+    {
+      element: "#help",
+      intro: HELP_TUT[language],
     },
   ];
 
