@@ -54,8 +54,7 @@ def parse_date(date_as_string):
         parsed_day=datetime_object
     except ValueError:
         parsed_day=datetime_object
-    finally:
-        print(parsed_day)       
+    finally:    
         return parsed_day
 
 
@@ -152,6 +151,12 @@ class Article:
 
 
 
+    def extract_article_content(self):
+        article_divs = self.soup.find_all('body')
+        article_content = ''
+        for div in article_divs:
+            article_content += div.get_text() + '\n'
+        return article_content    
 
     def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):
         """
