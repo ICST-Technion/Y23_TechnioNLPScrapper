@@ -6,10 +6,10 @@ import { getLanguage } from '../Helpers/helpers';
 
 
 export interface FAQsPageProps {
-    setPageNumber: React.Dispatch<React.SetStateAction<number>>
+    hideFAQ: () => void;
 }
 
-export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
+export const FAQsPage: React.FC<FAQsPageProps> = ({hideFAQ}) => {
 
   const language:number = getLanguage();
   const FAQList_E = [{
@@ -89,7 +89,7 @@ export const FAQsPage: React.FC<FAQsPageProps> = ({setPageNumber}) => {
 
   return (
     <>
-    <button className='go-back-button' onClick={()=>{setPageNumber(MAIN_SEARCH_PAGE)}}>{GO_BACK[language]}</button>
+    <button className='go-back-button' onClick={hideFAQ}>{GO_BACK[language]}</button>
     <div className="App">
     <div className="faqs">
         {language == HEBREW ? faqs_H.map((faq, i) => (

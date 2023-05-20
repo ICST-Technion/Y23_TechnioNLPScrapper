@@ -32,16 +32,6 @@ export const SearchPage: React.FC<searchPageProps> = ({
   return (
     <>
       <button
-        id="FAQ"
-        className="FAQs"
-        onClick={() => {
-          setPageNumber(FAQ_PAGE);
-          console.log("XXDDSS");
-        }}
-      >
-        {FAQS[language]}
-      </button>
-      <button
         id="run"
         className="run-query-button"
         disabled={keywords[0].length === 0}

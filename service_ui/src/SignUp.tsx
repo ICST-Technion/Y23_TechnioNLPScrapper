@@ -14,7 +14,7 @@ import { EMPTY_FIELD_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIG
 
 
 export interface SignUpProps {
-   setRegistered:React.Dispatch<React.SetStateAction<boolean>>;
+   setRegistered: () => void;
 }
 
 export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
@@ -57,7 +57,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
             })
             setErrormsg("");
             alert(SUCCESSFUL_SIGN_UP[language]);
-            setRegistered(false);
+            setRegistered();
         }
         catch(err: any){
             let message = "";

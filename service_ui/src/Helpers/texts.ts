@@ -36,6 +36,7 @@ export const SEARCH_BAR_TUT = ["You write in your query into this button \n The 
 export const ADVANCED_SEARCH_TUT = ["You can use this button to get redirected to a page with advanced search options", "תוכל להשתמש בלחצן זה כדי להפנות מחדש לדף עם אפשרויות חיפוש מתקדמות"]
 export const RUN_TUT = ["You can use this button run the query", "תוכל להשתמש בלחצן זה להפעיל את השאילתה"]
 export const HELLO = ["Hello, ", "!שלום ,"]
+export const LANGUAGE_TUT = ["You can use this button to change the language", "תוכל להשתמש בלחצן זה כדי לשנות את השפה"]
 //searchComponnent 
 export const SEARCH_BAR_INFO = ["Search Keywords Separated by Space", "חפש מילות מפתח מופרדות ברווח"]
 export const SEARCH_BAR_VALIDATION =["At Least One Keyword is Required", "דרושה לפחות מילת מפתח אחת"]

@@ -245,12 +245,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           </TabPanel>
 
           <TabPanel value={value} index={2}>
-            <Container className="timeFrames">
-              <Button onClick={() => setTimeFrame("day")}>daily</Button>
-              <Button onClick={() => setTimeFrame("week")}>weekly</Button>
-              <Button onClick={() => setTimeFrame("month")}>monthly</Button>
-              <Button onClick={() => setTimeFrame("year")}>yearly</Button>
-            </Container>
               <Bar
                 datasetIdKey="trial"
                 className="fit"
@@ -272,7 +266,12 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                 }}
                 data={timedData}
               />
-            
+              <Container className="timeFrames">
+              <Button onClick={() => setTimeFrame("day")}>daily</Button>
+              <Button onClick={() => setTimeFrame("week")}>weekly</Button>
+              <Button onClick={() => setTimeFrame("month")}>monthly</Button>
+              <Button onClick={() => setTimeFrame("year")}>yearly</Button>
+            </Container>
           </TabPanel>
           </div>
         </Box>
