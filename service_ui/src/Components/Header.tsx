@@ -140,11 +140,10 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                       }}
                     >
                       {pages.map((page, index) => (
-                        <a onClick={getButtonFunction(index)}>
-                            <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                <Typography textAlign="center">{page}</Typography>
-                            </MenuItem>
-                        </a>
+                        <MenuItem key={page} onClick={handleCloseNavMenu}>
+                            <Typography textAlign="center" component={Button}
+                            onClick={getButtonFunction(index)}>{page}</Typography>
+                        </MenuItem>
                       ))}
                     </Menu>
                   </Box>
