@@ -6,58 +6,89 @@ import { SignedInMainPage } from "./Components/Client_Pages/clientMain";
 import { SignIn } from "./SignIn";
 import { basicAxiosInstance, cookie, getLanguage } from "./Helpers/helpers";
 import { SignUp } from "./SignUp";
-import Button from "@mui/material/Button";
-import { REGISTER, SINGOUT } from "./Helpers/texts";
 import CircleLoader from "react-spinners/CircleLoader";
+import { Header } from "./Components/Header";
+import { FAQsPage } from "./Extra Pages/FAQsPage";
+import { set } from "date-fns";
 
 function App() {
 
-  const emptyUser = {username: "", role: ""};
   const [signedIn, setSignedIn] = React.useState<any>(undefined);
-  const [register, setRegister] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [page, setPage] = React.useState(0);
 
   //only for reneder on cookie change
   const [changed, setChanged] = React.useState(false);
-  const language = getLanguage();
 
   const getUserFromCookie = async () => {
     console.log("getting user from cookie");
-    const token = cookie.get("token");
-    if (token) {
-      try{
-        let res = await basicAxiosInstance()({method: "GET", url: "/autologin"})
-        console.log(res.data)
-        setSignedIn(res.data);
-        return signedIn;
-      }
-      catch{
-        cookie.remove("token");
-      }
+    if(cookie.get("token") === undefined){
+      setLoading(false);
+      return undefined;
     }
-    setSignedIn(emptyUser);
-    console.log(signedIn);
-    return signedIn;
+    try{
+      let res: any = await basicAxiosInstance()({method: "GET", url: "/autologin"})
+      console.log(res.data)
+      setSignedIn(res.data);
+      return signedIn;
+    }
+    catch{
+      cookie.remove("token");
+      setLoading(false);
+      return undefined;
+    }
   }
 
+  const signOut = () => {
+    cookie.remove("token");
+    setSignedIn(undefined);
+    setPage(0);
+    setLoading(false);
+  }
+
+  const openRegister = () => {
+    setPage(2);
+  }
+
+  const goHome = () => {
+    setPage(0);
+  }
+
+  const openFAQ = () => {
+    setPage(1);
+  }
+
+  const hideRegister = () => {
+    return (signedIn && signedIn.role !== "admin");
+  }
+
+  const isLoggedIn = () => {
+      return signedIn !== undefined && signedIn.username !== undefined;
+  }
+
+
   useEffect(() => {
-    setSignedIn(getUserFromCookie());
+   getUserFromCookie();
   }, []);
 
   /*
    * This function returns the correct page to be displayed, based on the pageNumber state
    */
   const getPage = () => {
-    if (signedIn !== undefined && signedIn.username !== undefined && signedIn.username !== "") {
+    if (page === 1) {
+      return (
+        <FAQsPage hideFAQ={() => setPage(0)}/>
+      );
+    }
+    else if (isLoggedIn()) {
       return (
         <>
-          <Button className="sign-out" onClick={() => { cookie.remove("token"); setSignedIn(emptyUser); setRegister(false);}}>{SINGOUT[language]}</Button>
-          <Button className="register" onClick={() => { setRegister(true)}} hidden={signedIn.role !== "admin" || register}> {REGISTER[language]}</Button>
-          {register? <><Logo /><SignUp setRegistered={setRegister}/></>
+          {page === 2? <><Logo /><SignUp setRegistered={() => {setPage(0)}}/></>
           :<SignedInMainPage username={signedIn.username} role={signedIn.role}/>
           }
         </>
       );
-    } else if(signedIn == emptyUser) {
+    } else if(!loading) {
       return (
         <>
           <Logo cssClasses="logo" />
@@ -75,7 +106,10 @@ function App() {
 
   return (
     <>
-      <Background setChanged={setChanged}/>
+          <Header setChanged={setChanged} signOut={signOut}
+          openRegister={openRegister} hideRegister={hideRegister()}
+          isLoggedIn={isLoggedIn()} openFAQ={openFAQ} goToMainPage={goHome}/>
+      <Background />
        {getPage()}
     </>
   );

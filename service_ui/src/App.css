@@ -495,6 +495,7 @@ background-color: #8d6cdf !important;
   position:fixed !important;
   top: 5vh;
   right: 5vw;
+  font-size: 0.7rem !important;
   z-index: 100;
   color: #4d13c2 !important;
 }
@@ -502,6 +503,7 @@ background-color: #8d6cdf !important;
   position: fixed !important;
   top: 5vh;
   right: 12vw;
+  font-size: 0.7rem !important;
   z-index: 100;
   color: #4d13c2 !important;
 }
@@ -513,4 +515,18 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question {
 
 .faq-question {
   justify-content: center !important;
+}
+
+.Icon{
+  background-image: url('./Images/icon.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 45px;
+  height: 45px;
+  mix-blend-mode: multiply;
+  filter: contrast(1);
+}
+
+.Header button{
+  color: #4d13c2 !important
 }

@@ -118,13 +118,6 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
           />
         </>
       );
-    } else if (pageNumber === consts.FAQ_PAGE) {
-      return (
-        <>
-          <Logo cssClasses="minimized-logo2" />
-          <FAQsPage setPageNumber={setPageNumber} />
-        </>
-      );
     } else if (pageNumber === consts.ADVANCED_SEARCH_PAGE) {
       return (
         <>
