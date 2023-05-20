@@ -221,9 +221,9 @@
   width: 30px !important;
 }
 
-.FAQs, .go-back-button{
+.go-back-button{
   position: fixed;
-  top: 5vh;
+  top: 100px;
   left:3vw;
   font-size: 1vw;
   font-weight: bold;
@@ -398,6 +398,9 @@ background-color: #8d6cdf !important;
   display: inline;
 }
 
+.result .go-back-button{
+  top: 140px !important;
+}
 
 .Loading-Page{ 
   text-align: center;
@@ -405,7 +408,8 @@ background-color: #8d6cdf !important;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  position: fixed;
+  top: 40vh !important;
 }
 
 .faqs {
