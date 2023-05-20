@@ -60,8 +60,9 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
     const [pages, setPages] = React.useState<string[]>([]);
 
     useEffect(() => {
+        if(hideRegister) setInRegister(false);
         setPages(setupPages());
-    }, [language, isLoggedIn, hideRegister]);
+    }, [language, isLoggedIn, hideRegister, inRegister]);
         
     const setupPages = () => {
         let pages = [languageStrings , FAQS[language]];
@@ -75,6 +76,10 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
         return pages;
     }
 
+    const onGoToMainPage = () => {
+        setInRegister(false);
+        goToMainPage();
+    }
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
@@ -153,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                     noWrap
                     component="a"
                     href=""
-                    onClick={() => goToMainPage()}
+                    onClick={() => onGoToMainPage()}
                     sx={{
                       mr: 2,
                       display: { xs: 'flex', md: 'none' },
