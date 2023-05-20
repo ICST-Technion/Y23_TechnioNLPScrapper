@@ -418,11 +418,13 @@ background-color: #8d6cdf !important;
 }
 
 .faqs {
-	width: 50%;
-	max-width: 700px;
-  margin-top: 50px;
-  margin-left: 325px;
-	padding: 20px;
+  margin-top: 4vh;
+	width: 70vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15vw;
 }
 
 .faqs .faq {
@@ -437,7 +439,7 @@ background-color: #8d6cdf !important;
   text-align: left;
 	position: relative;
   color: black;
-  font-size: 1.3vw;
+  font-size: 1.4vw;
 	transition: all 0.4s ease;
 }
 
@@ -453,7 +455,7 @@ background-color: #8d6cdf !important;
 }
 
 .faqs .faq .faq-answer {
-  font-size: 16px;
+  font-size: 20px;
 	opacity: 0;
 	max-height: 0;
 	overflow-y: hidden;
