@@ -58,6 +58,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
     }
 
     const [pages, setPages] = React.useState<string[]>([]);
+
     useEffect(() => {
         setPages(setupPages());
     }, [language, isLoggedIn, hideRegister]);
@@ -76,6 +77,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
 
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
       };
@@ -170,6 +172,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                     {pages.map((page, index) => (
                       <Button
                         key={page}
+                        id={page}
                         onClick={getButtonFunction(index)}
                         sx={{ my: 2, color: 'white', display: 'block' }}
                       >

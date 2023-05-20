@@ -13,7 +13,7 @@ import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Cookies from "universal-cookie";
 import Typography from "@mui/material/Typography";
-import { ADVANCED_SEARCH_TUT, FAQS_TUT, HELLO, HELP_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
+import { ADVANCED_SEARCH_TUT, FAQS, FAQS_TUT, HELLO, HELP_TUT, LANGUAGE_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
 
 export interface SignedInMainPageProps {
   username: string;
@@ -43,13 +43,21 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [enabled, setEnabled] = React.useState(false);
   const [initialStep, setInitialStep] = React.useState(0);
 
+  const languageStrings = language == consts.ENGLISH? "Hebrew" : "English";
+
   const onExit = () => {
     cookie.set("firstTime", "false", { path: "/" });
     setEnabled(false);
   };
+
   const steps = [
     {
-      element: "#FAQ",
+      element: "#"+languageStrings,
+      intro: LANGUAGE_TUT[language],
+      position: "right",
+    },
+    {
+      element: "#"+FAQS[language],
       intro: FAQS_TUT[language],
       position: "right",
     },
