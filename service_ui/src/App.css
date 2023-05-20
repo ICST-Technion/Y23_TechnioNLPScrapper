@@ -40,7 +40,8 @@
   position: fixed;
   z-index: -2;
   width:100vw;
-  height:100vh;
+  margin-top: 5vh;
+  height:95vh;
   background-image: url('./Images/BG.jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -352,10 +353,11 @@ background-color: #8d6cdf !important;
 }
 
 .result div[role=tabpanel] div{
-  min-height: 75vh;
+  height: 68vh !important;
   width: inherit;
   max-width: inherit;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -365,11 +367,14 @@ background-color: #8d6cdf !important;
   height: inherit;
   width: inherit;
   max-width: 60vw;
+  min-height: 55vh;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .result div[role=tabpanel] div :has(.timeFrames){
-  min-height: 75vh;
+  height: 55vh;
   max-width: 60vw;
   width: inherit;
   display: flex;
@@ -380,18 +385,18 @@ background-color: #8d6cdf !important;
 }
 
 .timeFrames{
-  min-height: 20vh !important;
+  min-height: 10vh !important;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-self: center;
-  margin-top: -25vh;
 }
 
 .timeFrames button{
   color: #4d13c2;
-  justify-content: left;
+  justify-content: center;
   text-align:center;
   width: 100%;
+  padding-left: 1vw !important;
 }
 
 .result div[role=tabpanel] p canvas{
@@ -533,5 +538,16 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question {
 }
 
 .Header button{
-  color: #4d13c2 !important
+  color: #4d13c2 !important;
+}
+
+.Header {
+  position: fixed !important;
+  background-color: white !important;
+  height: 68px !important;
+  z-index: 100 !important;
+}
+
+.page-body{
+  padding-top: 68px !important;
 }

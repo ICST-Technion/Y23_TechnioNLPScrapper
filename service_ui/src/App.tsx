@@ -110,7 +110,9 @@ function App() {
           openRegister={openRegister} hideRegister={hideRegister()}
           isLoggedIn={isLoggedIn()} openFAQ={openFAQ} goToMainPage={goHome}/>
       <Background />
+      <div className="page-body">
        {getPage()}
+      </div>
     </>
   );
 }
