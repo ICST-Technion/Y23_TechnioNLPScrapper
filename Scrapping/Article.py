@@ -1,11 +1,15 @@
 from collections import Counter
 from string import punctuation
+import sys
 from urllib.error import HTTPError
 import bs4 as bs
 import urllib.request
 from datetime import datetime
 from tldextract import extract
 import re
+
+sys.path.append('..\\Scrapping')
+from Scrapping.NLP import extract_sentiment
 
 
 # this dictionary is here in case we will want to parse new date formats
@@ -95,6 +99,9 @@ class Article:
         self.website = get_website_name(link)
         self.date = parse_date(self.extract_date())
 
+        text=self.extract_article_content()
+        self.sentiment=extract_sentiment(text)
+
     def extract_date(self):
         """
     Tries to search in common tags in the articles where the date is found.
@@ -152,11 +159,11 @@ class Article:
 
 
     def extract_article_content(self):
-        article_divs = self.soup.find_all('body')
-        article_content = ''
-        for div in article_divs:
-            article_content += div.get_text() + '\n'
-        return article_content    
+        print('&&&&&&&&&&&&') 
+        meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
+        content_description=meta_tag["content"] if meta_tag is not None else ''
+        print(content_description)          
+        return content_description    
 
     def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):
         """
