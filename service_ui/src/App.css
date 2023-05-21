@@ -40,7 +40,8 @@
   position: fixed;
   z-index: -2;
   width:100vw;
-  height:100vh;
+  margin-top: 5vh;
+  height:95vh;
   background-image: url('./Images/BG.jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -215,14 +216,15 @@
 
 .help-icon{
   position: fixed;
-  top: 5vh;
-  left:9.5vw;
-  height: 3vh !important;
+  top: 19px !important;
+  right:9.5vw;
+  height: 30px !important;
+  width: 30px !important;
 }
 
-.FAQs, .go-back-button{
+.go-back-button{
   position: fixed;
-  top: 5vh;
+  top: 100px;
   left:3vw;
   font-size: 1vw;
   font-weight: bold;
@@ -351,10 +353,11 @@ background-color: #8d6cdf !important;
 }
 
 .result div[role=tabpanel] div{
-  min-height: 75vh;
+  height: 68vh !important;
   width: inherit;
   max-width: inherit;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -364,11 +367,14 @@ background-color: #8d6cdf !important;
   height: inherit;
   width: inherit;
   max-width: 60vw;
+  min-height: 55vh;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .result div[role=tabpanel] div :has(.timeFrames){
-  min-height: 75vh;
+  height: 55vh;
   max-width: 60vw;
   width: inherit;
   display: flex;
@@ -379,24 +385,27 @@ background-color: #8d6cdf !important;
 }
 
 .timeFrames{
-  min-height: 20vh !important;
+  min-height: 10vh !important;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-self: center;
-  margin-top: -25vh;
 }
 
 .timeFrames button{
   color: #4d13c2;
-  justify-content: left;
+  justify-content: center;
   text-align:center;
   width: 100%;
+  padding-left: 1vw !important;
 }
 
 .result div[role=tabpanel] p canvas{
   display: inline;
 }
 
+.result .go-back-button{
+  top: 140px !important;
+}
 
 .Loading-Page{ 
   text-align: center;
@@ -404,15 +413,18 @@ background-color: #8d6cdf !important;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  position: fixed;
+  top: 40vh !important;
 }
 
 .faqs {
-	width: 50%;
-	max-width: 700px;
-  margin-top: 50px;
-  margin-left: 325px;
-	padding: 20px;
+  margin-top: 4vh;
+	width: 70vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15vw;
 }
 
 .faqs .faq {
@@ -427,7 +439,7 @@ background-color: #8d6cdf !important;
   text-align: left;
 	position: relative;
   color: black;
-  font-size: 1.3vw;
+  font-size: 1.4vw;
 	transition: all 0.4s ease;
 }
 
@@ -443,7 +455,7 @@ background-color: #8d6cdf !important;
 }
 
 .faqs .faq .faq-answer {
-  font-size: 16px;
+  font-size: 20px;
 	opacity: 0;
 	max-height: 0;
 	overflow-y: hidden;
@@ -495,6 +507,7 @@ background-color: #8d6cdf !important;
   position:fixed !important;
   top: 5vh;
   right: 5vw;
+  font-size: 0.7rem !important;
   z-index: 100;
   color: #4d13c2 !important;
 }
@@ -502,6 +515,7 @@ background-color: #8d6cdf !important;
   position: fixed !important;
   top: 5vh;
   right: 12vw;
+  font-size: 0.7rem !important;
   z-index: 100;
   color: #4d13c2 !important;
 }
@@ -513,4 +527,29 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question {
 
 .faq-question {
   justify-content: center !important;
+}
+
+.Icon{
+  background-image: url('./Images/icon.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 45px;
+  height: 45px;
+  mix-blend-mode: multiply;
+  filter: contrast(1);
+}
+
+.Header button{
+  color: #4d13c2 !important;
+}
+
+.Header {
+  position: fixed !important;
+  background-color: white !important;
+  height: 68px !important;
+  z-index: 100 !important;
+}
+
+.page-body{
+  padding-top: 68px !important;
 }

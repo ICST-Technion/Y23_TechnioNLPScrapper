@@ -1,19 +1,16 @@
 import React from "react";
 import { SearchPage } from "./QueryPage/SearchPage";
 import { BaseResults } from "./Results/BaseResults";
-import { Background } from "../Background";
 import { Logo } from "../Logo";
 import { cookie, getLanguage, mapToArray, useQueryConstructor } from "../../Helpers/helpers";
 import { AxiosResponse } from "axios";
 import { AdvancedSearchComponent } from "./QueryPage/advancedSearchComponent";
-import { FAQsPage } from "../../Extra Pages/FAQsPage";
 import * as consts from "../../Helpers/consts";
 import { Steps } from "intro.js-react";
 import "intro.js/introjs.css";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import Cookies from "universal-cookie";
 import Typography from "@mui/material/Typography";
-import { ADVANCED_SEARCH_TUT, FAQS_TUT, HELLO, HELP_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
+import { ADVANCED_SEARCH_TUT, FAQS, FAQS_TUT, HELLO, HELP_TUT, LANGUAGE_TUT, RUN_TUT, SEARCH_BAR_TUT } from "../../Helpers/texts";
 
 export interface SignedInMainPageProps {
   username: string;
@@ -43,20 +40,21 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [enabled, setEnabled] = React.useState(false);
   const [initialStep, setInitialStep] = React.useState(0);
 
+  const languageStrings = language == consts.ENGLISH? "Hebrew" : "English";
+
   const onExit = () => {
     cookie.set("firstTime", "false", { path: "/" });
     setEnabled(false);
   };
+
   const steps = [
     {
-      element: "#FAQ",
-      intro: FAQS_TUT[language],
-      position: "right",
+      element: "#"+languageStrings,
+      intro: LANGUAGE_TUT[language],
     },
     {
-      element: "#help",
-      intro: HELP_TUT[language],
-      position: "right",
+      element: "#"+FAQS[language],
+      intro: FAQS_TUT[language],
     },
     {
       element: "#searchbar",
@@ -69,6 +67,10 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
     {
       element: "#run",
       intro: RUN_TUT[language],
+    },
+    {
+      element: "#help",
+      intro: HELP_TUT[language],
     },
   ];
 
@@ -116,13 +118,6 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
             positiveKeywords={mapToArray(query.advancedQuery.positiveKeywords)}
             negativeKeywords={mapToArray(query.advancedQuery.negativeKeywords)}
           />
-        </>
-      );
-    } else if (pageNumber === consts.FAQ_PAGE) {
-      return (
-        <>
-          <Logo cssClasses="minimized-logo2" />
-          <FAQsPage setPageNumber={setPageNumber} />
         </>
       );
     } else if (pageNumber === consts.ADVANCED_SEARCH_PAGE) {
