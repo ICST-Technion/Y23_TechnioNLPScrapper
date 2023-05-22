@@ -35,6 +35,7 @@ import {
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
 import { GO_BACK, SESSION_EXPIRE } from "../../../Helpers/texts";
+import { LoadingComponent } from "../General Components/LoadingComponent";
 
 export interface baseResultsProps {
   includedKeywords: string[];
@@ -53,6 +54,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 }) => {
   const language = getLanguage();
   const [loading, setLoading] = React.useState(false);
+  const [showResult, setShowResult] = React.useState(false);
   const [datasets, setDatasets] = React.useState<any[]>([]);
   const [merged, setMerged] = React.useState<any[]>([]);
   const [value, setValue] = React.useState(0);
@@ -69,9 +71,10 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     try {
       const req = await axiosPromise!;
       let data = req.data.data;
-      setDatasets(data);
+      //setDatasets(data);
       console.log(data);
       setLoading(false);
+      setTimeout(() => {setShowResult(true)}, 1000)
       if (data.length > 0) setMerged(mergeKeywords(data));
     } catch (err: any) {
       if (err && err.response && err.response.status === 401)
@@ -87,8 +90,9 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
   // get the data from server on page load async and start loading screen
   React.useEffect(() => {
-    getData();
+    //getData();
     setLoading(true);
+    setShowResult(false);
   }, []);
 
   // print datasets onto the console for testing/viewing
@@ -111,20 +115,10 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     setValue(newValue);
   };
 
-  // use loading screen if data is not loaded yet
-  if (loading) {
-    return (
-      <>
-        
-        <div className="Loading-Page">
-          <CircleLoader color={"#5e17eb"} loading={loading} size={180} />
-        </div>
-      </>
-    );
-  }
 
+  const getPage = () => {
   // if there is no data, return a message
-  else if (datasets.length === 0) {
+  if (datasets.length === 0) {
     return (
       <div className="App flex result">
         <button
@@ -278,4 +272,27 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       </>
     );
   }
+}
+
+const getLoadingOrPage = () => {
+  if(!showResult)
+    {
+      return <LoadingComponent isAnimating={loading}/>
+    }
+  else {
+    return(
+      <div hidden={loading}>
+        {getPage()}
+      </div>
+    );
+  }
+}
+
+return(
+  <>
+    {getLoadingOrPage()}
+  </>
+
+);
+
 };
