@@ -71,7 +71,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     try {
       const req = await axiosPromise!;
       let data = req.data.data;
-      //setDatasets(data);
+      setDatasets(data);
       console.log(data);
       setLoading(false);
       setTimeout(() => {setShowResult(true)}, 1000)
@@ -90,7 +90,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
   // get the data from server on page load async and start loading screen
   React.useEffect(() => {
-    //getData();
+    getData();
     setLoading(true);
     setShowResult(false);
   }, []);
