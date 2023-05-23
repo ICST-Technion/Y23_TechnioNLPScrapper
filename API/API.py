@@ -149,6 +149,10 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,c
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
+                
+                keywords_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in keywords_intonation_list]
+                phrase_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in phrase_intonation_list]
+                
                 rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,
                 phrase_intonation_list,
                 category)
@@ -187,7 +191,6 @@ def do_search_query(category='1'):
             positive_keywords=positive_keywords,
             negative_keywords=negative_keywords
         )
-    print(keyword_to_intonation)
     # Perform the search and scrape the links for each website
     for website in site_list:
         search_results = search_google(query, website)

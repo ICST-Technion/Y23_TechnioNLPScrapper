@@ -49,12 +49,17 @@ class ArticleTests(unittest.TestCase):
 
     def test_write_keywords_to_sql(self):
         sql_article = Article('https://www.ynetnews.com/article/hj11i0w19o')
-        keyword_example = [('divide', False), ('security', True)]
+        keyword_example = [('divide', 'negative'), ('security', 'positive')]
         sql_query = SQLQuery()
         rows = sql_article.create_rows_to_database(keyword_example)
         self.assertEqual(len(rows), len(keyword_example))
         sql_query.insert_article_to_sql(rows)
 
+    def test_extract_content_from_article(self):
+        article = Article('https://www.israelhayom.co.il/news/world-news/middle-east/article/14119964')
+        body=article.extract_article_content()
+        self.assertNotEqual(len(body),0)
+        
 
 if __name__ == '__main__':
     unittest.main()
