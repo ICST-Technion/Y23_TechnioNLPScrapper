@@ -88,6 +88,7 @@
 }
 
 .advanced-search-button{
+  margin-top: 2vh;
   position: relative;
   float: right;
   right: 21vw;
@@ -521,8 +522,8 @@ background-color: #8d6cdf !important;
 }
 
 input, select, textarea, label, span, p, .faq-answer, .faq-question {
-  text-align: start;
-  unicode-bidi: plaintext;
+  text-align: start !important;
+  unicode-bidi: plaintext !important;
 }
 
 .faq-question {
