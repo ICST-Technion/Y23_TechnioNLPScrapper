@@ -25,6 +25,7 @@
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
     "react-image-gallery": "^1.2.11",
+    "react-nprogress": "^0.1.6",
     "react-scripts": "5.0.1",
     "react-shepherd": "^4.2.0",
     "react-spinners": "^0.13.7",
