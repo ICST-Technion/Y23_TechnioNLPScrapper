@@ -96,24 +96,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
             <AppBar className='Header' position="static" color='transparent'>
               <Container maxWidth="xl" >
                 <Toolbar disableGutters>
-                  <Box className='Icon'sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}/>
-                  <Typography
-                    variant="h6"
-                    noWrap
-                    component="a"
-                    onClick={() => goToMainPage()}
-                    sx={{
-                      mr: 1,
-                      display: { xs: 'none', md: 'flex' },
-                      fontFamily: 'monospace',
-                      fontWeight: 700,
-                      letterSpacing: '.3rem',
-                      color: 'inherit',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    TechnioNLP
-                  </Typography>
+                  <Box component="button" style={{backgroundColor:'transparent'}} onClick={() => goToMainPage()} className='Icon'sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}/>
         
                   <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                     <IconButton

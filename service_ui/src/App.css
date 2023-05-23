@@ -88,6 +88,7 @@
 }
 
 .advanced-search-button{
+  margin-top: 2vh;
   position: relative;
   float: right;
   right: 21vw;
@@ -521,8 +522,8 @@ background-color: #8d6cdf !important;
 }
 
 input, select, textarea, label, span, p, .faq-answer, .faq-question {
-  text-align: start;
-  unicode-bidi: plaintext;
+  text-align: start !important;
+  unicode-bidi: plaintext !important;
 }
 
 .faq-question {
@@ -552,4 +553,18 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question {
 
 .page-body{
   padding-top: 68px !important;
+}
+
+.loading-bar{
+  position:absolute !important;
+  top: 50vh !important;
+  width: 70vw;
+  left: 15vw !important;
+  height: 4vh !important;
+  border-radius: 30px;
+  background-color:#bfaeed80 !important;
+}
+
+.loading-bar span{
+  background-color: #9d9af7 !important;
 }
