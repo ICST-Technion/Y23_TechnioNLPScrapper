@@ -18,13 +18,8 @@ def extract_sentiment(text):
 
 # Set the service URL
     natural_language_understanding.set_service_url(url)
-    if text=='':
-        return 'neutral'
-    minimum_length=100
-    # the IBM expects a certain length of text and throws exception otherwise,
-    # we are going to pad the text with a neutral word if the text is too short
-    if len(text) < minimum_length:
-        text = text + 'רגיל' * (minimum_length - len(text))
+    # # the IBM expects a certain length of text and throws exception otherwise,
+    # # we are going to pad the text with a neutral word if the text is too short
     response = natural_language_understanding.analyze(text=text,
                                                           features=Features(sentiment=SentimentOptions())
                                                           ).get_result()

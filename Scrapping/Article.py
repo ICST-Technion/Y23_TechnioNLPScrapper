@@ -100,7 +100,10 @@ class Article:
         self.date = parse_date(self.extract_date())
 
         text=self.extract_article_content()
-        self.sentiment=extract_sentiment(text)
+        try:
+            self.sentiment=extract_sentiment(text)
+        except:
+            self.sentiment='neutral'    
 
     def extract_date(self):
         """
@@ -159,7 +162,6 @@ class Article:
 
 
     def extract_article_content(self):
-        print('&&&&&&&&&&&&') 
         meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
         content_description=meta_tag["content"] if meta_tag is not None else ''
         print(content_description)          

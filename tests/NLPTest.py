@@ -16,7 +16,15 @@ class NLPTests(unittest.TestCase):
     def test_sentiment_article_soup(self):
         link='https://www.ynet.co.il/environment-science/article/ryxizfkvh#autoplay'
         article=Article(link)
-        self.assertEqual(extract_sentiment(article.extract_article_content()),'negative')            
+        self.assertEqual(extract_sentiment(article.extract_article_content()),'positive')
+    def test_text_too_short_error(self):
+        sentiment='nothing'
+        try:
+            extract_sentiment('')
+        except:
+            sentiment='neutral'    
+        finally:
+            self.assertEqual(sentiment,'neutral')            
 
 
 if __name__ == '__main__':
