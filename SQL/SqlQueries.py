@@ -95,11 +95,15 @@ class SQLQuery:
             if conn:
                 cur.close()
                 conn.close()
-
-    def clear_table(self):
+    def insert_article_intonation_analysis_sql(self,article_analysis_list):
+        insert_sql = "INSERT INTO ArticleSentiment(article_link,overall_sentiment ,sum_negative_keywords ,sum_positive_keywords ,date) " \
+                     "VALUES(%s,%s,%s,%s,%s);"
+        self.execute_query(insert_sql, article_analysis_list)
+            
+    def clear_table(self,table_name='Articles'):
         """
         clears all records from the table, but table structure remains,
         unlike DROP and DELETE
         """
-        clear_query = "TRUNCATE TABLE Articles"
-        self.execute_query(clear_query)
+        clear_query = f"TRUNCATE TABLE {table_name}"
+        self.execute_query(clear_query)    
