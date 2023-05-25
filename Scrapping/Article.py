@@ -102,8 +102,6 @@ class Article:
         text=self.extract_article_content()
         try:
             self.sentiment,self.score=extract_sentiment(text)
-            print(self.sentiment)
-            print(self.score)
             #Watson can fail because the text is too short, or if there are invalid characters, 
             #or if just doesn't feel like it. In any case, here is a default value
         except:
