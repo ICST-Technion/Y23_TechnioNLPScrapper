@@ -100,7 +100,14 @@ class Article:
         self.date = parse_date(self.extract_date())
 
         text=self.extract_article_content()
-        self.sentiment=extract_sentiment(text)
+        try:
+            self.sentiment,self.score=extract_sentiment(text)
+            print(self.sentiment)
+            print(self.score)
+            #Watson can fail because the text is too short, or if there are invalid characters, 
+            #or if just doesn't feel like it. In any case, here is a default value
+        except:
+            self.sentiment,self.score='neutral',0.0    
 
     def extract_date(self):
         """
@@ -159,7 +166,6 @@ class Article:
 
 
     def extract_article_content(self):
-        print('&&&&&&&&&&&&') 
         meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
         content_description=meta_tag["content"] if meta_tag is not None else ''
         print(content_description)          
@@ -177,9 +183,9 @@ class Article:
     the link to the article, the intonation of the keyword)
     """
         date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
-        rows = [(self.website, keyword, date_str, str(self.count_word_in_webpage(keyword)), self.link, str(intonation), category)
+        rows = [(self.website, keyword, date_str, str(self.count_word_in_webpage(keyword)), self.link, str(intonation), category,self.score)
             for keyword, intonation in keyword_intonation_list]
-        rows += [(self.website, phrase, date_str, str(self.count_phrase_in_webpage(phrase)), self.link, str(intonation), category)
+        rows += [(self.website, phrase, date_str, str(self.count_phrase_in_webpage(phrase)), self.link, str(intonation), category,self.score)
              for phrase, intonation in phrases_intonation_list]
         return rows
 

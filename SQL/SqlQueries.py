@@ -49,8 +49,8 @@ class SQLQuery:
 
     """
 
-        insert_sql = "INSERT INTO Articles(website,keyword,date,count,link,intonation,category) " \
-                     "VALUES(%s,%s,%s,%s,%s,%s,%s);"
+        insert_sql = "INSERT INTO Articles(website,keyword,date,count,link,intonation,category,score) " \
+                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, keyword_list)
     def insert_keyword_intonation_to_sql(self,keyword_intonation_list):
         insert_sql = "INSERT INTO Keywords(keyword,intonation) " \
