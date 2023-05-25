@@ -25,7 +25,7 @@ def extract_sentiment(text):
                                                           ).get_result()
     sentiment = response['sentiment']['document']
     label = sentiment['label']
-    print(label)
-    return label
+    score = sentiment['score']
+    return label,score
 
 
