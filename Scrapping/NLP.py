@@ -32,6 +32,8 @@ def find_keyword_in_text(text,keywords_limit_num=5):
     return keywords
     
 
+#TODO: extract word sentiment score
+
 
 def extract_sentiment(text):
     natural_language_understanding=initialize_natural_language_understanding()

@@ -9,7 +9,7 @@ from tldextract import extract
 import re
 
 sys.path.append('..\\Scrapping')
-from Scrapping.NLP import extract_sentiment
+from Scrapping.NLP import *
 
 
 # this dictionary is here in case we will want to parse new date formats
@@ -99,7 +99,7 @@ class Article:
         self.website = get_website_name(link)
         self.date = parse_date(self.extract_date())
 
-        text=self.extract_article_content()
+        text=self.extract_article_description()
         try:
             self.sentiment,self.score=extract_sentiment(text)
             #Watson can fail because the text is too short, or if there are invalid characters, 
@@ -126,6 +126,27 @@ class Article:
     # we don't know how to extract
         return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
+    def extract_article_body(self):
+
+        hebrew_pattern = re.compile(r'[\u0590-\u05FF\s]+')
+# Find elements containing Hebrew text in the body- the article itself
+        hebrew_elements = self.soup.body.find_all('span',text=hebrew_pattern,attrs={'data-text': 'true'})
+        extracted_text = ''.join([element.get_text() for element in hebrew_elements])
+        return extracted_text
+
+    def calculate_keyowrd_sum(self,intonation='positive'):
+        body=self.extract_article_body()
+        description=self.extract_article_description()
+        sum=0.0
+        if len(body)+len(description)==0:
+            return sum
+        keywords_in_article=find_keyword_in_text(body)+find_keyword_in_text(description)
+        
+        for keyword_data in keywords_in_article:
+            relevance=keyword_data['relevance']
+            #TODO: add intonation calculation to a word
+            sum+=relevance*self.score
+        return sum
 
     def find_text_by_regex(self, regex):
         """
@@ -158,15 +179,11 @@ class Article:
         pattern = re.compile(r'\b{}\b'.format(re.escape(phrase)))
         return len(self.soup.find_all(string=pattern))
 
+    
 
-
-
-
-
-    def extract_article_content(self):
+    def extract_article_description(self):
         meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
-        content_description=meta_tag["content"] if meta_tag is not None else ''
-        print(content_description)          
+        content_description=meta_tag["content"] if meta_tag is not None else ''        
         return content_description    
 
     def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):

@@ -55,11 +55,15 @@ class ArticleTests(unittest.TestCase):
         self.assertEqual(len(rows), len(keyword_example))
         sql_query.insert_article_to_sql(rows)
 
-    def test_extract_content_from_article(self):
+    def test_extract_description_from_article(self):
         article = Article('https://www.israelhayom.co.il/news/world-news/middle-east/article/14119964')
-        body=article.extract_article_content()
+        body=article.extract_article_description()
         self.assertNotEqual(len(body),0)
-        
+    def test_extract_body_of_article(self):
+        link='https://www.ynet.co.il/news/article/syy1t11tb3'
+        article = Article(link)
+        self.assertGreater(len(article.extract_article_body()),0)
+
 
 if __name__ == '__main__':
     unittest.main()
