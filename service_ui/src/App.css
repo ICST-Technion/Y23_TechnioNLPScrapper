@@ -66,6 +66,15 @@
   color: rgb(0 0 0 / 48%);
   font-size: auto;
 }
+
+.search-bar.RTL .MuiInputLabel-root:not(.Mui-focused){
+  right:3.5vw !important;
+}
+
+.search-bar.LTR .MuiInputLabel-root{
+  left:0 !important;
+}
+
 .search-bar .MuiInputLabel-root.Mui-focused {
   color: black;
 }
