@@ -26,6 +26,7 @@
   margin-top: -2vh;
   margin-bottom: -2vh;
   pointer-events: none;
+  mix-blend-mode: multiply;
 }
 .minimized-logo{
   height: 23vh !important;
