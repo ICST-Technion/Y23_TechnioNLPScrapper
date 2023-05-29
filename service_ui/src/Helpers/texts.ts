@@ -32,7 +32,7 @@ export const GO_BACK = ["go back", "חזור"]
 //clientMain
 export const FAQS_TUT = ["You can use this button for help", "תוכל להשתמש בכפתור זה לעזרה"]
 export const HELP_TUT = ["You can click this button to open the tour again", "תוכל ללחוץ על כפתור זה כדי לפתוח את הסיור שוב"]
-export const SEARCH_BAR_TUT = ["You write in your query into this button \n The seachbar also supports common google search shortcuts","Google סרגל החיפוש תומך גם בקיצורי דרך נפוצים לחיפוש \n אתה כותב את השאילתה שלך לתוך הכפתור הזה"]
+export const SEARCH_BAR_TUT = ["You write in your query into this button \n The seachbar also supports common google search shortcuts"," סרגל החיפוש תומך גם בקיצורי דרך נפוצים לחיפוש גוגל \n אתה כותב את השאילתה שלך לתוך הכפתור הזה"]
 export const ADVANCED_SEARCH_TUT = ["You can use this button to get redirected to a page with advanced search options", "תוכל להשתמש בלחצן זה כדי להפנות מחדש לדף עם אפשרויות חיפוש מתקדמות"]
 export const RUN_TUT = ["You can use this button run the query", "תוכל להשתמש בלחצן זה להפעיל את השאילתה"]
 export const HELLO = ["Hello, ", "!שלום ,"]

@@ -49,11 +49,11 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
 
   const steps = [
     {
-      element: "#"+languageStrings,
+      element: "#language",
       intro: LANGUAGE_TUT[language],
     },
     {
-      element: "#"+FAQS[language],
+      element: "#FAQ",
       intro: FAQS_TUT[language],
     },
     {

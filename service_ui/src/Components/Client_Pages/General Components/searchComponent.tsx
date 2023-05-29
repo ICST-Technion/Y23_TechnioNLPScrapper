@@ -14,12 +14,13 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
   idx,
 }) => {
   const language = getLanguage();
+  const direction = language == 1 ? "RTL" : "LTR";
   return (
     <>
       <div className="search-button">
         <div id="searchbar">
           <TextField
-            className="search-bar"
+            className={"search-bar " + direction}
             label={SEARCH_BAR_INFO[language]}
             value={keywords[idx]}
             helperText={

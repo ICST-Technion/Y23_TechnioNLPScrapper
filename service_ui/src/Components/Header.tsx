@@ -91,6 +91,21 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
         setAnchorElNav(null);
       };
 
+    const getButtonID = (index: number) => {
+        switch(index){
+            case 0:
+                return "language";
+            case 1:
+                return "FAQ";
+            case 2:
+                return isLoggedIn && (!hideRegister || inRegister)? "register" : "signout";
+            case 3:
+                return isLoggedIn && (!hideRegister || inRegister)? "signout" : "";
+            default:
+                return "";
+        }
+      }
+
     const getHeader = () => {
         return (
             <AppBar className='Header' position="static" color='transparent'>
@@ -159,7 +174,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                     {pages.map((page, index) => (
                       <Button
                         key={page}
-                        id={page}
+                        id={getButtonID(index)}
                         onClick={getButtonFunction(index)}
                         sx={{ my: 2, color: 'white', display: 'block' }}
                       >
