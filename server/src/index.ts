@@ -47,7 +47,7 @@ app.post('/query', async (req: Request, res: Response) => {
     console.log(" --------- ERROR IN QUERY API CALL ---------");
     console.log(err);
     if(err.response){
-      res.status(err.response.status).send(err.response.data);
+      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
     }
     else{
       res.status(err.status? err.status : 500).send(err.message? err.message : err);
@@ -63,7 +63,7 @@ app.post('/query', async (req: Request, res: Response) => {
   console.log(" ---------- ERROR IN DB QUERY AFTER QUERY ----------");
   console.log(err);
     if(err.response){
-      res.status(err.response.status).send(err.response.data);
+      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
     }
     else{
       res.status(err.status? err.status : 500).send(err.message? err.message : err);
