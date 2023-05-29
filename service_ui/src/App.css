@@ -221,6 +221,7 @@
   right:9.5vw;
   height: 30px !important;
   width: 30px !important;
+  z-index: 200 !important;
 }
 
 .go-back-button{
