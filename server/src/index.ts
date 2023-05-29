@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import {client} from "./elephantsql.js"
-import axios, {AxiosResponse} from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
 import { loginRoute, signupRoute } from './user_management/authentication.js';
@@ -35,40 +35,80 @@ async function clearTable() {
 }
 
 app.post('/query', async (req: Request, res: Response) => {
+  const token = protectedRoute(req, res);
+  if(token === consts.ERROR_401 || typeof(token) === "string")
+    return;
+
+  //if we reach here then we have a token and the user is logged in
   try {
-    const token = protectedRoute(req, res);
-    if(token === consts.ERROR_401 || typeof(token) === "string")
-      return;
-  
-    //if we reach here then we have a token and the user is logged in
-    const response = await axios.post(consts.api_address+consts.query_request,req.body)
-    console.log(response);
+   await axios.post(consts.api_address+consts.query_request,req.body)
+  }
+  catch(err){
+    console.log(" --------- ERROR IN QUERY API CALL ---------");
+    console.log(err);
+    if(err.response){
+      res.status(err.response.status).send(err.response.data);
+    }
+    else{
+      res.status(err.status? err.status : 500).send(err.message? err.message : err);
+    }
+
+    return;
+  }
+  try{
     const results = await client.query('SELECT * FROM "public"."articles"');
     res.status(200).send({data: results.rows}).end();
     clearTable();
 } catch (err) {
-    console.log(err);
+  console.log(" ---------- ERROR IN DB QUERY AFTER QUERY ----------");
+  console.log(err);
+    if(err.response){
+      res.status(err.response.status).send(err.response.data);
+    }
+    else{
+      res.status(err.status? err.status : 500).send(err.message? err.message : err);
+    }
     clearTable();
-    res.status(500).send(err);
 }
 });
 
 app.post('/advancedSearch', async (req: Request, res: Response) => {
+  const token = protectedRoute(req, res);
+  if(token === consts.ERROR_401 || typeof(token) === "string")
+    return;
+
+  //if we reach here then we have a token and the user is logged in
   try {
-    const token = protectedRoute(req, res);
-    if(token === consts.ERROR_401 || typeof(token) === "string")
-      return;
-  
-    //if we reach here then we have a token and the user is logged in
-    const response = await axios.post(consts.api_address+consts.advanced_search_request,req.body)
-    console.log(response);
+    await axios.post(consts.api_address+consts.advanced_search_request,req.body)
+  }
+  catch(err){
+    console.log(" --------- ERROR IN ADVANCED SEARCH API CALL ---------");
+    console.log(err);
+    if(err.response){
+      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
+    }
+    else{
+      res.status(err.status? err.status : 500).send(err.message? err.message : err);
+    }
+
+    return;
+  }
+
+try{
     const results = await client.query('SELECT * FROM "public"."articles"');
     res.status(200).send({data: results.rows}).end();
     clearTable();
+
 } catch (err) {
-    console.log(err);
+  console.log(" ---------- ERROR IN DB QUERY AFTER ADVANCED SEARCH ----------");
+  console.log(err);
+    if(err.response){
+      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
+    }
+    else{
+      res.status(err.status? err.status : 500).send(err.message? err.message : err);
+    }
     clearTable();
-    res.status(500).send(err);
 }
 });
 
@@ -132,3 +172,13 @@ app.listen(port, async () =>
     console.log(err);
   }
 });
+
+
+function sendErrorBack(status: Number){
+  const error = {
+    message: "Error",
+    status: status
+  }
+
+  return error;
+}
