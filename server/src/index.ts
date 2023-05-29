@@ -172,13 +172,3 @@ app.listen(port, async () =>
     console.log(err);
   }
 });
-
-
-function sendErrorBack(status: Number){
-  const error = {
-    message: "Error",
-    status: status
-  }
-
-  return error;
-}
