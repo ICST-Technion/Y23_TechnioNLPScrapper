@@ -19,6 +19,10 @@ class MyTestCase(unittest.TestCase):
         keyword_list = [('example1', "False"), ('example2', "neutral")]
         rows = article.create_rows_to_database(keyword_list)
         sql_query.insert_article_to_sql(rows)
+    def test_generate_and_delete_random_table(self):
+        sql_query = SQLQuery()
+        id=sql_query.generate_table()
+        sql_query.delete_table(id)   
 
 
 
