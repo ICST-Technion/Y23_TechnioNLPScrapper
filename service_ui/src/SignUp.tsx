@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios, { Axios, AxiosError } from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import { basicAxiosInstance, getLanguage } from './Helpers/helpers';
-import { EMPTY_FIELD_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_UP, UNKNOWN_ERROR, USERNAME_VALIDATION_ERROR } from './Helpers/texts';
+import { EMAILADRESS, EMPTY_FIELD_VALIDATION_ERROR, HELLO, PASSWORD, PASSWORD_VALIDATION_ERROR, REGISTER_ACCOUNT, SIGNUP, SUCCESSFUL_SIGN_UP, UNKNOWN_ERROR, USERNAME, USERNAME_VALIDATION_ERROR } from './Helpers/texts';
 
 
 export interface SignUpProps {
@@ -87,10 +87,10 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
           }}
         >
           <Typography component="h1" variant="h5" marginBottom={2}>
-            Hello Admin!
+          {HELLO[language]}{'Admin'} 
           </Typography>
           <Typography component="h1" variant="h5">
-            Register a New Account
+          {REGISTER_ACCOUNT[language]}
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -99,7 +99,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label= {EMAILADRESS[language]}
                   name="email"
                   autoComplete="email"
                 />
@@ -111,7 +111,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
                   required
                   fullWidth
                   id="username"
-                  label="Username"
+                  label={USERNAME[language]}
                   autoFocus
                 />
               </Grid>
@@ -120,7 +120,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label={PASSWORD[language]}
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -133,7 +133,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+            {SIGNUP[language]}
             </Button>
           </Box>
           <Typography component="h5" variant="body1" color="red" hidden={Errormsg.length === 0}>
