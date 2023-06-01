@@ -34,7 +34,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { GO_BACK, SESSION_EXPIRE } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, GO_BACK, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SESSION_EXPIRE, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
 
 export interface baseResultsProps {
@@ -129,7 +129,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         >
           {GO_BACK[language]}
         </button>
-        <div>no data</div>
+        <div>{NODATA[language]}</div>
       </div>
     );
   } else {
@@ -137,15 +137,15 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
     //set up intonation data
     const intonationData = {
-      labels: ["intonation"],
+      labels: [INTONATION[language]],
       datasets: [
         {
           id: 1,
-          label: "negative intonation",
+          label: NEGATIVE_INTONATION[language],
           data: [
             countSumForType(
               datasets,
-              "negative",
+              NEGATIVE[language],
               positiveKeywords,
               negativeKeywords
             ),
@@ -154,11 +154,11 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         },
         {
           id: 2,
-          label: "neutral intonation",
+          label: NEUTRAL_INTONATION[language],
           data: [
             countSumForType(
               datasets,
-              "neutral",
+              NEUTRAL[language],
               positiveKeywords,
               negativeKeywords
             ),
@@ -167,11 +167,11 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         },
         {
           id: 3,
-          label: "positive intonation",
+          label: POSITIVE_INTONATION[language],
           data: [
             countSumForType(
               datasets,
-              "positive",
+              POSITIVE[language],
               positiveKeywords,
               negativeKeywords
             ),
@@ -199,11 +199,11 @@ export const BaseResults: React.FC<baseResultsProps> = ({
             <Tabs
               value={value}
               onChange={handleChange}
-              aria-label="basic tabs example"
+              aria-label={BASIC_TABS_EXAMPLE[language]}
             >
-              <Tab label="Keyword-Website Graph" {...a11yProps(0)} />
-              <Tab label="Intonation Summary Graph" {...a11yProps(1)} />
-              <Tab label="Timed Intonation Graph" {...a11yProps(1)} />
+              <Tab label= {KEYWORD_WEBSITE_GRAPH[language]} {...a11yProps(0)} />
+              <Tab label= {INTONATION_SUMMARY_GRAPH[language]} {...a11yProps(1)} />
+              <Tab label= {TIMED_INTONATION_GRAPH[language]} {...a11yProps(1)} />
             </Tabs>
           </Box>
           <div
