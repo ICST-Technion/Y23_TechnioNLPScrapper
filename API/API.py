@@ -113,24 +113,28 @@ def parse_google_search_query(query):
 app = Flask(__name__)
 
 
-@app.route('/rows', methods=['POST'])
-def default_select_table():
-    select_all = SQLQuery()
-    table = select_all.select_articles_from_sql()
-    return make_response(jsonify(results=table), 200)
+# @app.route('/rows', methods=['POST'])
+# def default_select_table():
+#     select_all = SQLQuery()
+#     table = select_all.select_articles_from_sql()
+#     return make_response(jsonify(results=table), 200)
 
 
 @app.route('/clear', methods=['POST'])
 def clear_table():
+
     clear_query = SQLQuery()
-    clear_query.clear_table()
+    #which table do we clear:
+    table_id=request.json.get('table_id', "")
+    if table_id!="":
+        clear_query.delete_table(table_id=table_id)
     return make_response("table cleared", 200)
 
 def get_default_websites():
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
 
-def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,category='1'):
+def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,table_id,category='1'):
     #TODO: scrap phrases and keywords differently
     '''
     scrapping information about each keyword and website
@@ -157,7 +161,7 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,c
                 phrase_intonation_list,
                 category)
                 insert_query=SQLQuery()
-                insert_query.insert_article_to_sql(rows_to_add)
+                insert_query.insert_article_to_sql(rows_to_add,table_id)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
 
@@ -192,9 +196,11 @@ def do_search_query(category='1'):
             negative_keywords=negative_keywords
         )
     # Perform the search and scrape the links for each website
+    table_id=SQLQuery().generate_table()
     for website in site_list:
         search_results = search_google(query, website)
-        scrap_links(search_results, keyword_to_intonation,phrase_to_intonation, category)
+        scrap_links(search_results, keyword_to_intonation,phrase_to_intonation,table_id,category)
+    return table_id    
 
 
 
@@ -204,9 +210,9 @@ def get_database_query():
     '''
     search and scrap 2 categories, and then return a response when finished
     '''
-    do_search_query('1')
+    table_id=do_search_query('1')
     # do_search_query('2')
-    return make_response("OK", 200)  
+    return make_response(str(table_id), 200)  
 
 
 def search_google(query, site_list, exclude_query=''):
@@ -234,21 +240,21 @@ def parse_table_rows(rows):
     return [row[0] for row in rows]
 
 
-def include_exclude_lists(universe, included, excluded):
-    '''
-    prevents repetition in searching included and excluded keywords, websites etc.
-    | is the union operator
-    '''
-    return list((set(universe) | set(included)) - set(excluded))
+# def include_exclude_lists(universe, included, excluded):
+#     '''
+#     prevents repetition in searching included and excluded keywords, websites etc.
+#     | is the union operator
+#     '''
+#     return list((set(universe) | set(included)) - set(excluded))
 
 
-def create_parameters_list(included_field, excluded_field):
-    '''
-    returns a list of the parameters we want in the search, and without the ones we want to exclude
-    '''
-    included_parameters = parse_json_and_strip(included_field)
-    excluded_parameters = parse_json_and_strip(excluded_field)
-    return include_exclude_lists([], included_parameters, excluded_parameters)
+# def create_parameters_list(included_field, excluded_field):
+#     '''
+#     returns a list of the parameters we want in the search, and without the ones we want to exclude
+#     '''
+#     included_parameters = parse_json_and_strip(included_field)
+#     excluded_parameters = parse_json_and_strip(excluded_field)
+#     return include_exclude_lists([], included_parameters, excluded_parameters)
 
 
 def is_at_least_one_keyword(category='1'):
@@ -349,10 +355,13 @@ def advanced_search_query(category='1'):
     _, decoded_exclude = url_encode_keywords(keywords_to_exclude)
     exclude_query = ','.join(decoded_exclude)
     
+
+    table_id=SQLQuery().generate_table()
     for website in websites_to_search:
         links_to_scrap = search_google(query, website, exclude_query)
-        scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,category)
+        scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,table_id,category)
     # TODO: specify dates in the google search
+    return table_id
 
 def url_encode_keywords(keywords):
     """
@@ -378,10 +387,11 @@ def advanced_search():
     returns bad request if there are no keywords in the search query
     otherwise returns ok
     '''
-    advanced_search_query('1')
+    
+    table_id=advanced_search_query('1')
     
     # not adding specified statistics yet, because there is only counter for now
-    return make_response("ok", 200)
+    return make_response(str(table_id), 200)
 
 
 # driver function
