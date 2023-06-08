@@ -111,7 +111,7 @@ class SQLQuery:
         returns the id of the generated table as string
         """
         table_id=str(random.randint(0,upper_limit))
-        create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation BOOLEAN,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"
+        create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation TEXT,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"
         self.execute_query(create_query)
         return table_id
     def delete_table(self,table_id):

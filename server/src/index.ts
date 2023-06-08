@@ -22,8 +22,9 @@ app.use(cookieParser())
 
 let userDB: typeof import("mongoose");
 
-async function clearTable() {
-  const body={}
+async function clearTable(table_id: string) {
+  //We need the table id, to know which table to clear
+  const body={'table_id': table_id}
   try {
     axios.post(
       consts.api_address+consts.clear_request,
@@ -41,7 +42,7 @@ app.post('/query', async (req: Request, res: Response) => {
 
   //if we reach here then we have a token and the user is logged in
   try {
-   await axios.post(consts.api_address+consts.query_request,req.body)
+   var api_response=await axios.post(consts.api_address+consts.query_request,req.body)
   }
   catch(err){
     console.log(" --------- ERROR IN QUERY API CALL ---------");
@@ -56,9 +57,15 @@ app.post('/query', async (req: Request, res: Response) => {
     return;
   }
   try{
-    const results = await client.query('SELECT * FROM "public"."articles"');
-    res.status(200).send({data: results.rows}).end();
-    clearTable();
+    //we have a table_id in the response to work with
+    if(api_response.data)
+    {
+      var table_id=api_response.data
+      const results = await client.query('SELECT * FROM Articles'+table_id);
+      res.status(200).send({data: results.rows}).end();
+      clearTable(table_id);
+    }
+    
 } catch (err) {
   console.log(" ---------- ERROR IN DB QUERY AFTER QUERY ----------");
   console.log(err);
@@ -68,7 +75,10 @@ app.post('/query', async (req: Request, res: Response) => {
     else{
       res.status(err.status? err.status : 500).send(err.message? err.message : err);
     }
-    clearTable();
+    if(api_response.data)
+    {
+    clearTable(api_response.data);
+    }
 }
 });
 
@@ -79,7 +89,7 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
 
   //if we reach here then we have a token and the user is logged in
   try {
-    await axios.post(consts.api_address+consts.advanced_search_request,req.body)
+   var api_response= await axios.post(consts.api_address+consts.advanced_search_request,req.body)
   }
   catch(err){
     console.log(" --------- ERROR IN ADVANCED SEARCH API CALL ---------");
@@ -95,9 +105,15 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
   }
 
 try{
-    const results = await client.query('SELECT * FROM "public"."articles"');
-    res.status(200).send({data: results.rows}).end();
-    clearTable();
+    if(api_response.data)
+    {
+      var table_id=api_response.data
+      console.log(table_id)
+      const results = await client.query('SELECT * FROM Articles'+table_id);
+      res.status(200).send({data: results.rows}).end();
+      clearTable(table_id);
+    }
+    
 
 } catch (err) {
   console.log(" ---------- ERROR IN DB QUERY AFTER ADVANCED SEARCH ----------");
@@ -108,25 +124,29 @@ try{
     else{
       res.status(err.status? err.status : 500).send(err.message? err.message : err);
     }
-    clearTable();
+    if(api_response.data)
+    {
+    clearTable(api_response.data);
+    }
 }
 });
 
-app.get('/rows', async (req: Request, res: Response) => {
-  try {
-    const token = protectedRoute(req, res);
-    if(token === consts.ERROR_401 || typeof(token) === "string")
-      return;
+//we aren't using this anyway, and I need id to clear table
+// app.get('/rows', async (req: Request, res: Response) => {
+//   try {
+//     const token = protectedRoute(req, res);
+//     if(token === consts.ERROR_401 || typeof(token) === "string")
+//       return;
   
-    //if we reach here then we have a token and the user is logged in
-    const results = await client.query('SELECT * FROM "public"."articles"');
-    res.send({data: results.rows});
-    clearTable();
-} catch (err) {
-    console.log(err);
-    res.status(500).send(err);
-}
-});
+//     //if we reach here then we have a token and the user is logged in
+//     const results = await client.query('SELECT * FROM "public"."articles"');
+//     res.send({data: results.rows});
+//     clearTable();
+// } catch (err) {
+//     console.log(err);
+//     res.status(500).send(err);
+// }
+// });
 
 app.post('/login', async (req: Request, res: Response) => {
   loginRoute(req, res);

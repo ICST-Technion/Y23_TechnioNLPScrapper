@@ -113,18 +113,21 @@ def parse_google_search_query(query):
 app = Flask(__name__)
 
 
-@app.route('/rows', methods=['POST'])
-def default_select_table():
-    select_all = SQLQuery()
-    table = select_all.select_articles_from_sql()
-    return make_response(jsonify(results=table), 200)
+# @app.route('/rows', methods=['POST'])
+# def default_select_table():
+#     select_all = SQLQuery()
+#     table = select_all.select_articles_from_sql()
+#     return make_response(jsonify(results=table), 200)
 
-#TODO: delete the generated table
+
 @app.route('/clear', methods=['POST'])
 def clear_table():
+
     clear_query = SQLQuery()
-    #delete the generated table
-    clear_query.clear_table()
+    #which table do we clear:
+    table_id=request.json.get('table_id', "")
+    if table_id!="":
+        clear_query.delete_table(table_id=table_id)
     return make_response("table cleared", 200)
 
 def get_default_websites():
