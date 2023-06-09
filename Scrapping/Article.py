@@ -79,7 +79,7 @@ class Article:
     This class will represent scrapped data from articles and put them in an Article object
     the properties are:
     link- the link of the article the scrapping is done from
-    make sure that the website allows scrapping first
+    make sure that the website allows scrapping first because some are forbidden to scrap from
     title: the main title of the article
     date: the date the article was published
     website: the name of the website (without TLD such as .com)
@@ -134,19 +134,23 @@ class Article:
         extracted_text = ''.join([element.get_text() for element in hebrew_elements])
         return extracted_text
 
-    def calculate_keyowrd_sum(self,intonation='positive'):
+    def calculate_keyowrd_sum(self,intonation):
         body=self.extract_article_body()
         description=self.extract_article_description()
-        sum=0.0
-        if len(body)+len(description)==0:
-            return sum
-        keywords_in_article=find_keyword_in_text(body)+find_keyword_in_text(description)
-        
-        for keyword_data in keywords_in_article:
-            relevance=keyword_data['relevance']
-            #TODO: add intonation calculation to a word
-            sum+=relevance*self.score
-        return sum
+        text=body+description
+        try:
+            keywords_in_article=find_keyword_in_text(text)
+            intonated_keywords=[keyword['sentiment']['score'] for keyword in keywords_in_article if keyword['sentiment']['label']==intonation]
+            return sum(intonated_keywords)
+        except:
+            return 0.0
+
+
+    def create_sentiment_score_rows(self):
+        date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
+        rows = [(self.link,self.sentiment,
+                 self.calculate_keyowrd_sum('negative'),self.calculate_keyowrd_sum('positive'),date_str)]
+        return rows
 
     def find_text_by_regex(self, regex):
         """

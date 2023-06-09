@@ -1,5 +1,5 @@
 from ibm_watson import NaturalLanguageUnderstandingV1
-from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
+from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions, KeywordsOptions
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 def initialize_natural_language_understanding():
@@ -18,11 +18,7 @@ def initialize_natural_language_understanding():
     return natural_language_understanding
 
 def find_keyword_in_text(text,keywords_limit_num=5):
-    features = {
-    'keywords': {
-        'limit': keywords_limit_num  # Set the desired number of keywords to extract
-    }
-}
+    features=Features(keywords=KeywordsOptions(sentiment=True,emotion=True,limit=keywords_limit_num))
     natural_language_understanding=initialize_natural_language_understanding()
 # Call the NLU service to extract keywords
     response = natural_language_understanding.analyze(text=text, features=features).get_result()

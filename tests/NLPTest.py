@@ -29,8 +29,14 @@ class NLPTests(unittest.TestCase):
         text='The dragon thrashed and wailed in its flight'
         keywords=find_keyword_in_text(text)
         for keyword in keywords:
-            print(keyword['text'], keyword['relevance'])
-        self.assertGreater(len(keywords),0)    
+            print(keyword)
+        self.assertGreater(len(keywords),0)
+    def test_Hebrew_keyword_sentiment_analysis(self):
+        text='מסעדה גרועה, איכות מצוינת'
+        keywords=find_keyword_in_text(text)
+        for keyword in keywords:
+            print(keyword['sentiment']['score'])
+        self.assertGreater(len(keywords),0)         
                     
 
 

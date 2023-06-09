@@ -96,12 +96,13 @@ class SQLQuery:
             if conn:
                 cur.close()
                 conn.close()
-    def insert_article_intonation_analysis_sql(self,article_analysis_list):
-        insert_sql = "INSERT INTO ArticleSentiment(article_link,overall_sentiment ,sum_negative_keywords ,sum_positive_keywords ,date) " \
+    def insert_article_intonation_analysis_sql(self,article_analysis_list,id=""):
+        insert_sql = "INSERT INTO ArticleSentiment"+str(id)+"(article_link,overall_sentiment,sum_negative_keywords ,sum_positive_keywords ,date) " \
                      "VALUES(%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, article_analysis_list)
+        print(article_analysis_list)
             
-    def clear_table(self,table_name='Articles'):
+    def clear_table(self):
         """
         clears all records from the table, but table structure remains,
         unlike DROP and DELETE
@@ -117,6 +118,8 @@ class SQLQuery:
         table_id=str(random.randint(0,upper_limit))
         create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation TEXT,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"
         self.execute_query(create_query)
+        create_sentiment_query = "CREATE TABLE ArticleSentiment"+table_id+"(article_link TEXT,overall_sentiment TEXT,sum_negative_keywords NUMERIC(5,3),sum_positive_keywords NUMERIC(5,3),date DATE,PRIMARY KEY (article_link));"
+        self.execute_query(create_sentiment_query)
         return table_id
     def delete_table(self,table_id):
         """
@@ -125,3 +128,5 @@ class SQLQuery:
         """
         clear_query = "DROP TABLE Articles"+str(table_id)
         self.execute_query(clear_query)
+        clear_sentiment_query = "DROP TABLE ArticleSentiment"+str(table_id)
+        self.execute_query(clear_sentiment_query)
