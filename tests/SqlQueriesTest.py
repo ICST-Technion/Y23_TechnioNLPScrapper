@@ -22,6 +22,7 @@ class MyTestCase(unittest.TestCase):
     def test_generate_and_delete_random_table(self):
         sql_query = SQLQuery()
         id=sql_query.generate_table()
+        print(id)
         sql_query.delete_table(id)   
 
 

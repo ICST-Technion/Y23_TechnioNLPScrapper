@@ -9,7 +9,7 @@ from tldextract import extract
 import re
 
 sys.path.append('..\\Scrapping')
-from Scrapping.NLP import extract_sentiment
+from Scrapping.NLP import *
 
 
 # this dictionary is here in case we will want to parse new date formats
@@ -79,7 +79,7 @@ class Article:
     This class will represent scrapped data from articles and put them in an Article object
     the properties are:
     link- the link of the article the scrapping is done from
-    make sure that the website allows scrapping first
+    make sure that the website allows scrapping first because some are forbidden to scrap from
     title: the main title of the article
     date: the date the article was published
     website: the name of the website (without TLD such as .com)
@@ -99,11 +99,9 @@ class Article:
         self.website = get_website_name(link)
         self.date = parse_date(self.extract_date())
 
-        text=self.extract_article_content()
+        text=self.extract_article_description()
         try:
             self.sentiment,self.score=extract_sentiment(text)
-            print(self.sentiment)
-            print(self.score)
             #Watson can fail because the text is too short, or if there are invalid characters, 
             #or if just doesn't feel like it. In any case, here is a default value
         except:
@@ -128,6 +126,31 @@ class Article:
     # we don't know how to extract
         return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
+    def extract_article_body(self):
+
+        hebrew_pattern = re.compile(r'[\u0590-\u05FF\s]+')
+# Find elements containing Hebrew text in the body- the article itself
+        hebrew_elements = self.soup.body.find_all('span',text=hebrew_pattern,attrs={'data-text': 'true'})
+        extracted_text = ''.join([element.get_text() for element in hebrew_elements])
+        return extracted_text
+
+    def calculate_keyowrd_sum(self,intonation):
+        body=self.extract_article_body()
+        description=self.extract_article_description()
+        text=body+description
+        try:
+            keywords_in_article=find_keyword_in_text(text)
+            intonated_keywords=[keyword['sentiment']['score'] for keyword in keywords_in_article if keyword['sentiment']['label']==intonation]
+            return sum(intonated_keywords)
+        except:
+            return 0.0
+
+
+    def create_sentiment_score_rows(self):
+        date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
+        rows = [(self.link,self.sentiment,
+                 self.calculate_keyowrd_sum('negative'),self.calculate_keyowrd_sum('positive'),date_str,self.score)]
+        return rows
 
     def find_text_by_regex(self, regex):
         """
@@ -160,15 +183,11 @@ class Article:
         pattern = re.compile(r'\b{}\b'.format(re.escape(phrase)))
         return len(self.soup.find_all(string=pattern))
 
+    
 
-
-
-
-
-    def extract_article_content(self):
+    def extract_article_description(self):
         meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
-        content_description=meta_tag["content"] if meta_tag is not None else ''
-        print(content_description)          
+        content_description=meta_tag["content"] if meta_tag is not None else ''        
         return content_description    
 
     def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):

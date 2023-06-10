@@ -22,8 +22,51 @@ app.use(cookieParser())
 
 let userDB: typeof import("mongoose");
 
+
+//added the format here in addition to the test
+//link,overall_sentiment, sum_negative_keywords,sum_positive_keywords,date,total_sentiment_score 
+//why do we need total_sentiment_score?
+//because sometimes there aren't keywords in the article that watson can recognize, so we need all of these
+// [
+//   [
+//     "https://www.ynet.co.il/news/article/hjg6zmupo#autoplay",
+//     "negative",
+//     "0.000",
+//     "1.770",
+//     "Thu, 01 Dec 2022 00:00:00 GMT",
+//     "-0.781"
+//   ]
+// ]
+
+app.get('/sentiment', async (req: Request, res: Response) => {
+  try {
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+
+    //if we reach here then we have a token and the user is logged in
+
+    //since wer'e using concurrent tables we have ids too
+    // const body={'table_id': table_id}
+    //body['table_id']
+    const api_response=await axios.post(consts.api_address+consts.sentiment_request,req.body)
+    
+    res.send({data: api_response.data});
+    //we need id to clear table
+    clearTable(req.body['table_id']);
+} catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+}
+
+
+
+
+});
+
 async function clearTable(table_id: string) {
   //We need the table id, to know which table to clear
+  //this deletes all relevant tables, including the sentiment analysis tables
   const body={'table_id': table_id}
   try {
     axios.post(
@@ -61,6 +104,9 @@ app.post('/query', async (req: Request, res: Response) => {
     if(api_response.data)
     {
       var table_id=api_response.data
+      //TODO: add this line
+      //const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+table_id);
+      //I am leaving the use of this data up to you
       const results = await client.query('SELECT * FROM Articles'+table_id);
       res.status(200).send({data: results.rows}).end();
       clearTable(table_id);
@@ -109,6 +155,9 @@ try{
     {
       var table_id=api_response.data
       console.log(table_id)
+      //TODO: add this line
+      //const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+table_id);
+      //I am leaving the use of this data up to you
       const results = await client.query('SELECT * FROM Articles'+table_id);
       res.status(200).send({data: results.rows}).end();
       clearTable(table_id);
@@ -131,22 +180,7 @@ try{
 }
 });
 
-//we aren't using this anyway, and I need id to clear table
-// app.get('/rows', async (req: Request, res: Response) => {
-//   try {
-//     const token = protectedRoute(req, res);
-//     if(token === consts.ERROR_401 || typeof(token) === "string")
-//       return;
-  
-//     //if we reach here then we have a token and the user is logged in
-//     const results = await client.query('SELECT * FROM "public"."articles"');
-//     res.send({data: results.rows});
-//     clearTable();
-// } catch (err) {
-//     console.log(err);
-//     res.status(500).send(err);
-// }
-// });
+
 
 app.post('/login', async (req: Request, res: Response) => {
   loginRoute(req, res);

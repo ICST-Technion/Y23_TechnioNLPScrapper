@@ -113,11 +113,17 @@ def parse_google_search_query(query):
 app = Flask(__name__)
 
 
-# @app.route('/rows', methods=['POST'])
-# def default_select_table():
-#     select_all = SQLQuery()
-#     table = select_all.select_articles_from_sql()
-#     return make_response(jsonify(results=table), 200)
+@app.route('/sentiment', methods=['POST'])
+def get_sentiment_rows():
+    query = SQLQuery()
+    #which table do we clear:
+    table_id=request.json.get('table_id', "")
+    rows=""
+    if table_id!="":
+        rows=query.select_articles_from_sql(id=table_id,table_name="ArticleSentiment")    
+    return jsonify(rows)
+
+
 
 
 @app.route('/clear', methods=['POST'])
@@ -160,8 +166,10 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 rows_to_add=article_info.create_rows_to_database(keywords_intonation_list,
                 phrase_intonation_list,
                 category)
+                sentiment_row_to_add=article_info.create_sentiment_score_rows()
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add,table_id)
+                insert_query.insert_article_intonation_analysis_sql(sentiment_row_to_add,table_id)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
 
