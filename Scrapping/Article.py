@@ -149,7 +149,7 @@ class Article:
     def create_sentiment_score_rows(self):
         date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
         rows = [(self.link,self.sentiment,
-                 self.calculate_keyowrd_sum('negative'),self.calculate_keyowrd_sum('positive'),date_str)]
+                 self.calculate_keyowrd_sum('negative'),self.calculate_keyowrd_sum('positive'),date_str,self.score)]
         return rows
 
     def find_text_by_regex(self, regex):

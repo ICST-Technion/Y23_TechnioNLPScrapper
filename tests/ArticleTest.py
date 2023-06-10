@@ -63,7 +63,17 @@ class ArticleTests(unittest.TestCase):
         link='https://www.ynet.co.il/news/article/syy1t11tb3'
         article = Article(link)
         self.assertGreater(len(article.extract_article_body()),0)
-
+    def test_article_sentiment_rows(self):
+        link='https://www.ynet.co.il/news/article/rkltcsbvn#autoplay'
+        article = Article(link)
+        rows=article.create_sentiment_score_rows()
+        print(f"the link of the article: {rows[0][0]}")
+        print(f"the overall sentiment: {rows[0][1]}")
+        print(f"the sum of negative keywords: {rows[0][2]}")
+        print(f"the sum of positive keywords: {rows[0][3]}")
+        print(f"the date of the article: {rows[0][4]}")
+        print(f"the total score of the article: {rows[0][5]}")
+        self.assertGreater(len(rows),0)
 
 if __name__ == '__main__':
     unittest.main()

@@ -113,6 +113,16 @@ def parse_google_search_query(query):
 app = Flask(__name__)
 
 
+@app.route('/sentiment', methods=['POST'])
+def get_sentiment_rows():
+    query = SQLQuery()
+    #which table do we clear:
+    table_id=request.json.get('table_id', "")
+    rows=""
+    if table_id!="":
+        rows=query.select_articles_from_sql(id=table_id,table_name="ArticleSentiment")    
+    return jsonify(rows)
+
 
 
 
