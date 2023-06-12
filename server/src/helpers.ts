@@ -10,6 +10,19 @@ export class DBerr {
     }
 }
 
+export const redircetError = (err: any, res: Response, message: string) => {
+    console.log(message);
+    console.log(err);
+    if(err.response){
+      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
+    }
+    else{
+      res.status(err.status? err.status : 500).send(err.message? err.message : err);
+    }
+
+    return;
+}
+
 export const setErrorResponse = (status:number, message:string, res: Response) => {
 
     res.status(status)

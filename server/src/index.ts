@@ -6,7 +6,7 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
 import { loginRoute, signupRoute } from './user_management/authentication.js';
-import { setErrorResponse } from './helpers.js';
+import { redircetError, setErrorResponse } from './helpers.js';
 import { protectedRoute } from './user_management/authorization.js';
 import cookieParser from 'cookie-parser'
 dotenv.config();
@@ -38,40 +38,52 @@ let userDB: typeof import("mongoose");
 //   ]
 // ]
 
-app.get('/sentiment', async (req: Request, res: Response) => {
+app.get('/sentiment/:id', async (req: Request, res: Response) => {
   try {
     const token = protectedRoute(req, res);
     if(token === consts.ERROR_401 || typeof(token) === "string")
       return;
-
     //if we reach here then we have a token and the user is logged in
 
-    //since wer'e using concurrent tables we have ids too
-    // const body={'table_id': table_id}
-    //body['table_id']
-    const api_response=await axios.post(consts.api_address+consts.sentiment_request,req.body)
+    //table id is req.params.id
+    const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+req.params.id);
     
-    res.send({data: api_response.data});
-    //we need id to clear table
-    clearTable(req.body['table_id']);
-} catch (err) {
-    console.log(err);
-    res.status(500).send(err);
-}
+    res.status(200).send({data: sentiment_results.rows}).end();
+    clearTable("ArticleSentiment"+req.params.id);
 
+  } catch (err) {
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+    clearTable("ArticleSentiment"+req.params.id);
+  }
+});
 
+app.get('/fullResults/:id', async (req: Request, res: Response) => {
+  try {
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+    //if we reach here then we have a token and the user is logged in
 
+    //table id is req.params.id
+    const sentiment_results = await client.query('SELECT * FROM Articles'+req.params.id);
+    
+    res.status(200).send({data: sentiment_results.rows}).end();
+    clearTable("Articles"+req.params.id);
 
+  } catch (err) {
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN FULL RESULTS ----------");
+    clearTable("Articles"+req.params.id);
+  }
 });
 
 async function clearTable(table_id: string) {
-  //We need the table id, to know which table to clear
-  //this deletes all relevant tables, including the sentiment analysis tables
-  const body={'table_id': table_id}
+  //We need the table id, to know which table to clear/delete
+  //table_id is a string that includes the table name and the specific transaction id
+  //for example: "Articles142857"
+
   try {
-    axios.post(
-      consts.api_address+consts.clear_request,
-      body
+    axios.delete(
+      consts.api_address+consts.clear_table_request+"/"+table_id,
      ).then((response:AxiosResponse)=>console.log(response.data));
   } catch (error) {
     console.error(error);
@@ -88,44 +100,19 @@ app.post('/query', async (req: Request, res: Response) => {
    var api_response=await axios.post(consts.api_address+consts.query_request,req.body)
   }
   catch(err){
-    console.log(" --------- ERROR IN QUERY API CALL ---------");
-    console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-
+    redircetError(err, res, " --------- ERROR IN QUERY API CALL ---------");
     return;
   }
-  try{
-    //we have a table_id in the response to work with
-    if(api_response.data)
-    {
-      var table_id=api_response.data
-      //TODO: add this line
-      //const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+table_id);
-      //I am leaving the use of this data up to you
-      const results = await client.query('SELECT * FROM Articles'+table_id);
-      res.status(200).send({data: results.rows}).end();
-      clearTable(table_id);
-    }
+  //we have a table_id in the response to work with
+  if(api_response.data)
+  {
+    var table_id=api_response.data
+    res.status(200).send({table_id:table_id}).end();
+  }
+  else {
+    setErrorResponse(500," --------- NO TABLE CREATED ---------", res);
+  }
     
-} catch (err) {
-  console.log(" ---------- ERROR IN DB QUERY AFTER QUERY ----------");
-  console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-    if(api_response.data)
-    {
-    clearTable(api_response.data);
-    }
-}
 });
 
 app.post('/advancedSearch', async (req: Request, res: Response) => {
@@ -138,46 +125,18 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
    var api_response= await axios.post(consts.api_address+consts.advanced_search_request,req.body)
   }
   catch(err){
-    console.log(" --------- ERROR IN ADVANCED SEARCH API CALL ---------");
-    console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-
+    redircetError(err, res," --------- ERROR IN ADVANCED SEARCH API CALL ---------");
     return;
   }
+  if(api_response.data)
+  {
+    var table_id=api_response.data
+    res.status(200).send({table_id:table_id}).end();
+  }
+  else {
+    setErrorResponse(500," --------- NO TABLE CREATED ---------", res);
+  }
 
-try{
-    if(api_response.data)
-    {
-      var table_id=api_response.data
-      console.log(table_id)
-      //TODO: add this line
-      //const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+table_id);
-      //I am leaving the use of this data up to you
-      const results = await client.query('SELECT * FROM Articles'+table_id);
-      res.status(200).send({data: results.rows}).end();
-      clearTable(table_id);
-    }
-    
-
-} catch (err) {
-  console.log(" ---------- ERROR IN DB QUERY AFTER ADVANCED SEARCH ----------");
-  console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-    if(api_response.data)
-    {
-    clearTable(api_response.data);
-    }
-}
 });
 
 

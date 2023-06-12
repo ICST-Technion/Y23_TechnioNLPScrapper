@@ -133,3 +133,11 @@ class SQLQuery:
         self.execute_query(clear_query)
         clear_sentiment_query = "DROP TABLE ArticleSentiment"+str(table_id)
         self.execute_query(clear_sentiment_query)
+
+    def delete_specific_table(self,table_name):
+        """
+        clears all records from the table and removes it permenantly
+        unlike TRUNCATE 
+        """
+        clear_query = "DROP TABLE "+str(table_name)
+        self.execute_query(clear_query)

@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
-import { cookie, copy, getLanguage, randomIntFromInterval } from "../../../Helpers/helpers";
+import { basicAxiosInstance, cookie, copy, getLanguage, randomIntFromInterval } from "../../../Helpers/helpers";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
@@ -70,7 +70,14 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const getData = async () => {
     try {
       const req = await axiosPromise!;
-      let data = req.data.data;
+      let data;
+      let table_id = req.data.table_id;
+      if(table_id) {
+        const r = await basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id})
+        const f = await basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})
+        console.log(f.data.data);
+        data = r.data.data;
+      }
       setDatasets(data);
       console.log(data);
       setLoading(false);

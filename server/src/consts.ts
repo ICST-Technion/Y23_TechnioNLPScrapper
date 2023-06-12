@@ -15,5 +15,7 @@ export const USER = "user";
 export const query_request='/query'
 export const advanced_search_request='/advancedSearch'
 export const clear_request='/clear'
+export const clear_table_request='/delete'
 export const sentiment_request='/sentiment'
 export const api_address='https://technionlpapi.onrender.com'
+//export const api_address='http://localhost:10000'
