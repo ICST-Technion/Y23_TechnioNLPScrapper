@@ -52,8 +52,27 @@ app.get('/sentiment/:id', async (req: Request, res: Response) => {
     clearTable("ArticleSentiment"+req.params.id);
 
   } catch (err) {
-      console.log(err);
-      res.status(500).send(err);
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+    clearTable("ArticleSentiment"+req.params.id);
+  }
+});
+
+app.get('/fullResults/:id', async (req: Request, res: Response) => {
+  try {
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+    //if we reach here then we have a token and the user is logged in
+
+    //table id is req.params.id
+    const sentiment_results = await client.query('SELECT * FROM Articles'+req.params.id);
+    
+    res.status(200).send({data: sentiment_results.rows}).end();
+    clearTable("Articles"+req.params.id);
+
+  } catch (err) {
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN FULL RESULTS ----------");
+    clearTable("Articles"+req.params.id);
   }
 });
 
@@ -91,20 +110,16 @@ app.post('/query', async (req: Request, res: Response) => {
     if(api_response.data)
     {
       var table_id=api_response.data
-      //TODO: add this line
-      //const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+table_id);
-      //I am leaving the use of this data up to you
       const results = await client.query('SELECT * FROM Articles'+table_id);
-      res.status(200).send({data: results.rows}).end();
+      res.status(200).send({data: results.rows, table_id:table_id}).end();
       clearTable("Articles"+table_id);
-
     }
     
 } catch (err) {
   redircetError(err, res," ---------- ERROR IN DB QUERY AFTER QUERY ----------");
     if(api_response.data)
     {
-  clearTable(api_response.data);
+    clearTable(api_response.data);
     return;
     }
 }
@@ -129,11 +144,8 @@ try{
     {
       var table_id=api_response.data
       console.log(table_id)
-      //TODO: add this line
-      //const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+table_id);
-      //I am leaving the use of this data up to you
       const results = await client.query('SELECT * FROM Articles'+table_id);
-      res.status(200).send({data: results.rows}).end();
+      res.status(200).send({data: results.rows, table_id:table_id}).end();
       clearTable("Articles"+table_id);
     }
     
