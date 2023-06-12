@@ -103,24 +103,16 @@ app.post('/query', async (req: Request, res: Response) => {
     redircetError(err, res, " --------- ERROR IN QUERY API CALL ---------");
     return;
   }
-  try{
-    //we have a table_id in the response to work with
-    if(api_response.data)
-    {
-      var table_id=api_response.data
-      const results = await client.query('SELECT * FROM Articles'+table_id);
-      res.status(200).send({data: results.rows, table_id:table_id}).end();
-      clearTable("Articles"+table_id);
-    }
+  //we have a table_id in the response to work with
+  if(api_response.data)
+  {
+    var table_id=api_response.data
+    res.status(200).send({table_id:table_id}).end();
+  }
+  else {
+    setErrorResponse(500," --------- NO TABLE CREATED ---------", res);
+  }
     
-} catch (err) {
-  redircetError(err, res," ---------- ERROR IN DB QUERY AFTER QUERY ----------");
-    if(api_response.data)
-    {
-    clearTable(api_response.data);
-    return;
-    }
-}
 });
 
 app.post('/advancedSearch', async (req: Request, res: Response) => {
@@ -136,26 +128,15 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
     redircetError(err, res," --------- ERROR IN ADVANCED SEARCH API CALL ---------");
     return;
   }
+  if(api_response.data)
+  {
+    var table_id=api_response.data
+    res.status(200).send({table_id:table_id}).end();
+  }
+  else {
+    setErrorResponse(500," --------- NO TABLE CREATED ---------", res);
+  }
 
-try{
-    if(api_response.data)
-    {
-      var table_id=api_response.data
-      console.log(table_id)
-      const results = await client.query('SELECT * FROM Articles'+table_id);
-      res.status(200).send({data: results.rows, table_id:table_id}).end();
-      clearTable("Articles"+table_id);
-    }
-    
-
-} catch (err) {
-  redircetError(err, res," ---------- ERROR IN DB QUERY AFTER ADVANCED SEARCH ----------");
-    if(api_response.data)
-    {
-    clearTable(api_response.data);
-    return;
-    }
-}
 });
 
 
