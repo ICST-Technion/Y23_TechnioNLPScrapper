@@ -54,6 +54,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 }) => {
   const language = getLanguage();
   const [loading, setLoading] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState("Scrapping and Analyzing Data...");
   const [showResult, setShowResult] = React.useState(false);
   const [datasets, setDatasets] = React.useState<any[]>([]);
   const [merged, setMerged] = React.useState<any[]>([]);
@@ -65,23 +66,34 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   timeFrameLimits.set("month", getStartOf10thPreviousMonth());
   timeFrameLimits.set("year", getStartOf10thPreviousYear());
   /*
-   * This function gets the data from the server, and sets the datasets state
+   * This function sets up the data from the server, and sets the datasets state
    */
-  const getData = async () => {
+  const startAnalysis = async () => {
     try {
       const req = await axiosPromise!;
-      let data;
       let table_id = req.data.table_id;
-      if(table_id) {
-        const r = await basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id})
-        const f = await basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})
-        console.log(f.data.data);
-        data = r.data.data;
+      return table_id;
+    } catch (err: any) {
+      if (err && err.response && err.response.status === 401)
+      {
+         alert(SESSION_EXPIRE[language]);
+         cookie.remove("token");
+         window.location.reload();
       }
+      alert(err.response.data? err.response.data.statusText : err)
+      setPageNumber(MAIN_SEARCH_PAGE);
+    }
+  };
+
+  const getData = async (table_id: string) => {
+    try {
+      setLoadingMessage("Loading Analysis and Graphs...");
+      const r = await basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id})
+      const f = await basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})
+      console.log(r.data.data);
+      console.log(f.data.data);
+      let data = r.data.data;
       setDatasets(data);
-      console.log(data);
-      setLoading(false);
-      setTimeout(() => {setShowResult(true)}, 1000)
       if (data.length > 0) setMerged(mergeKeywords(data));
     } catch (err: any) {
       if (err && err.response && err.response.status === 401)
@@ -90,16 +102,26 @@ export const BaseResults: React.FC<baseResultsProps> = ({
          cookie.remove("token");
          window.location.reload();
       }
-      alert(err);
+      alert(err)
       setPageNumber(MAIN_SEARCH_PAGE);
     }
   };
 
+  const endLoading = () => {
+    setLoading(false);
+    setTimeout(() => {setShowResult(true)}, 2000);
+  };
+
   // get the data from server on page load async and start loading screen
   React.useEffect(() => {
-    getData();
     setLoading(true);
     setShowResult(false);
+
+    startAnalysis().then((table_id) => {
+      if(table_id) 
+        getData(table_id)
+        .then(() => {endLoading()})
+      });
   }, []);
 
   // print datasets onto the console for testing/viewing
@@ -284,7 +306,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 const getLoadingOrPage = () => {
   if(!showResult)
     {
-      return <LoadingComponent isAnimating={loading}/>
+      return <LoadingComponent isAnimating={loading} message={loadingMessage}/>
     }
   else {
     return(
