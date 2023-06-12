@@ -8,10 +8,16 @@ export const WELCOME = ["Welcome!", "!ברוכים הבאים"]
 export const SIGNIN = ["Please Sign In to Continue", "בבקשה להתחבר כדי להמשיך לאתר"]
 export const FORGOTPASSWORD = ["Forgot password? Contact an admin","שכחת את הסיסמא? פנה למנהל" ]
 export const SIGNINN = ["Sign In", "התחבר"]
+export const USERNAME_EMAIL = ["Username or Email Address", "שם משתמש או כתובת דואר אלקטרוני"]
 
 //SIGNUP
 export const USERNAME_VALIDATION_ERROR = ["Username must be at least 4 characters", "שם המשתמש חייב להיות בן 4 תווים לפחות"]
 export const SUCCESSFUL_SIGN_UP = ["Account created successfully!","!החשבון נוצר בהצלחה"]
+export const REGISTER_ACCOUNT = ["Register a New Account", "יצירת חשבון חדש"]
+export const SIGNUP = ["Sign Up", "הירשם"]
+export const EMAILADRESS = ["Email Address", "כתובת דואר אלקטרוני"]
+export const USERNAME = ["Username", "שם משתמש"]
+export const PASSWORD = ["Password", "סיסמה"]
 
 //SearchPage
 export const FAQS = ["FAQs", "שאלות נפוצות"]
@@ -19,12 +25,12 @@ export const RUN = ["Run", "הרץ"]
 export const ADVANCED_SEARCH_OPTIONS = ["Advanced Search Options","אפשרויות חיפוש מתקדמות"]
 
 //advancedSearchComponent
-export const EXCLUDED_KEYWORDS = ["included keywords", "מילים כלולות"]
-export const EXCLUDE_KEYWORDS = ["exclude keywords", "מילים לא כלולות"]
+export const EXCLUDED_KEYWORDS = ["included keywords", "מילים נכללות"]
+export const EXCLUDE_KEYWORDS = ["exclude keywords", "מילים לא נכללות"]
 export const POSITIVE_KEYWORDS = ["Positive Keywords", "מילים חיוביות"]
 export const NEGATIVE_KEYWORDS = ["Negative Keywords", "מילים שליליות"]
-export const SPECIFY_WEBSITES = ["Specify Websites", "אתרים כלולות"]
-export const EXCLUDE_WEBSITES = ["Exclude Websites", "אתרים לא כלולות"]
+export const SPECIFY_WEBSITES = ["Specify Websites", "אתרים נכללים"]
+export const EXCLUDE_WEBSITES = ["Exclude Websites", "אתרים לא נכללים"]
 export const TIME_RANGE = ["Time Range","טווח זמן"]
 export const CLEAR = ["Clear", "נקה"]
 export const GO_BACK = ["go back", "חזור"]
@@ -37,6 +43,7 @@ export const ADVANCED_SEARCH_TUT = ["You can use this button to get redirected t
 export const RUN_TUT = ["You can use this button run the query", "תוכל להשתמש בלחצן זה להפעיל את השאילתה"]
 export const HELLO = ["Hello, ", "!שלום ,"]
 export const LANGUAGE_TUT = ["You can use this button to change the language", "תוכל להשתמש בלחצן זה כדי לשנות את השפה"]
+
 //searchComponnent 
 export const SEARCH_BAR_INFO = ["Search Keywords Separated by Space", "חפש מילות מפתח מופרדות ברווח"]
 export const SEARCH_BAR_VALIDATION =["At Least One Keyword is Required", "דרושה לפחות מילת מפתח אחת"]
@@ -55,7 +62,34 @@ export const ANSWER5= ['Yes, You will always see the most up-to-date information
 
 //BaseResults
 export const SESSION_EXPIRE = ['Session Expired, Please log in again', " החיבור פג תוקף, נא להיכנס שוב"]
+export const NODATA = ["no data", "אין מידע"]
+export const INTONATION = ["intonation", "אינטונציה"]
+export const NEGATIVE_INTONATION = ["negative intonation", "אינטונציה שלילית"]
+export const POSITIVE_INTONATION = ["positive intonation", "אינטונציה חיובית"]
+export const NEUTRAL_INTONATION = ["neutral intonation", "אינטונציה ניטרלית"]
+export const KEYWORD_WEBSITE_GRAPH = ["Keyword-Website Graph", "גרף מילות מפתח-אתר"]
+export const INTONATION_SUMMARY_GRAPH = ["Intonation Summary Graph", "גרף סיכום אינטונציה"]
+export const TIMED_INTONATION_GRAPH = ["Timed Intonation Graph", "גרף אינטונציה לפי זמן"]
+export const BASIC_TABS_EXAMPLE = ["basic tabs example", "דוגמה לכרטיסיות בסיסיות"]
+export const NEGATIVE = ["negative", "שלילי"]
+export const POSITIVE = ["positive", "חיובי"]
+export const NEUTRAL = ["neutral", "ניטראלי"]
+
 
 //App
 export const SINGOUT = ["Sign Out", "התנתק"]
 export const REGISTER = ["register new user", "הוספת משתמש חדש"]
+
+//Time Range
+export const SELECTTIME = ["Select Time Range", "בחר טווח זמן"]
+export const TODAY = ["Today", "היום"]
+export const YESTERDAY = ["Yesterday", "אתמול"]
+export const THISWEEK = ["This week", "השבוע"]
+export const LAST_7_DAYS = ["Last 7 days", "שבעה ימים אחרונים"]
+export const LAST_30_DAYS = ["Last 30 days", "שלושים ימים אחרונים"]
+export const LASTWEEK = ["Last week", "שבוע שעבר"]
+export const THISMONTH = ["This month", "החודש"]
+export const LASTMONTH = ["Last month", "חודש שעבר"]
+export const THISYEAR = ["This year", "השנה"]
+export const LASTYEAR = ["Last year", "שנה שעברה"]
+export const ALLTIME = ["All time", "כל הזמן"]

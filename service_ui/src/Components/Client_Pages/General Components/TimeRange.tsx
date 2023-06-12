@@ -12,6 +12,7 @@ import { RangeType } from "rsuite/esm/DateRangePicker";
 import { Typography } from "@mui/material";
 import { getLanguage } from "../../../Helpers/helpers";
 import { ENGLISH } from "../../../Helpers/consts";
+import { ALLTIME, LASTMONTH, LASTWEEK, LASTYEAR, LAST_30_DAYS, LAST_7_DAYS, SELECTTIME, THISMONTH, THISWEEK, THISYEAR, TODAY, YESTERDAY } from "../../../Helpers/texts";
 
 export interface timeRangeProps {
   text: string;
@@ -24,6 +25,7 @@ export const TimeRange: React.FC<timeRangeProps> = ({
   timeRange,
   setTimeRange,
 }) => {
+  const language = getLanguage();
   const ID = 1;
   const { afterToday } = DateRangePicker;
 
@@ -32,31 +34,31 @@ export const TimeRange: React.FC<timeRangeProps> = ({
    */
   const predefinedRanges: RangeType[] = [
     {
-      label: "Today",
+      label: TODAY[language],
       value: [new Date(), new Date()],
       placement: "left",
     },
     {
-      label: "Yesterday",
+      label: YESTERDAY[language],
       value: [addDays(new Date(), -1), addDays(new Date(), -1)],
       placement: "left",
     },
     {
-      label: "This week",
+      label: THISWEEK[language],
       value: [startOfWeek(new Date()), new Date()],
     },
     {
-      label: "Last 7 days",
+      label: LAST_7_DAYS[language],
       value: [subDays(new Date(), 6), new Date()],
       placement: "left",
     },
     {
-      label: "Last 30 days",
+      label: LAST_30_DAYS[language],
       value: [subDays(new Date(), 29), new Date()],
       placement: "left",
     },
     {
-      label: "Last week",
+      label: LASTWEEK[language],
       closeOverlay: false,
       placement: "left",
       value: (value: any) => {
@@ -68,11 +70,11 @@ export const TimeRange: React.FC<timeRangeProps> = ({
       },
     },
     {
-      label: "This month",
+      label: THISMONTH[language],
       value: [startOfMonth(new Date()), new Date()],
     },
     {
-      label: "Last month",
+      label: LASTMONTH[language],
       value: [
         startOfMonth(addMonths(new Date(), -1)),
         endOfMonth(addMonths(new Date(), -1)),
@@ -80,11 +82,11 @@ export const TimeRange: React.FC<timeRangeProps> = ({
       placement: "left",
     },
     {
-      label: "This year",
+      label: THISYEAR[language],
       value: [new Date(new Date().getFullYear(), 0, 1), new Date()],
     },
     {
-      label: "Last year",
+      label: LASTYEAR[language],
       value: [
         new Date(new Date().getFullYear() - 1, 0, 1),
         new Date(new Date().getFullYear(), 0, 0),
@@ -92,7 +94,7 @@ export const TimeRange: React.FC<timeRangeProps> = ({
       placement: "left",
     },
     {
-      label: "All time",
+      label: ALLTIME[language],
       value: [new Date(new Date().getFullYear() - 32, 0, 1), new Date()],
       placement: "left",
     },
@@ -102,7 +104,7 @@ export const TimeRange: React.FC<timeRangeProps> = ({
     return (
       <div style={{ marginLeft: "-3vw" }}>
         <DateRangePicker
-          placeholder="Select Time Range"
+          placeholder={SELECTTIME[language]}
           onChange={(range) => {
             if (range) setTimeRange([range![0], range![1]]);
           }}
@@ -119,7 +121,7 @@ export const TimeRange: React.FC<timeRangeProps> = ({
       </div>
     );
   };
-  const language = getLanguage();
+  
   if(language == ENGLISH){
   return (
     <div className="button-pop-component time">

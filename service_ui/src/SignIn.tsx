@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
-import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN } from './Helpers/texts';
+import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN, PASSWORD, USERNAME_EMAIL } from './Helpers/texts';
 import { getLanguage } from './Helpers/helpers';
 
 export interface SignInProps {
@@ -103,7 +103,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               required
               fullWidth
               id="email"
-              label="Username or Email Address"
+              label={USERNAME_EMAIL[language]}
               name="email"
               autoComplete="email"
               autoFocus
@@ -113,7 +113,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={PASSWORD[language]}
               type="password"
               id="password"
               autoComplete="current-password"
