@@ -6,7 +6,7 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
 import * as consts from "./consts.js"
 import { connectToDB } from './user_management/DBfunctions.js';
 import { loginRoute, signupRoute } from './user_management/authentication.js';
-import { setErrorResponse } from './helpers.js';
+import { redircetError, setErrorResponse } from './helpers.js';
 import { protectedRoute } from './user_management/authorization.js';
 import cookieParser from 'cookie-parser'
 dotenv.config();
@@ -44,31 +44,18 @@ app.post('/query', async (req: Request, res: Response) => {
    await axios.post(consts.api_address+consts.query_request,req.body)
   }
   catch(err){
-    console.log(" --------- ERROR IN QUERY API CALL ---------");
-    console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-
+    redircetError(err, res, " --------- ERROR IN QUERY API CALL ---------");
     return;
   }
   try{
     const results = await client.query('SELECT * FROM "public"."articles"');
     res.status(200).send({data: results.rows}).end();
     clearTable();
+
 } catch (err) {
-  console.log(" ---------- ERROR IN DB QUERY AFTER QUERY ----------");
-  console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-    clearTable();
+  redircetError(err, res," ---------- ERROR IN DB QUERY AFTER QUERY ----------");
+  clearTable();
+    return;
 }
 });
 
@@ -82,15 +69,7 @@ app.post('/advancedSearch', async (req: Request, res: Response) => {
     await axios.post(consts.api_address+consts.advanced_search_request,req.body)
   }
   catch(err){
-    console.log(" --------- ERROR IN ADVANCED SEARCH API CALL ---------");
-    console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
-
+    redircetError(err, res," --------- ERROR IN ADVANCED SEARCH API CALL ---------");
     return;
   }
 
@@ -100,15 +79,9 @@ try{
     clearTable();
 
 } catch (err) {
-  console.log(" ---------- ERROR IN DB QUERY AFTER ADVANCED SEARCH ----------");
-  console.log(err);
-    if(err.response){
-      res.status(err.response.status).send({statusText: err.response.statusText, data: err.response.data});
-    }
-    else{
-      res.status(err.status? err.status : 500).send(err.message? err.message : err);
-    }
+  redircetError(err, res," ---------- ERROR IN DB QUERY AFTER ADVANCED SEARCH ----------");
     clearTable();
+    return;
 }
 });
 
