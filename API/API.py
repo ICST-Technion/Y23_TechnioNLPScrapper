@@ -124,7 +124,15 @@ def get_sentiment_rows():
     return jsonify(rows)
 
 
+@app.route('/delete/:id', methods=['DELETE'])
+def delete_table():
 
+    clear_query = SQLQuery()
+    #which table do we clear:
+    table_id=request.parameter_storage_class.get('id', "")
+    if table_id!="":
+        clear_query.delete_specific_table(table_id=table_id)
+    return make_response("table deleted", 200)
 
 @app.route('/clear', methods=['POST'])
 def clear_table():

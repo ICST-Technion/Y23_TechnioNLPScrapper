@@ -81,11 +81,9 @@ async function clearTable(table_id: string) {
   //table_id is a string that includes the table name and the specific transaction id
   //for example: "Articles142857"
 
-  const body={'table_id': table_id}
   try {
-    axios.post(
-      consts.api_address+consts.clear_request,
-      body
+    axios.delete(
+      consts.api_address+consts.clear_table_request+"/"+table_id,
      ).then((response:AxiosResponse)=>console.log(response.data));
   } catch (error) {
     console.error(error);
