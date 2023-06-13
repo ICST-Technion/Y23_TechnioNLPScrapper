@@ -162,6 +162,14 @@ app.post('/register', async (req: Request, res: Response) => {
 });
 
 app.get('/autoLogin', async (req: Request, res: Response) => {
+
+  //generally this will be on first page load
+  //send a message to wake up the API server
+
+  //we dont care to await the response
+  axios.get(consts.api_address+"/fakeRoute").then().catch((err: any) => {});
+
+
   const token = protectedRoute(req, res);
   if(token === consts.ERROR_401 || typeof(token) === "string"){
     return;

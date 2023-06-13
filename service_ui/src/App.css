@@ -579,3 +579,16 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
 .loading-bar span{
   background-color: #9d9af7 !important;
 }
+
+.loading-message{
+  position:absolute !important;
+  top: 57vh !important;
+  text-align: center;
+}
+
+.loading-container{
+  height: 53vh;
+  display: flex !important;
+  justify-content: center;
+  align-items: end;
+}

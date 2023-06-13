@@ -54,35 +54,38 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 }) => {
   const language = getLanguage();
   const [loading, setLoading] = React.useState(false);
+  const [loadingMessage, setLoadingMessage] = React.useState("Scrapping and Analyzing Data...");
   const [showResult, setShowResult] = React.useState(false);
+
+  // this is the dataset that includes everything, split by keyword and article
   const [datasets, setDatasets] = React.useState<any[]>([]);
+
+  //this dataset is one that focuses on article, date and its overall intonation
+  const [articleIntonationDataset, setArticleIntonationDataset] = React.useState<any[]>([]);
+
+  // merged datasets is the datasets merged by keyword and website, wont be needed when we this in the backend
   const [merged, setMerged] = React.useState<any[]>([]);
+
   const [value, setValue] = React.useState(0);
-  const [timeFrame, setTimeFrame] = React.useState<unitType>("week");
+
+  // helpers needed for the time graph
+  const [dataByScore, setDataByScore] = React.useState<boolean>(false);
+  const [timeFrame, setTimeFrame] = React.useState<unitType>("week")
   const timeFrameLimits = new Map<unitType, string>();
   timeFrameLimits.set("day", getDate10DaysAgo());
   timeFrameLimits.set("week", getStartOf10thPreviousWeek());
   timeFrameLimits.set("month", getStartOf10thPreviousMonth());
   timeFrameLimits.set("year", getStartOf10thPreviousYear());
+
+
   /*
-   * This function gets the data from the server, and sets the datasets state
+   * This function sets up the data from the server, and sets the datasets state
    */
-  const getData = async () => {
+  const startAnalysis = async () => {
     try {
       const req = await axiosPromise!;
-      let data;
       let table_id = req.data.table_id;
-      if(table_id) {
-        const r = await basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id})
-        const f = await basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})
-        console.log(f.data.data);
-        data = r.data.data;
-      }
-      setDatasets(data);
-      console.log(data);
-      setLoading(false);
-      setTimeout(() => {setShowResult(true)}, 1000)
-      if (data.length > 0) setMerged(mergeKeywords(data));
+      return table_id;
     } catch (err: any) {
       if (err && err.response && err.response.status === 401)
       {
@@ -90,22 +93,66 @@ export const BaseResults: React.FC<baseResultsProps> = ({
          cookie.remove("token");
          window.location.reload();
       }
-      alert(err);
+      alert(err.response?.data? err.response.data.statusText : err)
       setPageNumber(MAIN_SEARCH_PAGE);
     }
   };
 
+  const getData = async (table_id: string) => {
+    try {
+      setLoadingMessage("Loading Analysis and Graphs...");
+
+      //request data from DB
+      const [dataReq, intonationDataReq] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
+      basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})])
+
+      // print them for local testing, can delete this later
+      console.log(dataReq.data.data);
+      console.log(intonationDataReq.data.data);
+
+      //save the datasets
+      const data = dataReq.data.data;
+      const intonationData = intonationDataReq.data.data;
+      setDatasets(data);
+      setArticleIntonationDataset(intonationData);
+      
+      //if we have data, merge them by keywords
+      if (data.length > 0) setMerged(mergeKeywords(data));
+    
+    } catch (err: any) {
+      if (err && err.response && err.response.status === 401)
+      {
+         alert(SESSION_EXPIRE[language]);
+         cookie.remove("token");
+         window.location.reload();
+      }
+
+      if(err.response?.data?.includes("does not exist"))
+      {
+        return;
+      }
+
+      alert(err.response?.data? err.response.data : err)
+      setPageNumber(MAIN_SEARCH_PAGE);
+    }
+  };
+
+  const endLoading = () => {
+    setLoading(false);
+    setTimeout(() => {setShowResult(true)}, 2000);
+  };
+
   // get the data from server on page load async and start loading screen
   React.useEffect(() => {
-    getData();
     setLoading(true);
     setShowResult(false);
-  }, []);
 
-  // print datasets onto the console for testing/viewing
-  React.useEffect(() => {
-    console.log(datasets);
-  }, [datasets]);
+    startAnalysis().then((table_id) => {
+      if(table_id) 
+        getData(table_id)
+        .then(() => {endLoading()})
+      });
+  }, []);
 
   // register the chart.js plugins
   ChartJS.register(
@@ -152,7 +199,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           data: [
             countSumForType(
               datasets,
-              NEGATIVE[language],
+              "negative",
               positiveKeywords,
               negativeKeywords
             ),
@@ -165,7 +212,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           data: [
             countSumForType(
               datasets,
-              NEUTRAL[language],
+              "neutral",
               positiveKeywords,
               negativeKeywords
             ),
@@ -178,7 +225,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           data: [
             countSumForType(
               datasets,
-              POSITIVE[language],
+              "positive",
               positiveKeywords,
               negativeKeywords
             ),
@@ -193,8 +240,12 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       datasets: websiteDatasets(merged),
     };
 
-    const timedData = {
-      datasets: createTimeIntonationSet(datasets, timeFrame),
+    const timedDataByCount = {
+      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame)[0],
+    };
+
+    const timedDataByScore = {
+      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame)[1],
     };
 
     // ------ END DATA SETUP ------ //
@@ -246,6 +297,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           </TabPanel>
 
           <TabPanel value={value} index={2}>
+              <Button onClick={() => setDataByScore((old) => !old)}>show the graph by {dataByScore? "Count" : "Score"}</Button>
               <Bar
                 datasetIdKey="trial"
                 className="fit"
@@ -265,7 +317,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                     },
                   },
                 }}
-                data={timedData}
+                data={dataByScore? timedDataByScore : timedDataByCount}
               />
               <Container className="timeFrames">
               <Button onClick={() => setTimeFrame("day")}>daily</Button>
@@ -284,7 +336,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 const getLoadingOrPage = () => {
   if(!showResult)
     {
-      return <LoadingComponent isAnimating={loading}/>
+      return <LoadingComponent isAnimating={loading} message={loadingMessage}/>
     }
   else {
     return(
