@@ -69,6 +69,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const [value, setValue] = React.useState(0);
 
   // helpers needed for the time graph
+  const [dataByScore, setDataByScore] = React.useState<boolean>(false);
   const [timeFrame, setTimeFrame] = React.useState<unitType>("week")
   const timeFrameLimits = new Map<unitType, string>();
   timeFrameLimits.set("day", getDate10DaysAgo());
@@ -296,6 +297,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           </TabPanel>
 
           <TabPanel value={value} index={2}>
+              <Button  onClick={() => setDataByScore((old) => !old)}>show the graph by {dataByScore? "Count" : "Score"}</Button>
               <Bar
                 datasetIdKey="trial"
                 className="fit"
@@ -315,7 +317,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                     },
                   },
                 }}
-                data={timedDataByCount}
+                data={dataByScore? timedDataByScore : timedDataByCount}
               />
               <Container className="timeFrames">
               <Button onClick={() => setTimeFrame("day")}>daily</Button>
