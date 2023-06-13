@@ -199,7 +199,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           data: [
             countSumForType(
               datasets,
-              NEGATIVE[language],
+              "negative",
               positiveKeywords,
               negativeKeywords
             ),
@@ -212,7 +212,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           data: [
             countSumForType(
               datasets,
-              NEUTRAL[language],
+              "neutral",
               positiveKeywords,
               negativeKeywords
             ),
@@ -225,7 +225,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           data: [
             countSumForType(
               datasets,
-              POSITIVE[language],
+              "positive",
               positiveKeywords,
               negativeKeywords
             ),
@@ -297,7 +297,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           </TabPanel>
 
           <TabPanel value={value} index={2}>
-              <Button  onClick={() => setDataByScore((old) => !old)}>show the graph by {dataByScore? "Count" : "Score"}</Button>
+              <Button onClick={() => setDataByScore((old) => !old)}>show the graph by {dataByScore? "Count" : "Score"}</Button>
               <Bar
                 datasetIdKey="trial"
                 className="fit"
