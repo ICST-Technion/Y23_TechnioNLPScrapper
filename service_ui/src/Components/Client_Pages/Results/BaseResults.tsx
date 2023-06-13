@@ -92,7 +92,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
          cookie.remove("token");
          window.location.reload();
       }
-      alert(err.response.data? err.response.data.statusText : err)
+      alert(err.response?.data? err.response.data.statusText : err)
       setPageNumber(MAIN_SEARCH_PAGE);
     }
   };
@@ -125,7 +125,13 @@ export const BaseResults: React.FC<baseResultsProps> = ({
          cookie.remove("token");
          window.location.reload();
       }
-      alert(err)
+
+      if(err.response?.data?.includes("does not exist"))
+      {
+        return;
+      }
+
+      alert(err.response?.data? err.response.data : err)
       setPageNumber(MAIN_SEARCH_PAGE);
     }
   };
@@ -233,8 +239,12 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       datasets: websiteDatasets(merged),
     };
 
-    const timedData = {
-      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame),
+    const timedDataByCount = {
+      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame)[0],
+    };
+
+    const timedDataByScore = {
+      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame)[1],
     };
 
     // ------ END DATA SETUP ------ //
@@ -305,7 +315,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                     },
                   },
                 }}
-                data={timedData}
+                data={timedDataByCount}
               />
               <Container className="timeFrames">
               <Button onClick={() => setTimeFrame("day")}>daily</Button>

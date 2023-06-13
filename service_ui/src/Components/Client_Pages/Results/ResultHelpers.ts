@@ -1,3 +1,4 @@
+import { da } from "date-fns/locale";
 import { copy, randomIntFromInterval } from "../../../Helpers/helpers";
 
 // set usefuls consts and types
@@ -167,36 +168,24 @@ function createIntonationMap(): IntonationMap {
   return map;
 }
 
-/*
-* create a new dataset grouped by time and intonation
-* @param dataset - the dataset to group
-* @param timeFrame - the time frame to group by: 'day', 'week', 'month' or 'year'
-* @returns a new dataset grouped by time and intonation
-*/
-export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => {
+function createTimeAndValueBasedSet(dataMap: IntonationMap, timeFrame: unitType, valueIndex: number, isScore: boolean = false) {
   let innerData = new Array(3);
   for (let i = 0; i < 3; i++) {
     innerData[i] = new Array();
   }
 
-  const dataMap = groupByTimeAndIntonation(dataset, timeFrame);
-  console.log("------------- group by intonation ---------------");
   dataMap.forEach((value, key) => {
     const intonation = key;
     const timePeriods = value;
     timePeriods.forEach((value, key) => {
       const timePeriod = key;
-      const count = value[0];
-      console.log("timePeriod: " + timePeriod);
-      console.log("value: " + value);
-      console.log("count: " + count);
-      const score = value[1]/count;
+      const yValue = isScore? value[valueIndex]/value[0]: value[valueIndex];
       if (intonation === "negative") {
-        innerData[NEGATIVE].push({ x: timePeriod, y: count });
+        innerData[NEGATIVE].push({ x: timePeriod, y: yValue });
       } else if (intonation === "neutral") {
-        innerData[NEUTRAL].push({ x: timePeriod, y: count });
+        innerData[NEUTRAL].push({ x: timePeriod, y: yValue });
       } else if (intonation === "positive") {
-        innerData[POSITIVE].push({ x: timePeriod, y: count });
+        innerData[POSITIVE].push({ x: timePeriod, y: yValue });
       } else {
         console.log(
           "not any of the normal intonations, my intonation is:" + intonation
@@ -205,9 +194,26 @@ export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => 
     });
   });
 
+  return innerData;
+
+}
+
+/*
+* create a new dataset grouped by time and intonation
+* @param dataset - the dataset to group
+* @param timeFrame - the time frame to group by: 'day', 'week', 'month' or 'year'
+* @returns a new dataset grouped by time and intonation
+*/
+export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => {
+
+  const dataMap = groupByTimeAndIntonation(dataset, timeFrame);
+  console.log("------------- group by intonation ---------------");
+  const dataByCount = createTimeAndValueBasedSet(dataMap, timeFrame, 0);
+  const dataByScore = createTimeAndValueBasedSet(dataMap, timeFrame, 1, true);
+
   let intonations = ["negative", "neutral", "positive"];
   let colors = ["(255,0,0,0.5)", "(0,0,255,0.5)", "(0,255,0,0.5)"];
-  let sets = innerData.map((dataset, idx) => {
+  let countSet = dataByCount.map((dataset, idx) => {
     return {
       id: idx,
       label: intonations[idx],
@@ -216,7 +222,17 @@ export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => 
     };
   });
 
-  return sets;
+
+  let scoreSet = dataByScore.map((dataset, idx) => {
+    return {
+      id: idx,
+      label: intonations[idx],
+      data: dataset,
+      backgroundColor: `rgba` + colors[idx],
+    };
+  }).filter((item) => item.id !== 1);
+
+  return [countSet, scoreSet];
 };
 
 /*
@@ -243,7 +259,7 @@ const groupByTimeAndIntonation = (
       ?.set(
         timePeriod,
         [(matrix.get(item.overall_sentiment)!.get(timePeriod)?.[0] || 0) + 1
-        , (matrix.get(item.overall_sentiment)!.get(timePeriod)?.[1] || 0) + item.total_score]
+        , (matrix.get(item.overall_sentiment)!.get(timePeriod)?.[1] || 0) + Math.abs(item.total_score)]
       );
   });
 
