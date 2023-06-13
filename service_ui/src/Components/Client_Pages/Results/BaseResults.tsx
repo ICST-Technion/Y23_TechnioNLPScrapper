@@ -56,15 +56,27 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const [loading, setLoading] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState("Scrapping and Analyzing Data...");
   const [showResult, setShowResult] = React.useState(false);
+
+  // this is the dataset that includes everything, split by keyword and article
   const [datasets, setDatasets] = React.useState<any[]>([]);
+
+  //this dataset is one that focuses on article, date and its overall intonation
+  const [articleIntonationDataset, setArticleIntonationDataset] = React.useState<any[]>([]);
+
+  // merged datasets is the datasets merged by keyword and website, wont be needed when we this in the backend
   const [merged, setMerged] = React.useState<any[]>([]);
+
   const [value, setValue] = React.useState(0);
-  const [timeFrame, setTimeFrame] = React.useState<unitType>("week");
+
+  // helpers needed for the time graph
+  const [timeFrame, setTimeFrame] = React.useState<unitType>("week")
   const timeFrameLimits = new Map<unitType, string>();
   timeFrameLimits.set("day", getDate10DaysAgo());
   timeFrameLimits.set("week", getStartOf10thPreviousWeek());
   timeFrameLimits.set("month", getStartOf10thPreviousMonth());
   timeFrameLimits.set("year", getStartOf10thPreviousYear());
+
+
   /*
    * This function sets up the data from the server, and sets the datasets state
    */
@@ -88,13 +100,24 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const getData = async (table_id: string) => {
     try {
       setLoadingMessage("Loading Analysis and Graphs...");
-      const r = await basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id})
-      const f = await basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})
-      console.log(r.data.data);
-      console.log(f.data.data);
-      let data = r.data.data;
+
+      //request data from DB
+      const [dataReq, intonationDataReq] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
+      basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})])
+
+      // print them for local testing, can delete this later
+      console.log(dataReq.data.data);
+      console.log(intonationDataReq.data.data);
+
+      //save the datasets
+      const data = dataReq.data.data;
+      const intonationData = intonationDataReq.data.data;
       setDatasets(data);
+      setArticleIntonationDataset(intonationData);
+      
+      //if we have data, merge them by keywords
       if (data.length > 0) setMerged(mergeKeywords(data));
+    
     } catch (err: any) {
       if (err && err.response && err.response.status === 401)
       {
@@ -123,11 +146,6 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         .then(() => {endLoading()})
       });
   }, []);
-
-  // print datasets onto the console for testing/viewing
-  React.useEffect(() => {
-    console.log(datasets);
-  }, [datasets]);
 
   // register the chart.js plugins
   ChartJS.register(
@@ -216,7 +234,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     };
 
     const timedData = {
-      datasets: createTimeIntonationSet(datasets, timeFrame),
+      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame),
     };
 
     // ------ END DATA SETUP ------ //

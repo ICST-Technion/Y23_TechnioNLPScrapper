@@ -8,7 +8,7 @@ export const POSITIVE = 2;
 export type unitType = false | "week" | "millisecond" | "second" | "minute" | "hour" | "day" | "month" | "quarter" | "year" | undefined;
 
 const intonations: string[] = ["neutral", "positive", "negative"];
-type IntonationMap = Map<string, Map<string, number>>;
+type IntonationMap = Map<string, Map<string, [number,number]>>;
 
 
 // set ally props for tabs
@@ -136,7 +136,6 @@ export const websiteDatasets = (merged: any[]) => {
       if (row.website === website)
         innerData[idx][keywords.indexOf(row.keyword)] = row.count;
     });
-    console.log(innerData);
   });
   let sets = innerData.map((dataset, idx) => {
     return {
@@ -161,9 +160,9 @@ export const websiteDatasets = (merged: any[]) => {
 * @returns a new intonation map
 */
 function createIntonationMap(): IntonationMap {
-  const map = new Map<string, Map<string, number>>();
+  const map = new Map<string, Map<string, [number,number]>>();
   intonations.forEach((intonation: string) => {
-    map.set(intonation, new Map<string, number>());
+    map.set(intonation, new Map<string, [number,number]>());
   });
   return map;
 }
@@ -181,13 +180,17 @@ export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => 
   }
 
   const dataMap = groupByTimeAndIntonation(dataset, timeFrame);
-
+  console.log("------------- group by intonation ---------------");
   dataMap.forEach((value, key) => {
     const intonation = key;
     const timePeriods = value;
     timePeriods.forEach((value, key) => {
       const timePeriod = key;
-      const count = value;
+      const count = value[0];
+      console.log("timePeriod: " + timePeriod);
+      console.log("value: " + value);
+      console.log("count: " + count);
+      const score = value[1]/count;
       if (intonation === "negative") {
         innerData[NEGATIVE].push({ x: timePeriod, y: count });
       } else if (intonation === "neutral") {
@@ -234,12 +237,13 @@ const groupByTimeAndIntonation = (
     if (timeFrame === "week") timePeriod = getWeekStart(item.date);
     else if (timeFrame === "month") timePeriod = getMonthStart(item.date);
     else if (timeFrame === "year") timePeriod = getYearStart(item.date);
-    const count = item.count;
+    //let matrixItem = matrix.get(item.overall_sentiment);
     matrix
-      .get(item.intonation)
+      .get(item.overall_sentiment)
       ?.set(
         timePeriod,
-        (matrix.get(item.intonation)?.get(timePeriod) || 0) + count
+        [(matrix.get(item.overall_sentiment)!.get(timePeriod)?.[0] || 0) + 1
+        , (matrix.get(item.overall_sentiment)!.get(timePeriod)?.[1] || 0) + item.total_score]
       );
   });
 
