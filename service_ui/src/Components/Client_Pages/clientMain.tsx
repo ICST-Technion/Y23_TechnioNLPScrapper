@@ -49,7 +49,8 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
 
   const steps = [
     {
-      element: "#language",
+      //only need to show it on one language button, no need for both
+      element: "#language1",
       intro: LANGUAGE_TUT[language],
     },
     {
@@ -98,7 +99,7 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
             onExit={onExit}
           />
           <Typography id="hello" variant="h5" className="centered" marginTop={-3} marginBottom={3}>
-            {HELLO[language]}{username}
+            {language == 0? HELLO[language] + username : username + HELLO[language]}
           </Typography>
           <SearchPage
             keywords={keywords}

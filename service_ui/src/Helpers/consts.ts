@@ -8,3 +8,4 @@ export const FE_SERVER = "https://technionlp-fe-service.onrender.com";
 
 export const ENGLISH: number = 0;
 export const HEBREW: number = 1;
+export const ARABIC: number = 2;

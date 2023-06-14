@@ -36,12 +36,12 @@ export const CLEAR = ["Clear", "נקה", "امسح"]
 export const GO_BACK = ["go back", "חזור", "عد"]
 
 //clientMain
-export const FAQS_TUT = ["You can use this button for help", "תוכל להשתמש בכפתור זה לעזרה", "يمكنك استخدام هذا الزر للمساعدة"]
+export const FAQS_TUT = ["You can use this button for help", "תוכל להשתמש בכפתור זה לעזרה", "يمكنك استخدام هذا الزر للحصول على مساعدة"]
 export const HELP_TUT = ["You can click this button to open the tour again", "תוכל ללחוץ על כפתור זה כדי לפתוח את הסיור שוב", "يمكنك النقر فوق هذا الزر لفتح الجولة مرة أخرى"]
 export const SEARCH_BAR_TUT = ["You write in your query into this button \n The seachbar also supports common google search shortcuts"," סרגל החיפוש תומך גם בקיצורי דרך נפוצים לחיפוש גוגל \n אתה כותב את השאילתה שלך לתוך הכפתור הזה", "يمكنك كتابة الاستعلام الخاص بك في هذا الزر \n يدعم شريط البحث أيضًا اختصارات البحث الشائعة في جوجل"]
 export const ADVANCED_SEARCH_TUT = ["You can use this button to get redirected to a page with advanced search options", "תוכל להשתמש בלחצן זה כדי להפנות מחדש לדף עם אפשרויות חיפוש מתקדמות", "يمكنك استخدام هذا الزر لإعادة توجيهك إلى صفحة بخيارات بحث متقدمة"]
 export const RUN_TUT = ["You can use this button run the query", "תוכל להשתמש בלחצן זה להפעיל את השאילתה", "يمكنك استخدام هذا الزر لتشغيل الاستعلام"]
-export const HELLO = ["Hello, ", "!שלום ," , "!مرحبا,"]
+export const HELLO = ["Hello, ", " ,שלום" , " ,مرحبا"]
 export const LANGUAGE_TUT = ["You can use this button to change the language", "תוכל להשתמש בלחצן זה כדי לשנות את השפה", "يمكنك استخدام هذا الزر لتغيير اللغة"]
 
 //searchComponnent 
