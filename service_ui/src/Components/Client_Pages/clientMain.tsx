@@ -40,8 +40,6 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
   const [enabled, setEnabled] = React.useState(false);
   const [initialStep, setInitialStep] = React.useState(0);
 
-  const languageStrings = language == consts.ENGLISH? "Hebrew" : "English";
-
   const onExit = () => {
     cookie.set("firstTime", "false", { path: "/" });
     setEnabled(false);
