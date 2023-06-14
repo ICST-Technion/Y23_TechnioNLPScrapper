@@ -67,7 +67,7 @@
   font-size: auto;
 }
 
-.search-bar.RTL .MuiInputLabel-root:not(.Mui-focused){
+.search-bar.RTL .MuiInputLabel-root:not(.Mui-focused):not(.MuiInputLabel-shrink){
   right:3.5vw !important;
 }
 
