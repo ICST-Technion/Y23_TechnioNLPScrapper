@@ -74,6 +74,8 @@ export const BASIC_TABS_EXAMPLE = ["basic tabs example", "דוגמה לכרטי�
 export const NEGATIVE = ["negative", "שלילי", "سلبي"]
 export const POSITIVE = ["positive", "חיובי", "إيجابي"]
 export const NEUTRAL = ["neutral", "ניטראלי", "محايد"]
+export const DATA_READING_LABEL = ["Loading Analysis and Graphs...", "טוען נתונים וגרפים...", "تحميل التحليل والرسوم البيانية... "]
+export const DATA_PREPARATION_LABEL= ["Scrapping and Analyzing Data...", "קורא ומנתח נתונים...", "قراءة وتحليل البيانات... "]
 
 
 //App
