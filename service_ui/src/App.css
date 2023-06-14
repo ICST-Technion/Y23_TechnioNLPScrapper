@@ -532,7 +532,7 @@ background-color: #8d6cdf !important;
   color: #4d13c2 !important;
 }
 
-input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-tooltiptext{
+input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-tooltiptext, h6{
   text-align: start !important;
   unicode-bidi: plaintext !important;
 }
