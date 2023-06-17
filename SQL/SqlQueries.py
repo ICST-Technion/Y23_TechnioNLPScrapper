@@ -103,7 +103,11 @@ class SQLQuery:
         insert_sql = "INSERT INTO ArticleSentiment"+str(id)+"(article_link,overall_sentiment,sum_negative_keywords ,sum_positive_keywords ,date, total_score) " \
                      "VALUES(%s,%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, article_analysis_list)
-        print(article_analysis_list)
+    def insert_keyword_intonation_analysis_sql(self,keyword_analysis_list,id=""):
+        insert_sql = "INSERT INTO KeywordSentiment"+str(id)+"(keyword,intonation,score ,website) " \
+                     "VALUES(%s,%s,%s,%s);"
+        self.execute_query(insert_sql, keyword_analysis_list)
+        
             
     def clear_table(self):
         """
@@ -123,7 +127,10 @@ class SQLQuery:
         self.execute_query(create_query)
         create_sentiment_query = "CREATE TABLE ArticleSentiment"+table_id+"(article_link TEXT,overall_sentiment TEXT,sum_negative_keywords NUMERIC(5,3),sum_positive_keywords NUMERIC(5,3),date DATE,total_score Numeric(4,3),PRIMARY KEY (article_link));"
         self.execute_query(create_sentiment_query)
+        keyword_sentiment_query = "CREATE TABLE KeywordSentiment"+table_id+"keyword TEXT,intonation TEXT,score Numeric(5,3),website TEXT,PRIMARY KEY (keyword,intonation,website) ;"
+        self.execute_query(keyword_sentiment_query)
         return table_id
+    
     def delete_table(self,table_id):
         """
         clears all records from the table and removes it permenantly
@@ -133,7 +140,9 @@ class SQLQuery:
         self.execute_query(clear_query)
         clear_sentiment_query = "DROP TABLE ArticleSentiment"+str(table_id)
         self.execute_query(clear_sentiment_query)
-
+        clear_keyword_sentiment_query = "DROP TABLE KeywordSentiment"+str(table_id)
+        self.execute_query(clear_keyword_sentiment_query)
+    
     def delete_specific_table(self,table_name):
         """
         clears all records from the table and removes it permenantly

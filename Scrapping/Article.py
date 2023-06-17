@@ -106,7 +106,8 @@ class Article:
             #or if just doesn't feel like it. In any case, here is a default value
         except:
             self.sentiment,self.score='neutral',0.0    
-
+    def get_website(self):
+        return self.website
     def extract_date(self):
         """
     Tries to search in common tags in the articles where the date is found.
@@ -133,17 +134,20 @@ class Article:
         hebrew_elements = self.soup.body.find_all('span',text=hebrew_pattern,attrs={'data-text': 'true'})
         extracted_text = ''.join([element.get_text() for element in hebrew_elements])
         return extracted_text
-
-    def calculate_keyowrd_sum(self,intonation):
+    def find_keywords_in_article(self):
         body=self.extract_article_body()
         description=self.extract_article_description()
         text=body+description
         try:
             keywords_in_article=find_keyword_in_text(text)
+            return keywords_in_article
+        except:
+            return []    
+    def calculate_keyowrd_sum(self,intonation):
+            keywords_in_article=self.find_keywords_in_article()
             intonated_keywords=[keyword['sentiment']['score'] for keyword in keywords_in_article if keyword['sentiment']['label']==intonation]
             return sum(intonated_keywords)
-        except:
-            return 0.0
+
 
 
     def create_sentiment_score_rows(self):
