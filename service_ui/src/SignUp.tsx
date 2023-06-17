@@ -87,7 +87,7 @@ export const SignUp: React.FC<SignUpProps> = ({setRegistered}) => {
           }}
         >
           <Typography component="h1" variant="h5" marginBottom={2}>
-          {HELLO[language]}{'Admin'} 
+          {language == 0? HELLO[language] + 'Admin' : 'Admin' + HELLO[language]}
           </Typography>
           <Typography component="h1" variant="h5">
           {REGISTER_ACCOUNT[language]}

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ENGLISH, HEBREW } from '../Helpers/consts';
+import { ARABIC, ENGLISH, HEBREW } from '../Helpers/consts';
 import { getLanguage, setLanguage } from '../Helpers/helpers';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -27,11 +27,13 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister, hideRegister, isLoggedIn, openFAQ, goToMainPage}) => {
 
     const language = getLanguage();
-    const languageStrings = language == ENGLISH? "Hebrew" : "English";
+    const languageOne = language == ENGLISH? "עברית" : "English";
+    const languageTwo = language == ARABIC? "עברית" : "ألعربية";
     const [inRegister, setInRegister] = React.useState(false);
 
-    const changeLanguage = () => {
-        setLanguage(language == ENGLISH? HEBREW : ENGLISH);
+    const changeLanguage = (index: number) => {
+        index == 0? (language == ENGLISH? setLanguage(HEBREW) : setLanguage(ENGLISH))
+        : (language == ARABIC? setLanguage(HEBREW) : setLanguage(ARABIC));
         setChanged((old: boolean) => !old);
     }
 
@@ -44,13 +46,16 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
         switch(index){
             case 0:
                 //set timeout to allow button animations to finish before changing language
-                return () => setTimeout(changeLanguage, 300);
+                return () => setTimeout(() => {changeLanguage(0)}, 300);
             case 1:
-                return openFAQ;
+                //set timeout to allow button animations to finish before changing language
+                return () => setTimeout(() => {changeLanguage(1)}, 300);
             case 2:
+                return openFAQ;
+            case 3:
                 return isLoggedIn && (!hideRegister || inRegister)? onOpenRegister
                 : signOut;
-            case 3:
+            case 4:
                 return isLoggedIn && (!hideRegister || inRegister)? signOut : () => {alert("show not reach here")}
             default:
                 return () => {};
@@ -65,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
     }, [language, isLoggedIn, hideRegister, inRegister]);
         
     const setupPages = () => {
-        let pages = [languageStrings , FAQS[language]];
+        let pages = [languageOne, languageTwo, FAQS[language]];
         if(isLoggedIn){
             if(!hideRegister || inRegister){
                 pages.push(REGISTER[language]);
@@ -94,12 +99,14 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
     const getButtonID = (index: number) => {
         switch(index){
             case 0:
-                return "language";
+                return "language1";
             case 1:
-                return "FAQ";
+                return "language2";
             case 2:
-                return isLoggedIn && (!hideRegister || inRegister)? "register" : "signout";
+                return "FAQ";
             case 3:
+                return isLoggedIn && (!hideRegister || inRegister)? "register" : "signout";
+            case 4:
                 return isLoggedIn && (!hideRegister || inRegister)? "signout" : "";
             default:
                 return "";

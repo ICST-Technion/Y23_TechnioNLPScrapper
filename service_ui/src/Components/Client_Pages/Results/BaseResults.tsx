@@ -34,7 +34,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { BASIC_TABS_EXAMPLE, GO_BACK, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SESSION_EXPIRE, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, DATA_PREPARATION_LABEL, DATA_READING_LABEL, GO_BACK, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SESSION_EXPIRE, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
 
 export interface baseResultsProps {
@@ -54,7 +54,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 }) => {
   const language = getLanguage();
   const [loading, setLoading] = React.useState(false);
-  const [loadingMessage, setLoadingMessage] = React.useState("Scrapping and Analyzing Data...");
+  const [loadingMessage, setLoadingMessage] = React.useState(DATA_PREPARATION_LABEL[language]);
   const [showResult, setShowResult] = React.useState(false);
 
   // this is the dataset that includes everything, split by keyword and article
@@ -100,7 +100,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
   const getData = async (table_id: string) => {
     try {
-      setLoadingMessage("Loading Analysis and Graphs...");
+      setLoadingMessage(DATA_READING_LABEL[language]);
 
       //request data from DB
       const [dataReq, intonationDataReq] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),

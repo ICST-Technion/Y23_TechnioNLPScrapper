@@ -14,7 +14,7 @@ export const SearchComponent: React.FC<SearchComponentProps> = ({
   idx,
 }) => {
   const language = getLanguage();
-  const direction = language == 1 ? "RTL" : "LTR";
+  const direction = language == 0 ? "LTR" : "RTL";
   return (
     <>
       <div className="search-button">
