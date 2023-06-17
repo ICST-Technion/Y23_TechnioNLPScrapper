@@ -147,6 +147,15 @@ def clear_table():
 def get_default_websites():
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
+def create_keyword_sentiment_rows(keywords_to_intonation_in_query,article):
+    website=article.get_website()
+    postive_rows_in_query= [(keyword,intonation,1.0,website) for (keyword,intonation) in keywords_to_intonation_in_query if intonation=='positive']
+    negative_rows_in_query= [(keyword,intonation,-1.0,website) for (keyword,intonation) in keywords_to_intonation_in_query if intonation=='negative']
+    #Watson doesn't find these as keywords
+    neutral_rows_in_query= [(keyword,intonation,0.0,website) for (keyword,intonation) in keywords_to_intonation_in_query if intonation=='neutral']
+    #keywords we have according to Watson 
+    rows_from_watson=[(keyword['text'],keyword['sentiment']['label'],keyword['sentiment']['score'],website) for keyword in article.find_keywords_in_article()]
+    return postive_rows_in_query+negative_rows_in_query+neutral_rows_in_query+rows_from_watson
 
 def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,table_id,category='1'):
     #TODO: scrap phrases and keywords differently
@@ -175,9 +184,11 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 phrase_intonation_list,
                 category)
                 sentiment_row_to_add=article_info.create_sentiment_score_rows()
+                keyword_sentiment_rows_to_add=create_keyword_sentiment_rows(keywords_intonation_list,article_info)
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add,table_id)
                 insert_query.insert_article_intonation_analysis_sql(sentiment_row_to_add,table_id)
+                insert_query.insert_keyword_intonation_analysis_sql(keyword_sentiment_rows_to_add,table_id)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
 
@@ -200,7 +211,7 @@ def do_search_query(category='1'):
     excluded_keywords = query_dict["excluded_keywords"]
     site = query_dict["site"]
     datarange = query_dict["datarange"]
-
+    
     # Get the list of websites to search
     site_list = get_default_websites()
     if site is not None:

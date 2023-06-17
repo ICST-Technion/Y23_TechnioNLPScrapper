@@ -35,7 +35,8 @@ class NLPTests(unittest.TestCase):
         text='מסעדה גרועה, איכות מצוינת'
         keywords=find_keyword_in_text(text)
         for keyword in keywords:
-            print(keyword['sentiment']['score'])
+            print(keyword['text'])
+            print(keyword['sentiment'])
         self.assertGreater(len(keywords),0)         
                     
 
