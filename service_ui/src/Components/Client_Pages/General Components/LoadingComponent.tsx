@@ -13,7 +13,7 @@ export interface LoadingComponentProps {
    = ({isAnimating, message}) => {
 
     const { animationDuration, isFinished, progress } = useNProgress({
-        animationDuration: 1000,
+        incrementDuration: 5000,
         isAnimating,
       })
     
