@@ -191,8 +191,8 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                         {page}
                       </Button>
                     ))}
-                    <Button hidden={username === undefined}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
+                    <Button 
+                    sx={{ my: 2, color: 'white', display: isLoggedIn? 'block': 'none'}}
                     className='user-hello'>
                       {language == 0? HELLO[language] + username : username + HELLO[language]}
                     </Button> 

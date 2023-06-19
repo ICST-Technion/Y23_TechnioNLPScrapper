@@ -15,8 +15,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { FE_SERVER } from './Helpers/consts';
 import Cookies from 'universal-cookie';
-import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN, PASSWORD, USERNAME_EMAIL } from './Helpers/texts';
+import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN, PASSWORD, USERNAME_EMAIL, HELLO, LANDING_HEADER, LANDING_BODY } from './Helpers/texts';
 import { getLanguage } from './Helpers/helpers';
+import { Logo } from './Components/Logo';
+import { JoinedLogo } from './Components/Joined_logo';
+
 
 export interface SignInProps {
    setSignedIn:React.Dispatch<React.SetStateAction<{
@@ -31,6 +34,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
     const theme = createTheme();
 
     const [Errormsg, setErrormsg] = React.useState<string>("");
+    const [hideSignIn, setHideSignIn] = React.useState<boolean>(true);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -78,7 +82,10 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
       }
     };
 
+  const getSingIn = () => {
   return (
+  <>
+    <Logo cssClasses="logo" />
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -144,5 +151,35 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
         </Box>
       </Container>
     </ThemeProvider>
+    </>
+  );
+  }
+
+  const getLandingPage = () => {
+    return(
+      <Container className='centered w7 c1'>
+        <JoinedLogo cssClasses='joined' />
+        <Typography className='landing-header' variant='h5'>
+            {LANDING_HEADER[language]}
+        </Typography>
+        <Typography className='landing-body w4' variant='body1'>
+            {LANDING_BODY[language]}
+        </Typography>
+        <Typography className='landing-body sign-text' variant='body1'
+        onClick={() => {setHideSignIn(false)}} component={Button}>
+            {SIGNIN[language]}
+        </Typography>
+      </Container>
+    )
+  }
+
+  const getPage = () => {
+   return hideSignIn?  getLandingPage() :  getSingIn();
+  }
+
+  return(
+    <>
+    {getPage()}
+    </>
   );
 }

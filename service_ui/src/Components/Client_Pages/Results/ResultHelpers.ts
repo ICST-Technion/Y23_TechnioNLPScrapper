@@ -143,13 +143,7 @@ export const websiteDatasets = (merged: any[]) => {
       id: idx,
       label: websites[idx],
       data: dataset,
-      backgroundColor: `rgba(${randomIntFromInterval(
-        0,
-        255
-      )},${randomIntFromInterval(0, 255)},${randomIntFromInterval(
-        0,
-        255
-      )},0.5)`,
+      backgroundColor: `rgba(${randomIntFromInterval(0,255)},${randomIntFromInterval(0, 255)},${randomIntFromInterval(0, 255)},0.5)`,
     };
   });
 
