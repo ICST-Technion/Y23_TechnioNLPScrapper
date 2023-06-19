@@ -227,7 +227,7 @@
 
 .help-icon{
   position: fixed;
-  top: 19px !important;
+  top: min(24px, 4.4vh) !important;
   right:4vw;
   height: min(30px, 3.6vh) !important;
   width: min(30px, 3.6vh) !important;
