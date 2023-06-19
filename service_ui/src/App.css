@@ -565,7 +565,7 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
 .user-hello{
   pointer-events: none;
   position: fixed;
-  right: 10vw;
+  right: 8vw;
 }
 
 .page-body{
