@@ -91,7 +91,6 @@ function App() {
     } else if(!loading) {
       return (
         <>
-          <Logo cssClasses="logo" />
           <SignIn setSignedIn={setSignedIn}/>
         </>
       );
