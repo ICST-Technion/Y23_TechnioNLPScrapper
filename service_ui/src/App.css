@@ -232,6 +232,7 @@
   height: min(30px, 3.6vh) !important;
   width: min(30px, 3.6vh) !important;
   z-index: 200 !important;
+  color: #8d6cdf !important;
 }
 
 .go-back-button{
