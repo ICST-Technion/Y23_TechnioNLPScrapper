@@ -3,6 +3,7 @@ import { useNProgress } from '@tanem/react-nprogress'
 import LinearProgress from '@mui/material/LinearProgress'
 import Container from '@mui/material/Container'
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 export interface LoadingComponentProps {
     isAnimating: boolean;
@@ -13,7 +14,7 @@ export interface LoadingComponentProps {
    = ({isAnimating, message}) => {
 
     const { animationDuration, isFinished, progress } = useNProgress({
-        animationDuration: 1000,
+        incrementDuration: 5000,
         isAnimating,
       })
     
@@ -21,7 +22,12 @@ export interface LoadingComponentProps {
     return (
         <>
         <Container className="loading-container" hidden={isFinished} disableGutters={true} style={{transition: `opacity ${animationDuration}ms linear`}}>
-        <LinearProgress className="loading-bar" variant="determinate" value={progress * 100} style={{transitionDuration: `${animationDuration}ms`}} />
+          <Container className="loading-bar-container">
+          <LinearProgress className="loading-bar" variant="determinate" value={progress * 100} style={{transitionDuration: `${animationDuration}ms`}} />
+            <Typography variant="body2" color="text.secondary">{`${Math.round(
+              progress * 100,
+            )}%`}</Typography>
+            </Container>
         <Typography variant="h6" className="loading-message">{message}</Typography>
         </Container>
         </>
