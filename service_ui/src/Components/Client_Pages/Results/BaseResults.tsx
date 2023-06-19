@@ -34,7 +34,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { BASIC_TABS_EXAMPLE, DATA_PREPARATION_LABEL, DATA_READING_LABEL, GO_BACK, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SESSION_EXPIRE, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, GO_BACK, GRAPH_BY, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
 
 export interface baseResultsProps {
@@ -297,11 +297,17 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           </TabPanel>
 
           <TabPanel value={value} index={2}>
-              <Button onClick={() => setDataByScore((old) => !old)}>show the graph by {dataByScore? "Count" : "Score"}</Button>
+              <Button onClick={() => setDataByScore((old) => !old)}>{SHOW_THE_GRAPH_BY[language]} {dataByScore? COUNT[language] : SCORE[language]}</Button>
               <Bar
                 datasetIdKey="trial"
                 className="fit"
                 options={{
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: `${GRAPH_BY[language]} ${dataByScore? SCORE[language] : COUNT[language]}` ,
+                    },
+                  },
                   responsive: true,
                   scales: {
                     x: {

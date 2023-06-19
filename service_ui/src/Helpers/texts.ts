@@ -80,7 +80,10 @@ export const POSITIVE = ["positive", "חיובי", "إيجابي"]
 export const NEUTRAL = ["neutral", "ניטראלי", "محايد"]
 export const DATA_READING_LABEL = ["Loading Analysis and Graphs...", "טוען נתונים וגרפים...", "تحميل التحليل والرسوم البيانية... "]
 export const DATA_PREPARATION_LABEL= ["Scrapping and Analyzing Data...", "קורא ומנתח נתונים...", "قراءة وتحليل البيانات... "]
-
+export const SHOW_THE_GRAPH_BY = ["show the graph by","הצג את הגרף לפי","عرض الرسم البياني بواسطة"]
+export const COUNT = ["Article Count","מספר כתבות","عدد المقالات"]
+export const SCORE = ["Average Score","ניקוד ממוצע","معدل درجات"]
+export const GRAPH_BY = ["Graph By","גרף לפי","رسم بياني بواسطة"]
 
 //App
 export const SINGOUT = ["Sign Out", "התנתק", "خروج"]
