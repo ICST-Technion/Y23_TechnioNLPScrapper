@@ -562,6 +562,12 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
   z-index: 100 !important;
 }
 
+.user-hello{
+  pointer-events: none;
+  position: fixed;
+  right: 10vw;
+}
+
 .page-body{
   padding-top: 68px !important;
 }

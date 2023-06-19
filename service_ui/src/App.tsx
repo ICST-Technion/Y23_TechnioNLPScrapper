@@ -108,7 +108,8 @@ function App() {
     <>
           <Header setChanged={setChanged} signOut={signOut}
           openRegister={openRegister} hideRegister={hideRegister()}
-          isLoggedIn={isLoggedIn()} openFAQ={openFAQ} goToMainPage={goHome}/>
+          isLoggedIn={isLoggedIn()} openFAQ={openFAQ} goToMainPage={goHome}
+          username={isLoggedIn()? signedIn.username : undefined}/>
       <Background />
       <div className="page-body">
        {getPage()}

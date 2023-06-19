@@ -96,9 +96,6 @@ export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, rol
             initialStep={initialStep}
             onExit={onExit}
           />
-          <Typography id="hello" variant="h5" className="centered" marginTop={-3} marginBottom={3}>
-            {language == 0? HELLO[language] + username : username + HELLO[language]}
-          </Typography>
           <SearchPage
             keywords={keywords}
             setKeywords={setKeywords}
