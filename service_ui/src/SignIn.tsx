@@ -157,7 +157,7 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
 
   const getLandingPage = () => {
     return(
-      <Container className='centered w7 c1'>
+      <Container className='centered w7 c1 landing-page-container'>
         <JoinedLogo cssClasses='joined' />
         <Typography className='landing-header' variant='h5'>
             {LANDING_HEADER[language]}
