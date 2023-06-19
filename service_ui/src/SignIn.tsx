@@ -18,6 +18,7 @@ import Cookies from 'universal-cookie';
 import {EMPTY_FIELD_VALIDATION_ERROR, USERNAME_EMAIL_VALIDATION_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESSFUL_SIGN_IN, UNKNOWN_ERROR, WELCOME, SIGNIN, FORGOTPASSWORD, SIGNINN, PASSWORD, USERNAME_EMAIL, HELLO, LANDING_HEADER, LANDING_BODY } from './Helpers/texts';
 import { getLanguage } from './Helpers/helpers';
 import { Logo } from './Components/Logo';
+import { JoinedLogo } from './Components/Joined_logo';
 
 
 export interface SignInProps {
@@ -156,12 +157,17 @@ export const SignIn: React.FC<SignInProps> = ({setSignedIn}) => {
 
   const getLandingPage = () => {
     return(
-      <Container>
-        <Typography className='landing-header' variant='h4'>
+      <Container className='centered w7 c1'>
+        <JoinedLogo cssClasses='joined' />
+        <Typography className='landing-header' variant='h5'>
             {LANDING_HEADER[language]}
         </Typography>
-        <Typography className='landing-header' variant='body1'>
+        <Typography className='landing-body w4' variant='body1'>
             {LANDING_BODY[language]}
+        </Typography>
+        <Typography className='landing-body sign-text' variant='body1'
+        onClick={() => {setHideSignIn(false)}} component={Button}>
+            {SIGNIN[language]}
         </Typography>
       </Container>
     )

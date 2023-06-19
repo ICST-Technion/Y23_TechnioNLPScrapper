@@ -8,7 +8,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
 }
 
 .top-margin{
@@ -21,6 +20,15 @@
   text-align: center;
 } 
 
+.w7{
+  width: 70vw !important;
+}
+
+.w4{
+  width: 40vw !important;
+  text-align: center !important;
+}
+
 .App-logo {
   height: 35vh;
   margin-top: -2vh;
@@ -28,6 +36,12 @@
   pointer-events: none;
   mix-blend-mode: multiply;
 }
+
+.joined.App-logo{
+  height: 34vh !important;
+  padding-bottom: 1vh;
+}
+
 .minimized-logo{
   height: 23vh !important;
   margin-top: -4vh !important;
@@ -604,4 +618,27 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
   width: auto !important;
   align-items: center !important;
   padding-bottom: 1vh;
+}
+
+.landing-body.sign-text{
+  text-align: center !important;
+  color: #4d13c2 !important;
+  text-transform:none;
+}
+
+.landing-header{
+  color: black;
+  padding-bottom: 2vh ;
+}
+
+.landing-body{
+  color: black;
+  padding-bottom: 5vh ;
+}
+
+.c1{
+  display: flex!important;
+  flex-direction: column !important;
+  justify-content: center!important;
+  align-items: center!important;
 }
