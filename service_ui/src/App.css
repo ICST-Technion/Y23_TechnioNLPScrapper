@@ -228,9 +228,9 @@
 .help-icon{
   position: fixed;
   top: 19px !important;
-  right:9.5vw;
-  height: 30px !important;
-  width: 30px !important;
+  right:4vw;
+  height: min(30px, 3.6vh) !important;
+  width: min(30px, 3.6vh) !important;
   z-index: 200 !important;
 }
 
