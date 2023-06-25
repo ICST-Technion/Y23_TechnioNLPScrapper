@@ -1,3 +1,8 @@
 Flask==2.2.2
 google_api_python_client==2.74.0
 SQL==2022.4.0
+beautifulsoup4==4.11.1
+tldextract==3.4.0
+ibm-watson==7.0.0
+psycopg2==2.9.5
+Scrapping==0.1.dev0
