@@ -8,7 +8,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
 }
 
 .top-margin{
@@ -21,6 +20,15 @@
   text-align: center;
 } 
 
+.w7{
+  width: 70vw !important;
+}
+
+.w4{
+  width: 40vw !important;
+  text-align: center !important;
+}
+
 .App-logo {
   height: 35vh;
   margin-top: -2vh;
@@ -28,6 +36,12 @@
   pointer-events: none;
   mix-blend-mode: multiply;
 }
+
+.joined.App-logo{
+  height: 34vh !important;
+  padding-bottom: 1vh;
+}
+
 .minimized-logo{
   height: 23vh !important;
   margin-top: -4vh !important;
@@ -94,7 +108,7 @@
 }
 
 .search-button{
-  margin-top: 2vh;
+  margin-top: 4vh;
 }
 
 .advanced-search-button{
@@ -227,11 +241,12 @@
 
 .help-icon{
   position: fixed;
-  top: 19px !important;
-  right:9.5vw;
-  height: 30px !important;
-  width: 30px !important;
+  top: 24px !important;
+  right:4vw;
+  height: 20px !important;
+  width: 20px !important;
   z-index: 200 !important;
+  color: #8d6cdf !important;
 }
 
 .go-back-button{
@@ -336,7 +351,6 @@ background-color: #8d6cdf !important;
   border-radius: 20px;
   padding-left: 4px;
   font-size: smaller;
-  height: 3.5vh;
   color: black;
 }
 .selected-value button{
@@ -553,6 +567,7 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
 
 .Header button{
   color: #4d13c2 !important;
+  text-transform: capitalize;
 }
 
 .Header {
@@ -562,15 +577,19 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
   z-index: 100 !important;
 }
 
+.user-hello{
+  pointer-events: none;
+  position: fixed !important;
+  right: 8vw !important;
+  text-transform: none !important;
+}
+
 .page-body{
   padding-top: 68px !important;
 }
 
 .loading-bar{
-  position:absolute !important;
-  top: 50vh !important;
   width: 70vw;
-  left: 15vw !important;
   height: 4vh !important;
   border-radius: 30px;
   background-color:#bfaeed80 !important;
@@ -581,14 +600,49 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
 }
 
 .loading-message{
-  position:absolute !important;
-  top: 57vh !important;
   text-align: center;
 }
 
 .loading-container{
-  height: 53vh;
+  margin-top: 43vh;
   display: flex !important;
+  flex-direction: column;
   justify-content: center;
-  align-items: end;
+  align-items: center;
+}
+
+.loading-bar-container{
+  display: flex !important;
+  flex-direction: row !important;
+  column-gap: 2vh;
+  width: auto !important;
+  align-items: center !important;
+  padding-bottom: 1vh;
+}
+
+.landing-body.sign-text{
+  text-align: center !important;
+  color: #4d13c2 !important;
+  text-transform:none;
+}
+
+.landing-header{
+  color: black;
+  padding-bottom: 2vh ;
+}
+
+.landing-body{
+  color: black;
+  padding-bottom: 5vh;
+}
+
+.landing-page-container{
+  margin-top: 10vh !important;
+}
+
+.c1{
+  display: flex!important;
+  flex-direction: column !important;
+  justify-content: center!important;
+  align-items: center!important;
 }

@@ -8,7 +8,7 @@ from googleapiclient.discovery import build
 from urllib.parse import quote, unquote
 
 # this line allows python to find our module.
-sys.path.append('..\\SQL')
+sys.path.append('.\\SQL')
 from SQL.SqlQueries import *
 import re
 

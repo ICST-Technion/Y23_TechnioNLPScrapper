@@ -11,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { FAQS, REGISTER, SINGOUT } from '../Helpers/texts';
+import { FAQS, HELLO, REGISTER, SINGOUT } from '../Helpers/texts';
 
 
 export interface HeaderProps {
@@ -22,9 +22,10 @@ export interface HeaderProps {
     isLoggedIn: boolean;
     openFAQ: () => void;
     goToMainPage: () => void;
+    username?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister, hideRegister, isLoggedIn, openFAQ, goToMainPage}) => {
+export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister, hideRegister, isLoggedIn, openFAQ, goToMainPage, username}) => {
 
     const language = getLanguage();
     const languageOne = language == ENGLISH? "עברית" : "English";
@@ -155,7 +156,9 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                             onClick={getButtonFunction(index)}>{page}</Typography>
                         </MenuItem>
                       ))}
+
                     </Menu>
+
                   </Box>
                   <Box className='Icon' sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                   <Typography
@@ -188,7 +191,13 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
                         {page}
                       </Button>
                     ))}
+                    <Button 
+                    sx={{ my: 2, color: 'white', display: isLoggedIn? 'block': 'none'}}
+                    className='user-hello'>
+                      {language == 0? HELLO[language] + username : username + HELLO[language]}
+                    </Button> 
                   </Box>
+
                 </Toolbar>
             </Container>
         </AppBar>
@@ -201,6 +210,7 @@ export const Header: React.FC<HeaderProps> = ({setChanged, signOut, openRegister
     return (
         <>
         {getHeader()}
+
         </>
     )
 

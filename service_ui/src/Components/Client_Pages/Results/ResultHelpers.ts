@@ -22,12 +22,7 @@ export function a11yProps(index: number) {
 
 // chart.js options
 export const optionsStacked = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart - Stacked",
-    },
-  },
+ 
   responsive: true,
   scales: {
     x: {
@@ -40,12 +35,6 @@ export const optionsStacked = {
 };
 
 export const options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart",
-    },
-  },
   responsive: true,
   scales: {
     x: {
@@ -143,13 +132,7 @@ export const websiteDatasets = (merged: any[]) => {
       id: idx,
       label: websites[idx],
       data: dataset,
-      backgroundColor: `rgba(${randomIntFromInterval(
-        0,
-        255
-      )},${randomIntFromInterval(0, 255)},${randomIntFromInterval(
-        0,
-        255
-      )},0.5)`,
+      backgroundColor: `rgba(${randomIntFromInterval(0,255)},${randomIntFromInterval(0, 255)},${randomIntFromInterval(0, 255)},0.5)`,
     };
   });
 
