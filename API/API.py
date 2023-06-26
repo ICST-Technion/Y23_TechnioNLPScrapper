@@ -412,4 +412,5 @@ def advanced_search():
 
 # driver function
 if __name__ == '__main__':
+    from waitress import serve
     app.run(host="0.0.0.0",debug=False, port=10000)
