@@ -127,7 +127,7 @@ class SQLQuery:
         self.execute_query(create_query)
         create_sentiment_query = "CREATE TABLE ArticleSentiment"+table_id+"(article_link TEXT,overall_sentiment TEXT,sum_negative_keywords NUMERIC(5,3),sum_positive_keywords NUMERIC(5,3),date DATE,total_score Numeric(4,3),PRIMARY KEY (article_link));"
         self.execute_query(create_sentiment_query)
-        keyword_sentiment_query = "CREATE TABLE KeywordSentiment"+table_id+"keyword TEXT,intonation TEXT,score Numeric(5,3),website TEXT,PRIMARY KEY (keyword,intonation,website) ;"
+        keyword_sentiment_query = "CREATE TABLE KeywordSentiment"+table_id+"(keyword TEXT,intonation TEXT,score Numeric(5,3),website TEXT,PRIMARY KEY (keyword,intonation,website));"
         self.execute_query(keyword_sentiment_query)
         return table_id
     
