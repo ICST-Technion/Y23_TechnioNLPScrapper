@@ -58,8 +58,8 @@ class SQLQuery:
         insert_sql = "INSERT INTO Keywords(keyword,intonation) " \
                      "VALUES(%s,%s);"
         self.execute_query(insert_sql, keyword_intonation_list)
-    def select_learned_keywords(self):
-        select_query='SELECT * FROM Keywords'
+    def select_all_from_table(self,table_name):
+        select_query=f'SELECT * FROM {table_name}'
         conn = None
         cur = None
         try:
@@ -75,6 +75,14 @@ class SQLQuery:
             if conn:
                 cur.close()
                 conn.close()
+    def select_learned_keywords(self):
+        return self.select_all_from_table('Keywords')
+    
+
+    def select_keyword_sentiment(self,id):
+        return self.select_all_from_table(f'KeywordSentiment'+{id})
+        
+                       
     def select_articles_from_sql(self, columns="*", conditions=None,id="",table_name="Articles"):
         """
         select columns from a table based in a condition
