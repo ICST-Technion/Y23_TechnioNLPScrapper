@@ -423,4 +423,5 @@ def advanced_search():
 
 # driver function
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=False, port=10000)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=10000)
