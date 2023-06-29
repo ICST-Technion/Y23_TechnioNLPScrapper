@@ -1,5 +1,3 @@
-from collections import Counter
-from string import punctuation
 import sys
 from urllib.error import HTTPError
 import bs4 as bs
@@ -12,8 +10,12 @@ sys.path.append('..\\Scrapping')
 from Scrapping.NLP import *
 
 
-# this dictionary is here in case we will want to parse new date formats
 def month_string_to_number(month_string):
+    """
+    Convert the month string to its corresponding number.
+    :param month_string: String representing the month abbreviation (e.g., 'Jan', 'Feb', etc.)
+    :return: Corresponding month number (1-12)
+    """
     month_to_number = {
         "Jan": 1,
         "Feb": 2,
@@ -31,28 +33,19 @@ def month_string_to_number(month_string):
     return month_to_number[month_string]
 
 
-'''
-Convert the string with the date to a datetime object
-date_as_string has the format returned by extract_date
-returns a datetime object with the same Year,Month,Day,Hour,Minute
-as the string
-The string format:
-"YYYY-MM-DDTHH:MM:SS.SSSSSSZ"
-(the format of the seconds doesn't really matter because we aren't using them)
-Y- year
-M-month
-D- day
-H-hour
-M-minute
-S-second
 
-'''
 
 
 def parse_date(date_as_string):
-    # checking if T is in the string not useful because some websites have IST in date
+    """
+    Convert the string with the date to a datetime object for uniformity ease of use
+    :param date_as_string: Date string in the format "YYYY-MM-DDTHH:MM:SS.SSSSSSZ"
+    because this is the format most news websites use
+    :return: Corresponding datetime object
+    """
     date_format = "%Y-%m-%dT%H:%M:%S.%fZ"
     datetime_object=datetime.now()
+    #can fail beause some websites don't use this format
     try:
         datetime_object = datetime.strptime(date_as_string, date_format)
         parsed_day=datetime_object
@@ -62,33 +55,35 @@ def parse_date(date_as_string):
         return parsed_day
 
 
-'''
-extract the name of the website from the link without tld,
-for example- www.ynet.co.il
-will return just ynet
-'''
+
 
 
 def get_website_name(link):
+    """
+    Extract the name of the website from the link without TLD.
+    for example- www.ynet.co.il
+    will return just ynet
+    :param link: Full website link
+    :return: Website name (without TLD)
+    """
     _, name, _ = extract(link)
     return name
 
 
 class Article:
     """
-    This class will represent scrapped data from articles and put them in an Article object
-    the properties are:
-    link- the link of the article the scrapping is done from
-    make sure that the website allows scrapping first because some are forbidden to scrap from
-    title: the main title of the article
-    date: the date the article was published
-    website: the name of the website (without TLD such as .com)
+    This class represents scrapped data from articles and puts them in an Article object.
+    It allows to process it before adding it to the database
     """
 
     def __init__(self, link):
+        """
+        Initialize the Article object with the given link.
+        :param link: Link of the article to be scraped
+        """
         self.link = link
         try:
-            # can fail because access is forbidden sometimes
+            # can fail because access is forbidden to some links
             source = urllib.request.urlopen(link).read()
         except HTTPError:
             print("Website inaccessible")
@@ -103,54 +98,78 @@ class Article:
         try:
             self.sentiment,self.score=extract_sentiment(text)
             #Watson can fail because the text is too short, or if there are invalid characters, 
-            #or if just doesn't feel like it. In any case, here is a default value
+            # In any case, there is a default value
         except:
             self.sentiment,self.score='neutral',0.0    
     def get_website(self):
         return self.website
     def extract_date(self):
         """
-    Tries to search in common tags in the articles where the date is found.
-    If it can't find the date, raises an exception.
-    Returns the date as a string.
-    """
+        Tries to search in common tags in articles where the date is found.
+        If it can't find the date, returns the current date and time.
+        :return: Date string in the format "YYYY-MM-DDTHH:MM:SS"
+        """
         tags_to_check = [
         self.soup.head.find("meta", property=prop) for prop in
         ["article:published_time", "article:published", "og:published_time"]
-    ] + [self.soup.time]
+        ] + [self.soup.time]
 
         date_property = next((tag.get("content") for tag in tags_to_check if tag is not None), None)
 
         if date_property is not None:
             return date_property
 
-    # we don't know how to extract
+        # We don't know how to extract, return current date and time
         return datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
     def extract_article_body(self):
-
+        """
+        Extract the body of the article from the webpage, for sentiment analysis.
+        Searches by looking for text in Hebrew,can return an empty string based on the site format
+        :return: Extracted text from the article body
+        """
         hebrew_pattern = re.compile(r'[\u0590-\u05FF\s]+')
-# Find elements containing Hebrew text in the body- the article itself
         hebrew_elements = self.soup.body.find_all('span',text=hebrew_pattern,attrs={'data-text': 'true'})
         extracted_text = ''.join([element.get_text() for element in hebrew_elements])
         return extracted_text
+    
     def find_keywords_in_article(self):
+        """
+        Find keywords in the article (using Watson, see NLP) by analyzing its body and description.
+        :return: List of keywords found in the article
+        """
         body=self.extract_article_body()
         description=self.extract_article_description()
         text=body+description
         try:
+            #Watson can throw exceptions if a text is too short
             keywords_in_article=find_keyword_in_text(text)
             return keywords_in_article
         except:
             return []    
+        
     def calculate_keyowrd_sum(self,intonation):
-            keywords_in_article=self.find_keywords_in_article()
-            intonated_keywords=[keyword['sentiment']['score'] for keyword in keywords_in_article if keyword['sentiment']['label']==intonation]
-            return sum(intonated_keywords)
+        """
+        Calculate the sum of scores for keywords with the given intonation.
+        :param intonation: Intonation of the keywords ('positive' or 'negative' or 'neutral')
+        :return: Sum of scores for keywords with the given intonation
+        """
+        keywords_in_article=self.find_keywords_in_article()
+        intonated_keywords=[keyword['sentiment']['score'] for keyword in keywords_in_article if keyword['sentiment']['label']==intonation]
+        return sum(intonated_keywords)
 
 
 
     def create_sentiment_score_rows(self):
+        """
+        Create rows for sentiment score data to be stored in the database.
+        :return: List of tuples representing sentiment score data
+        (overall_sentiment,sum_negative,sum_positive,date,article_score)
+        the reason for this format is this is the format psycopg uses for adding rows to the database.
+        The article_score is not always equal to sum_positive and sum_negative, this is intentional,
+        because article_score
+        analyzes the description and the body in its entirety.
+        """
         date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
         rows = [(self.link,self.sentiment,
                  self.calculate_keyowrd_sum('negative'),self.calculate_keyowrd_sum('positive'),date_str,self.score)]
@@ -158,8 +177,9 @@ class Article:
 
     def find_text_by_regex(self, regex):
         """
-        Returns a list of strings which contain the regular expression given as a parameter
-        regex- a regular expression to search for in the website,string
+        Return the list of strings that match a regular expression in the article.
+        :param regex: The expression to match
+        :return: The list of strings that match a regular expression in the article
         """
         return [paragraph.get_text() for paragraph in self.soup.findAll(name='div', string=re.compile(regex))]
 
@@ -169,20 +189,18 @@ class Article:
     def count_word_in_webpage(self, word):
         
         """
-        parameters:
-        word- the word we want to count, string
-        includes instances of the word within other words,
-        for example if the word is "in" , will be counted in "instance"
-        returns number of instances of that word in the text-integer
+        Count the number of instances of a word in the webpage.
+        :param word: Word to be counted
+        :return: Number of instances of the word in the text
         """
         return len(self.soup.find_all(string=re.compile(word)))
 
     def count_phrase_in_webpage(self, phrase):
         """
-        parameters:
-        phrase- the phrase we want to count, string
-        counts only if the phrase is the entire word
-        returns number of instances of that word in the text-integer
+        Count the number of instances of a phrase in the webpage.
+        (it can't be a part of another word)
+        :param phrase: Phrase to be counted
+        :return: Number of instances of the phrase in the text
         """
         pattern = re.compile(r'\b{}\b'.format(re.escape(phrase)))
         return len(self.soup.find_all(string=pattern))
@@ -190,21 +208,23 @@ class Article:
     
 
     def extract_article_description(self):
+        """
+        Extract the description of the article from the webpage.
+        can be empty because news formats for websites are different
+        :return: Extracted article description
+        """
         meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
         content_description=meta_tag["content"] if meta_tag is not None else ''        
         return content_description    
 
     def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):
         """
-    given a keyword list, convert it into a format which can be written to the database
-    :param keyword_intonation_list:
-    list of tuples, each tuple is (keyword,intonation)
-    keyword- string
-    intonation- True: positive, False:negative
-    :return: a list of the tuples :
-     (website name, the keyword, date of the article, the number of times the keyword shows up in the article,
-    the link to the article, the intonation of the keyword)
-    """
+        Create rows of data to be stored in the database.
+        :param keyword_intonation_list: List of tuples containing keywords and their intonations
+        :param phrases_intonation_list: List of tuples containing phrases and their intonations
+        :param category: Category of the article
+        :return: List of tuples representing data rows
+        """
         date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
         rows = [(self.website, keyword, date_str, str(self.count_word_in_webpage(keyword)), self.link, str(intonation), category,self.score)
             for keyword, intonation in keyword_intonation_list]
