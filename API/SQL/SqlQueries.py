@@ -18,7 +18,26 @@ class SQLQuery:
         self.host = url.hostname
         self.port = url.port
 
-
+    def update_keyword_sentiment(self,table_name,keyword,intonation,website,new_score):
+        conn = None
+        update_query = f"""UPDATE {table_name}
+                        SET score = {new_score}
+                        WHERE keyword = {keyword} AND intonation={intonation} AND website={website};"""
+        
+        try:
+            conn = psycopg2.connect(
+                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+            )
+            cur = conn.cursor()
+            # on multiple rows at once
+            cur.execute(update_query)
+            conn.commit()
+            cur.close()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
     def execute_query(self, sql_query, values=None):
 
         conn = None
@@ -112,7 +131,28 @@ class SQLQuery:
                      "VALUES(%s,%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, article_analysis_list)
     def insert_keyword_intonation_analysis_sql(self,keyword_analysis_list,id=""):
-        insert_sql = "INSERT INTO KeywordSentiment"+str(id)+"(keyword,intonation,score ,website) " \
+        existing_rows=self.select_keyword_sentiment(id)
+        updated_rows = []
+        for keyword_analysis in keyword_analysis_list:
+            keyword, intonation, score, website = keyword_analysis
+
+        # Check if there is a matching element in the existing_rows list
+            for existing_row in existing_rows:
+                kw, it, existing_score, web = existing_row
+                if kw == keyword and it == intonation and web == website:
+                # Calculate the updated score by adding the previous score and the current score
+                    updated_score = existing_score + score
+
+                # Create a new tuple with the updated score and append it to the updated_elements list
+                    updated_element = (keyword, intonation, updated_score, website)
+                    updated_rows.append(updated_element)
+        
+        for row in updated_rows:
+            keyword,intonation,score,website=row
+            self.update_keyword_sentiment(f"KeywordSentiment{id}",keyword,intonation,website,score)
+
+        
+        insert_sql = "INSERT INTO KeywordSentiment"+str(id)+"(keyword,intonation,score,website) " \
                      "VALUES(%s,%s,%s,%s);"
         self.execute_query(insert_sql, keyword_analysis_list)
         
