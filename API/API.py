@@ -189,7 +189,7 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 insert_query.insert_article_to_sql(rows_to_add,table_id)
                 insert_query.insert_article_intonation_analysis_sql(sentiment_row_to_add,table_id)
                 #TODO: change to insert and update
-                insert_query.insert_keyword_intonation_analysis_sql(keyword_sentiment_rows_to_add,table_id)
+                insert_query.insert_and_update_keyword_intonation_analysis_sql(keyword_sentiment_rows_to_add,table_id)
             except HTTPError:
                 make_response("This website is forbidden to scrap",403)   
 

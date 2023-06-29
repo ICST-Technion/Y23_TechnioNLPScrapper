@@ -8,7 +8,17 @@ from urllib.parse import urlparse
 
 
 class SQLQuery:
+    """
+    This class is used to connect to our posgresql database
+    and perform different operations on our records
+    """
     def __init__(self):
+        """
+        Initialize the SQLQuery class.
+        Set up the connection details for the PostgreSQL database.
+        The current url is an ElephantSQL database.
+        The maximum amount of records that can be stored, is limited by the payment plan
+        """
         self.db_url = "postgres://ltwwxnaj:BYQgr0k-KgVH98QbpkMfZ1USDpX2XDGU@ella.db.elephantsql.com/ltwwxnaj"
         # this line allows us to figure out the connection information to our database independent of the actual url
         url = urlparse(self.db_url)
@@ -19,6 +29,14 @@ class SQLQuery:
         self.port = url.port
 
     def update_keyword_sentiment(self,table_name,keyword,intonation,website,new_score):
+        """
+        Update the sentiment score of a keyword in the specified table.
+        :param table_name: Name of the table to update
+        :param keyword: Keyword to update
+        :param intonation: Intonation to update
+        :param website: Website to update
+        :param new_score: New sentiment score to set
+        """
         conn = None
         update_query = f"""UPDATE {table_name}
                         SET score = {new_score}
@@ -39,7 +57,11 @@ class SQLQuery:
             if conn is not None:
                 conn.close()
     def execute_query(self, sql_query, values=None):
-
+        """
+        Execute the provided SQL query,provided there are no values
+        :param sql_query: SQL query to execute
+        :param values: Values to be used in the query (optional)
+        """
         conn = None
         try:
             conn = psycopg2.connect(
@@ -62,22 +84,29 @@ class SQLQuery:
 
     def insert_article_to_sql(self, keyword_list,id=""):
         """
-    insert the keyword_list given as parameter to our SQL server
-    :param keyword_list: the rows you want to insert to the database
-    prints an error if there was an issue with insertion
-    note: postgresql automatically converts names to lowercase, to use uppercase
-    we need to add quotation marks ""
-
-    """
+        Insert a list of keyword rows into the Articles table.
+        :param keyword_list: List of keyword rows to insert
+        :param id: Optional identifier for the table for concurrency
+        """
 
         insert_sql = "INSERT INTO Articles"+str(id)+"(website,keyword,date,count,link,intonation,category,score) " \
                      "VALUES(%s,%s,%s,%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, keyword_list)
     def insert_keyword_intonation_to_sql(self,keyword_intonation_list):
+        """
+        Insert a list of keyword intonation rows into the Keywords table.
+        This is the table used for learning intonations of keywords
+        :param keyword_intonation_list: List of keyword intonation rows to insert
+        """
         insert_sql = "INSERT INTO Keywords(keyword,intonation) " \
                      "VALUES(%s,%s);"
         self.execute_query(insert_sql, keyword_intonation_list)
     def select_all_from_table(self,table_name):
+        """
+        Select all rows from the specified table.
+        :param table_name: Name of the table to select from
+        :return: List of all rows in the table
+        """
         select_query=f'SELECT * FROM {table_name}'
         conn = None
         cur = None
@@ -95,17 +124,31 @@ class SQLQuery:
                 cur.close()
                 conn.close()
     def select_learned_keywords(self):
+        """
+        Select all rows from the Keywords table.
+        we need it to map keywords we already learned to intonation
+        :return: List of all rows in the Keywords table
+        """
         return self.select_all_from_table('Keywords')
     
 
     def select_keyword_sentiment(self,id):
+        """
+        Select all rows from the KeywordSentiment table with the specified ID.
+        :param id: ID of the table
+        :return: List of all rows in the KeywordSentiment table
+        """
         return self.select_all_from_table(f'KeywordSentiment'+{id})
         
                        
     def select_articles_from_sql(self, columns="*", conditions=None,id="",table_name="Articles"):
         """
-        select columns from a table based in a condition
-        assumption: all tables have a name format of table_nameid
+        Select columns from a table based on a condition.
+        :param columns: Columns to select (default: "*" meaning all)
+        :param conditions: Condition to filter the rows (optional)
+        :param id: Optional identifier for the table
+        :param table_name: Name of the table to select from (default: "Articles")
+        :return: List of selected rows from the table
         """
         if conditions is not None:
             select_query = f"SELECT {columns} FROM "+table_name+str(id)+f" WHERE {conditions}"
@@ -126,11 +169,25 @@ class SQLQuery:
             if conn:
                 cur.close()
                 conn.close()
+
+
     def insert_article_intonation_analysis_sql(self,article_analysis_list,id=""):
+        """
+        Insert an article analysis list into the ArticleSentiment table.
+        :param article_analysis_list: List of article analysis rows to insert
+        :param id: Optional identifier for the table
+        """
         insert_sql = "INSERT INTO ArticleSentiment"+str(id)+"(article_link,overall_sentiment,sum_negative_keywords ,sum_positive_keywords ,date, total_score) " \
                      "VALUES(%s,%s,%s,%s,%s,%s);"
         self.execute_query(insert_sql, article_analysis_list)
-    def insert_keyword_intonation_analysis_sql(self,keyword_analysis_list,id=""):
+
+    def insert_and_update_keyword_intonation_analysis_sql(self,keyword_analysis_list,id=""):
+        """
+        Insert a keyword analysis list into the KeywordSentiment table.
+        We also need to upate the score of any keywords that already exist
+        :param keyword_analysis_list: List of keyword analysis rows to insert
+        :param id: Optional identifier for the table
+        """
         existing_rows=self.select_keyword_sentiment(id)
         updated_rows = []
         for keyword_analysis in keyword_analysis_list:
@@ -159,16 +216,18 @@ class SQLQuery:
             
     def clear_table(self):
         """
-        clears all records from the table, but table structure remains,
-        unlike DROP and DELETE
+        Clear all records from the table, but the table structure remains, unlike DROP and DELETE.
+        The table can be accessed later and does not need to be created again
         """
         clear_query = "TRUNCATE TABLE Articles"
         self.execute_query(clear_query)
     def generate_table(self,upper_limit=1000):
         """
-        Create a random Articles table to store the results,
-        so that concurrent requests will not show incorrectly
-        returns the id of the generated table as string
+        Create a random Articles table to store the results, 
+        so that concurrent requests will not show incorrectly.
+        Returns the ID of the generated table as a string.
+        :param upper_limit: Upper limit for the random table ID (default: 1000)
+        :return: ID of the generated table
         """
         table_id=str(random.randint(0,upper_limit))
         create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation TEXT,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"
@@ -181,8 +240,9 @@ class SQLQuery:
     
     def delete_table(self,table_id):
         """
-        clears all records from the table and removes it permenantly
-        unlike TRUNCATE 
+        Clear all records from all 3 tables and remove them permanently, unlike TRUNCATE.
+        The reason for this is to work within the limited storage of the free plan in ElephantSQL
+        :param table_id: ID of the table to delete
         """
         clear_query = "DROP TABLE Articles"+str(table_id)
         self.execute_query(clear_query)
@@ -193,8 +253,8 @@ class SQLQuery:
     
     def delete_specific_table(self,table_name):
         """
-        clears all records from the table and removes it permenantly
-        unlike TRUNCATE 
+        Clear all records from the table and remove it permanently, unlike TRUNCATE.
+        :param table_name: Name of the table to delete
         """
         clear_query = "DROP TABLE "+str(table_name)
         self.execute_query(clear_query)
