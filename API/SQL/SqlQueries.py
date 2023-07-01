@@ -120,6 +120,7 @@ class SQLQuery:
             conn = psycopg2.connect(
                 database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
             )
+            conn.set_client_encoding(self.encoding)
             cur = conn.cursor()
             cur.execute(select_query)
             return cur.fetchall()
@@ -144,7 +145,7 @@ class SQLQuery:
         :param id: ID of the table
         :return: List of all rows in the KeywordSentiment table
         """
-        return self.select_all_from_table(f'KeywordSentiment'+{id})
+        return self.select_all_from_table('KeywordSentiment'+id)
         
                        
     def select_articles_from_sql(self, columns="*", conditions=None,id="",table_name="Articles"):
@@ -166,6 +167,7 @@ class SQLQuery:
             conn = psycopg2.connect(
                 database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
             )
+            conn.set_client_encoding(self.encoding)
             cur = conn.cursor()
             cur.execute(select_query)
             return cur.fetchall()
