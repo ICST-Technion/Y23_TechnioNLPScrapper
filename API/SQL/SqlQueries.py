@@ -229,6 +229,7 @@ class SQLQuery:
         """
         clear_query = "TRUNCATE TABLE Articles"
         self.execute_query(clear_query)
+
     def generate_table(self,upper_limit=1000):
         """
         Create a random Articles table to store the results, 
@@ -238,6 +239,8 @@ class SQLQuery:
         :return: ID of the generated table
         """
         table_id=str(random.randint(0,upper_limit))
+        #erases previous tables we may have failed to close
+        self.delete_table(table_id)
         create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation TEXT,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"
         self.execute_query(create_query)
         create_sentiment_query = "CREATE TABLE ArticleSentiment"+table_id+"(article_link TEXT,overall_sentiment TEXT,sum_negative_keywords NUMERIC(5,3),sum_positive_keywords NUMERIC(5,3),date DATE,total_score Numeric(4,3),PRIMARY KEY (article_link));"
@@ -252,11 +255,11 @@ class SQLQuery:
         The reason for this is to work within the limited storage of the free plan in ElephantSQL
         :param table_id: ID of the table to delete
         """
-        clear_query = "DROP TABLE Articles"+str(table_id)
+        clear_query = "DROP TABLE IF EXISTS Articles"+str(table_id)
         self.execute_query(clear_query)
-        clear_sentiment_query = "DROP TABLE ArticleSentiment"+str(table_id)
+        clear_sentiment_query = "DROP TABLE IF EXISTS ArticleSentiment"+str(table_id)
         self.execute_query(clear_sentiment_query)
-        clear_keyword_sentiment_query = "DROP TABLE KeywordSentiment"+str(table_id)
+        clear_keyword_sentiment_query = "DROP TABLE IF EXISTS KeywordSentiment"+str(table_id)
         self.execute_query(clear_keyword_sentiment_query)
     
     def delete_specific_table(self,table_name):
@@ -264,5 +267,5 @@ class SQLQuery:
         Clear all records from the table and remove it permanently, unlike TRUNCATE.
         :param table_name: Name of the table to delete
         """
-        clear_query = "DROP TABLE "+str(table_name)
+        clear_query = "DROP TABLE IF EXISTS "+str(table_name)
         self.execute_query(clear_query)
