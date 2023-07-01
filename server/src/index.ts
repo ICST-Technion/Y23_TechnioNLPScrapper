@@ -23,9 +23,7 @@ app.use(cookieParser())
 let userDB: typeof import("mongoose");
 
 
-
-
-app.get('/keywordsentiment/:id', async (req: Request, res: Response) => {
+app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
   try {
     const token = protectedRoute(req, res);
     if(token === consts.ERROR_401 || typeof(token) === "string")
