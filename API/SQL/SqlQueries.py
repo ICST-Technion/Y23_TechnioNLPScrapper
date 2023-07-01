@@ -18,6 +18,8 @@ class SQLQuery:
         Set up the connection details for the PostgreSQL database.
         The current url is an ElephantSQL database.
         The maximum amount of records that can be stored, is limited by the payment plan
+        Note about the encoding: the default encoding is typically ASCII, which does not support Hebrew
+        characters
         """
         self.db_url = "postgres://ltwwxnaj:BYQgr0k-KgVH98QbpkMfZ1USDpX2XDGU@ella.db.elephantsql.com/ltwwxnaj"
         # this line allows us to figure out the connection information to our database independent of the actual url
@@ -27,6 +29,7 @@ class SQLQuery:
         self.password = url.password
         self.host = url.hostname
         self.port = url.port
+        self.encoding ='UTF-8'
 
     def update_keyword_sentiment(self,table_name,keyword,intonation,website,new_score):
         """
@@ -46,6 +49,7 @@ class SQLQuery:
             conn = psycopg2.connect(
                 database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
             )
+            conn.set_client_encoding(self.encoding)
             cur = conn.cursor()
             # on multiple rows at once
             cur.execute(update_query)
@@ -65,8 +69,10 @@ class SQLQuery:
         conn = None
         try:
             conn = psycopg2.connect(
-                database=self.database, user=self.user, password=self.password, host=self.host, port=self.port
+                database=self.database, user=self.user, 
+                password=self.password, host=self.host, port=self.port
             )
+            conn.set_client_encoding(self.encoding)
             cur = conn.cursor()
             # on multiple rows at once
             if values is not None:
