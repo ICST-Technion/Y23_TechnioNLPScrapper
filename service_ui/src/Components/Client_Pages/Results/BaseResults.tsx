@@ -106,9 +106,12 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       const [dataReq, intonationDataReq] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
       basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})])
 
+      const keywordSentimentData = await basicAxiosInstance()({method:"get", url:"/keywordSentiment/" + table_id})
+      console.log(keywordSentimentData.data.data)
+
       // print them for local testing, can delete this later
-      console.log(dataReq.data.data);
-      console.log(intonationDataReq.data.data);
+      // console.log(dataReq.data.data);
+      // console.log(intonationDataReq.data.data);
 
       //save the datasets
       const data = dataReq.data.data;
