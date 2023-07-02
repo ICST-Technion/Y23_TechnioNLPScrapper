@@ -85,10 +85,9 @@ class Article:
         try:
             # can fail because access is forbidden to some links
             source = urllib.request.urlopen(link).read()
-        except HTTPError:
-            print("Website inaccessible")
-            return
-        self.soup = bs.BeautifulSoup(source, 'lxml')
+            self.soup = bs.BeautifulSoup(source, 'lxml')
+        except HTTPError as e:
+            raise HTTPError(e.url, e.code, "forbidden to scrap.", e.hdrs, e.fp)
         if self.soup.title is not None:
             self.title = self.soup.title.string
         self.website = get_website_name(link)
