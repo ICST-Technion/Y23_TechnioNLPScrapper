@@ -8,7 +8,7 @@ import {
 import { basicAxiosInstance, getLanguage, mapToArray, parseString } from "../../../Helpers/helpers";
 import { ButtonWithPopUp } from "../General Components/ButtonWithPopUp";
 import { TimeRange } from "../General Components/TimeRange";
-import { CLEAR, EXCLUDED_KEYWORDS, EXCLUDE_KEYWORDS, EXCLUDE_WEBSITES, GO_BACK, NEGATIVE_KEYWORDS, POSITIVE_KEYWORDS, RUN, SPECIFY_WEBSITES, TIME_RANGE } from "../../../Helpers/texts";
+import { CLEAR, INCLUDED_KEYWORDS, EXCLUDE_KEYWORDS, EXCLUDE_WEBSITES, GO_BACK, NEGATIVE_KEYWORDS, POSITIVE_KEYWORDS, RUN, SPECIFY_WEBSITES, TIME_RANGE } from "../../../Helpers/texts";
 
 export interface AdvancedSearchComponentProps {
   keywords: string[];
@@ -108,7 +108,7 @@ export const AdvancedSearchComponent: React.FC<
             <div className="button-row">
               <ButtonWithPopUp
                 ID={4}
-                text={EXCLUDED_KEYWORDS[language]}
+                text={INCLUDED_KEYWORDS[language]}
                 updated={keywordMap}
                 setUpdated={setKeywordMapFromChild}
               />

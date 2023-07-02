@@ -1,5 +1,6 @@
 import { da } from "date-fns/locale";
 import { copy, randomIntFromInterval } from "../../../Helpers/helpers";
+import * as XLSX from "xlsx";
 
 // set usefuls consts and types
 export const NEGATIVE = 0;
@@ -307,4 +308,15 @@ export function getStartOf10thPreviousYear(): string {
   const tenYearsAgo = new Date(today.getFullYear() - 10, 0, 1, 0, 0, 0);
   const year = tenYearsAgo.getFullYear();
   return `${year}-01-01 00:00:00`;
+}
+
+
+export const downloadArticleDataAsExcel = (data: any) => {
+  //filter to remove the unnecessary fields
+  const filtered = data.map((item: any) => { return {article: item.article_link,
+     date: item.date, overall_sentiment: item.overall_sentiment, total_score: item.total_score}; });
+  const ws = XLSX.utils.json_to_sheet(filtered);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, "article_data.xlsx");
 }

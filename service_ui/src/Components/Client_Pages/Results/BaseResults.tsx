@@ -14,7 +14,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
 import { basicAxiosInstance, cookie, copy, getLanguage, randomIntFromInterval } from "../../../Helpers/helpers";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Modal, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
 import { MAIN_SEARCH_PAGE } from "../../../Helpers/consts";
@@ -22,6 +22,7 @@ import {
   a11yProps,
   countSumForType,
   createTimeIntonationSet,
+  downloadArticleDataAsExcel,
   getDate10DaysAgo,
   getStartOf10thPreviousMonth,
   getStartOf10thPreviousWeek,
@@ -34,7 +35,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { BASIC_TABS_EXAMPLE, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, GO_BACK, GRAPH_BY, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, CLICK_TO_DOWNLOAD, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, DOWNLOAD_ARTICLE_DATA, DOWNLOAD_DESC_1, DOWNLOAD_DESC_2, DOWNLOAD_DESC_3, DOWNLOAD_FILE, GO_BACK, GRAPH_BY, INTONATION, KEYWORD_INTONATION_COUNT, INTONATION_SUMMARY_GRAPH as KEYWORD_INTONATION_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
 
 export interface baseResultsProps {
@@ -67,6 +68,15 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const [merged, setMerged] = React.useState<any[]>([]);
 
   const [value, setValue] = React.useState(0);
+
+  // open for the download modal popup
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   // helpers needed for the time graph
   const [dataByScore, setDataByScore] = React.useState<boolean>(false);
@@ -263,10 +273,29 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               aria-label={BASIC_TABS_EXAMPLE[language]}
             >
               <Tab label= {KEYWORD_WEBSITE_GRAPH[language]} {...a11yProps(0)} />
-              <Tab label= {INTONATION_SUMMARY_GRAPH[language]} {...a11yProps(1)} />
-              <Tab label= {TIMED_INTONATION_GRAPH[language]} {...a11yProps(1)} />
+              <Tab label= {KEYWORD_INTONATION_GRAPH[language]} {...a11yProps(1)} />
+              <Tab label= {TIMED_INTONATION_GRAPH[language]} {...a11yProps(2)} />
+              <Button onClick={handleOpen}>{DOWNLOAD_ARTICLE_DATA[language]}</Button>
+              <Modal 
+                open={open}
+                onClose={handleClose}>
+                <Box className="download-modal">
+                  <h2 id="parent-modal-title" style={{alignSelf:'center'}}>{DOWNLOAD_FILE[language]}</h2>
+                  <p id="parent-modal-description_1">
+                    {DOWNLOAD_DESC_1[language]}
+                  </p>
+                  <p id="parent-modal-description_2">
+                    {DOWNLOAD_DESC_2[language]}
+                  </p>
+                  <p id="parent-modal-description_3">
+                    {DOWNLOAD_DESC_3[language]}
+                  </p>
+                  <Button onClick={() => downloadArticleDataAsExcel(articleIntonationDataset)}>{CLICK_TO_DOWNLOAD[language]}</Button>
+                </Box>
+              </Modal>
             </Tabs>
           </Box>
+            
           <div
               className="App flex result"
             >
@@ -293,7 +322,13 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
               <Bar
                 datasetIdKey="trial"
-                options={options}
+                options={
+                  {...options, plugins: {
+                    title: {
+                      display: true,
+                      text: `${GRAPH_BY[language]} ${KEYWORD_INTONATION_COUNT[language]}` ,
+                    },
+                  },}}
                 data={intonationData}
                 className="fit"
               />
