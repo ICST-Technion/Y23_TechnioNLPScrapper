@@ -656,7 +656,7 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
   background-color: floralwhite;
   display: flex;
   flex-direction: column;
-  height: 50vh;
+  min-height: 50vh;
   font-size: x-large;
   justify-content: space-evenly;
   padding: 2vh 4vw 3vh 4vw;
