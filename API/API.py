@@ -218,7 +218,9 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 #TODO: change to insert and update
                 insert_query.insert_and_update_keyword_intonation_analysis_sql(keyword_sentiment_rows_to_add,table_id)
             except HTTPError:
-                make_response("This website is forbidden to scrap",403)   
+                print('forbidden website')
+                #skip websites that we can't scrap because access is forbidden
+                continue
 
 def do_search_query(category='1'):
     '''

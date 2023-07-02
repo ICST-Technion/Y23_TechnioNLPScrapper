@@ -43,7 +43,7 @@ class SQLQuery:
         conn = None
         update_query = f"""UPDATE {table_name}
                         SET score = {new_score}
-                        WHERE keyword = {keyword} AND intonation={intonation} AND website={website};"""
+                        WHERE keyword = %s AND intonation= %s AND website= %s;"""
         
         try:
             conn = psycopg2.connect(
@@ -52,7 +52,7 @@ class SQLQuery:
             conn.set_client_encoding(self.encoding)
             cur = conn.cursor()
             # on multiple rows at once
-            cur.execute(update_query)
+            cur.execute(update_query,(keyword,intonation,website))
             conn.commit()
             cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
