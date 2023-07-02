@@ -86,6 +86,13 @@ export const SCORE = ["Average Score","ניקוד ממוצע","معدل درجا
 export const GRAPH_BY = ["Graph By","גרף לפי","رسم بياني بواسطة"]
 export const KEYWORD_INTONATION_COUNT = ["Intonated Use of Given Keywords","שימוש אינטונציונלי במילות מפתח נתונות","استخدام ملون للكلمات الرئيسية المعطاة"]
 
+export const DOWNLOAD_FILE = ["File Download", "הורדת הקובץ", "تحميل الملف"]
+export const DOWNLOAD_DESC_1 = ["The file you are about to download is the 'article_data.xlsx' file.", "הקובץ שאתה עומד להוריד הוא קובץ 'article_data.xlsx'.", "الملف الذي تقوم بتنزيله هو ملف 'article_data.xlsx'."]
+export const DOWNLOAD_DESC_2 = ["This file contains the data for each article that was analyzed.", "הקובץ מכיל את הנתונים של כל המאמרים שננתחו.", "يحتوي هذا الملف على البيانات لكل مقال تم تحليله."]
+export const DOWNLOAD_DESC_3 = ["The data includes: the article's link, its publication date,  sentiment score, and overall intonation.", "הנתונים כוללים: קישור המאמר, תאריך הפרסום, ניקוד המאמר, והאינטונציה הכוללת.", "تتضمن البيانات: رابط المقال ، تاريخ النشر ، درجة الإحساس ، والنبرة العامة."]
+export const DOWNLOAD_ARTICLE_DATA = ["Download Article Data", "הורד נתוני מאמרים", "تحميل بيانات المقالات"]
+export const CLICK_TO_DOWNLOAD = ["Click here to download", "לחץ כאן להורדה", "انقر هنا للتحميل"]
+
 //App
 export const SINGOUT = ["Sign Out", "התנתק", "خروج"]
 export const REGISTER = ["register new user", "הוספת משתמש חדש", "تسجيل مستخدم جديد"]

@@ -646,3 +646,18 @@ input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-to
   justify-content: center!important;
   align-items: center!important;
 }
+
+.download-modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #000;
+  background-color: floralwhite;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  font-size: x-large;
+  justify-content: space-evenly;
+  padding: 2vh 4vw 3vh 4vw;
+}
