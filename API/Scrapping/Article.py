@@ -93,7 +93,6 @@ class Article:
             self.title = self.soup.title.string
         self.website = get_website_name(link)
         self.date = parse_date(self.extract_date())
-
         text=self.extract_article_description()
         try:
             self.sentiment,self.score=extract_sentiment(text)
@@ -159,7 +158,6 @@ class Article:
         return sum(intonated_keywords)
 
 
-
     def create_sentiment_score_rows(self):
         """
         Create rows for sentiment score data to be stored in the database.
@@ -170,7 +168,7 @@ class Article:
         because article_score
         analyzes the description and the body in its entirety.
         """
-        date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
+        date_str = self.date_to_sql_format()
         rows = [(self.link,self.sentiment,
                  self.calculate_keyowrd_sum('negative'),self.calculate_keyowrd_sum('positive'),date_str,self.score)]
         return rows
@@ -216,7 +214,18 @@ class Article:
         meta_tag = self.soup.head.find('meta', attrs={'name': 'description'})
         content_description=meta_tag["content"] if meta_tag is not None else ''        
         return content_description    
+    def date_to_sql_format(self):
 
+        sql_datetime_format="%Y-%m-%d, %H:%M:%S"
+        date_as_sql_string=''
+        try:
+            date_as_sql_string = self.date.strftime(sql_datetime_format)
+        except:
+            date_as_sql_string = datetime.now().strftime(sql_datetime_format)
+        finally:
+            return date_as_sql_string    
+
+        
     def create_rows_to_database(self, keyword_intonation_list, phrases_intonation_list, category='1'):
         """
         Create rows of data to be stored in the database.
@@ -225,7 +234,7 @@ class Article:
         :param category: Category of the article
         :return: List of tuples representing data rows
         """
-        date_str = self.date.strftime("%Y-%m-%d, %H:%M:%S")
+        date_str = self.date_to_sql_format()
         rows = [(self.website, keyword, date_str, str(self.count_word_in_webpage(keyword)), self.link, str(intonation), category,self.score)
             for keyword, intonation in keyword_intonation_list]
         rows += [(self.website, phrase, date_str, str(self.count_phrase_in_webpage(phrase)), self.link, str(intonation), category,self.score)
