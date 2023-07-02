@@ -34,7 +34,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { BASIC_TABS_EXAMPLE, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, GO_BACK, GRAPH_BY, INTONATION, INTONATION_SUMMARY_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, GO_BACK, GRAPH_BY, INTONATION, KEYWORD_INTONATION_COUNT, INTONATION_SUMMARY_GRAPH as KEYWORD_INTONATION_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
 
 export interface baseResultsProps {
@@ -260,7 +260,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               aria-label={BASIC_TABS_EXAMPLE[language]}
             >
               <Tab label= {KEYWORD_WEBSITE_GRAPH[language]} {...a11yProps(0)} />
-              <Tab label= {INTONATION_SUMMARY_GRAPH[language]} {...a11yProps(1)} />
+              <Tab label= {KEYWORD_INTONATION_GRAPH[language]} {...a11yProps(1)} />
               <Tab label= {TIMED_INTONATION_GRAPH[language]} {...a11yProps(1)} />
             </Tabs>
           </Box>
@@ -290,7 +290,13 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
               <Bar
                 datasetIdKey="trial"
-                options={options}
+                options={
+                  {...options, plugins: {
+                    title: {
+                      display: true,
+                      text: `${GRAPH_BY[language]} ${KEYWORD_INTONATION_COUNT[language]}` ,
+                    },
+                  },}}
                 data={intonationData}
                 className="fit"
               />

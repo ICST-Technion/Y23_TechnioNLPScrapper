@@ -29,7 +29,7 @@ export const RUN = ["Run", "הרץ", "تشغيل"]
 export const ADVANCED_SEARCH_OPTIONS = ["Advanced Search Options","אפשרויות חיפוש מתקדמות", "خيارات البحث المتقدمة"]
 
 //advancedSearchComponent
-export const EXCLUDED_KEYWORDS = ["included keywords", "מילים נכללות", "كلمات متضمنة"]
+export const INCLUDED_KEYWORDS = ["included keywords", "מילים נכללות", "كلمات متضمنة"]
 export const EXCLUDE_KEYWORDS = ["exclude keywords", "מילים לא נכללות", "كلمات مستبعدة"]
 export const POSITIVE_KEYWORDS = ["Positive Keywords", "מילים חיוביות", "كلمات إيجابية"]
 export const NEGATIVE_KEYWORDS = ["Negative Keywords", "מילים שליליות", "كلمات سلبية"]
@@ -72,7 +72,7 @@ export const NEGATIVE_INTONATION = ["negative intonation", "אינטונציה �
 export const POSITIVE_INTONATION = ["positive intonation", "אינטונציה חיובית", "النبرة الإيجابية"]
 export const NEUTRAL_INTONATION = ["neutral intonation", "אינטונציה ניטרלית", "النبرة المحايدة"]
 export const KEYWORD_WEBSITE_GRAPH = ["Keyword-Website Graph", "גרף מילות מפתח-אתר", "الكلمة الرئيسية - موقع الويب"]
-export const INTONATION_SUMMARY_GRAPH = ["Intonation Summary Graph", "גרף סיכום אינטונציה", "ملخص النبرة "]
+export const INTONATION_SUMMARY_GRAPH = ["Keyword intonation Graph", "גרף אינטונצית מילות מפציח", "ملخص نبرة الكلمات "]
 export const TIMED_INTONATION_GRAPH = ["Articles Over Time Graph", "גרף מאמרים לאורך זמן", "مقالات مع مرور الوقت"]
 export const BASIC_TABS_EXAMPLE = ["basic tabs example", "דוגמה לכרטיסיות בסיסיות", "مثال على صفحات أساسية"]
 export const NEGATIVE = ["negative", "שלילי", "سلبي"]
@@ -84,6 +84,7 @@ export const SHOW_THE_GRAPH_BY = ["show the graph by","הצג את הגרף לפ
 export const COUNT = ["Article Count","מספר כתבות","عدد المقالات"]
 export const SCORE = ["Average Score","ניקוד ממוצע","معدل درجات"]
 export const GRAPH_BY = ["Graph By","גרף לפי","رسم بياني بواسطة"]
+export const KEYWORD_INTONATION_COUNT = ["Intonated Use of Given Keywords","שימוש אינטונציונלי במילות מפתח נתונות","استخدام ملون للكلمات الرئيسية المعطاة"]
 
 //App
 export const SINGOUT = ["Sign Out", "התנתק", "خروج"]
