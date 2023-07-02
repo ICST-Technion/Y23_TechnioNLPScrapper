@@ -205,10 +205,10 @@ class SQLQuery:
             for existing_row in existing_rows:
                 kw, it, existing_score, web = existing_row
                 if kw == keyword and it == intonation and web == website:
-                # Calculate the updated score by adding the previous score and the current score
-                    updated_score = existing_score + score
+                # Both are converted to float, because rows from the database with numeric type are of decimal.decimal type
+                    updated_score =float(existing_score) +float(score)
 
-                # Create a new tuple with the updated score and append it to the updated_elements list
+
                     updated_element = (keyword, intonation, updated_score, website)
                     updated_rows.append(updated_element)
         
