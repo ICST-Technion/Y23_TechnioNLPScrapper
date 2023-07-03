@@ -347,7 +347,7 @@ export const websiteIntonationDatasets = (merged: any[], orig_keywords:string[])
       id: idx,
       label: intonations[idx],
       data: dataset,
-      backgroundColor: `rgba(${idx == 0? 0: 255},${idx == 0? 255 : 0},${0},0.5)`,
+      backgroundColor: `rgba(${intonations[idx] === 'positive'? 0: 255},${intonations[idx] === 'positive'? 255 : 0},${0},0.5)`,
     };
   });
   return [keywords_websites,sets]
