@@ -32,11 +32,14 @@ import {
   options,
   unitType,
   websiteDatasets,
+  websiteIntonationDatasets,
+  websiteIntonationDatasetsByCount,
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { BASIC_TABS_EXAMPLE, CLICK_TO_DOWNLOAD, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, DOWNLOAD_ARTICLE_DATA, DOWNLOAD_DESC_1, DOWNLOAD_DESC_2, DOWNLOAD_DESC_3, DOWNLOAD_FILE, GO_BACK, GRAPH_BY, INTONATION, KEYWORD_INTONATION_COUNT, INTONATION_SUMMARY_GRAPH as KEYWORD_INTONATION_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, CLICK_TO_DOWNLOAD, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, DOWNLOAD_ARTICLE_DATA, DOWNLOAD_DESC_1, DOWNLOAD_DESC_2, DOWNLOAD_DESC_3, DOWNLOAD_FILE, GO_BACK, GRAPH_BY, INTONATION, KEYWORD_INTONATION_COUNT, INTONATION_SUMMARY_GRAPH as KEYWORD_INTONATION_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH, WATSON_KEYWORD_INTONATION_GRAPH } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
+import { TabPanelUnstyled } from "@mui/base";
 
 export interface baseResultsProps {
   includedKeywords: string[];
@@ -58,11 +61,9 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   const [loadingMessage, setLoadingMessage] = React.useState(DATA_PREPARATION_LABEL[language]);
   const [showResult, setShowResult] = React.useState(false);
 
-  // this is the dataset that includes everything, split by keyword and article
-  const [datasets, setDatasets] = React.useState<any[]>([]);
 
-  //this dataset is one that focuses on article, date and its overall intonation
-  const [articleIntonationDataset, setArticleIntonationDataset] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<any[]>([]);
+
 
   // merged datasets is the datasets merged by keyword and website, wont be needed when we this in the backend
   const [merged, setMerged] = React.useState<any[]>([]);
@@ -88,13 +89,27 @@ export const BaseResults: React.FC<baseResultsProps> = ({
   timeFrameLimits.set("year", getStartOf10thPreviousYear());
 
 
+
+
+
+
+  const endLoading = () => {
+    setLoading(false);
+    setTimeout(() => {setShowResult(true)}, 2000);
+  };
+
+  // get the data from server on page load async and start loading screen
+  React.useEffect(() => {
   /*
    * This function sets up the data from the server, and sets the datasets state
    */
   const startAnalysis = async () => {
     try {
+      setLoading(true);
+      setShowResult(false);
       const req = await axiosPromise!;
       let table_id = req.data.table_id;
+      setLoadingMessage(DATA_READING_LABEL[language]);
       return table_id;
     } catch (err: any) {
       if (err && err.response && err.response.status === 401)
@@ -107,58 +122,38 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       setPageNumber(MAIN_SEARCH_PAGE);
     }
   };
-
-  const getData = async (table_id: string) => {
-    try {
-      setLoadingMessage(DATA_READING_LABEL[language]);
-
-      //request data from DB
-      const [dataReq, intonationDataReq] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
-      basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id})])
-
-      const keywordSentimentData = await basicAxiosInstance()({method:"get", url:"/keywordSentiment/" + table_id})
-      console.log(keywordSentimentData.data.data)
-
-      // print them for local testing, can delete this later
-      // console.log(dataReq.data.data);
-      // console.log(intonationDataReq.data.data);
-
-      //save the datasets
-      const data = dataReq.data.data;
-      const intonationData = intonationDataReq.data.data;
-      setDatasets(data);
-      setArticleIntonationDataset(intonationData);
+    const getData = async (table_id: string) => {
+      try {
+        
+        //request data from DB
+        const [dataReq, intonationDataReq, keywordIntonationDataset] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
+        basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id}),await basicAxiosInstance()({method:"get", url:"/keywordSentiment/" + table_id})])
+  
+        const datas = dataReq.data.data;
+        //set the data
+        setData([dataReq.data.data, intonationDataReq.data.data, keywordIntonationDataset.data.data]);
+        
+        //if we have data, merge them by keywords
+        if (datas.length > 0 ) setMerged(mergeKeywords(datas));
       
-      //if we have data, merge them by keywords
-      if (data.length > 0) setMerged(mergeKeywords(data));
-    
-    } catch (err: any) {
-      if (err && err.response && err.response.status === 401)
-      {
-         alert(SESSION_EXPIRE[language]);
-         cookie.remove("token");
-         window.location.reload();
+      } catch (err: any) {
+        if (err && err.response && err.response.status === 401)
+        {
+           alert(SESSION_EXPIRE[language]);
+           cookie.remove("token");
+           window.location.reload();
+        }
+  
+        if(err.response?.data?.includes("does not exist"))
+        {
+          return;
+        }
+  
+        alert(err.response?.data? err.response.data : err)
+        setPageNumber(MAIN_SEARCH_PAGE);
       }
+    };
 
-      if(err.response?.data?.includes("does not exist"))
-      {
-        return;
-      }
-
-      alert(err.response?.data? err.response.data : err)
-      setPageNumber(MAIN_SEARCH_PAGE);
-    }
-  };
-
-  const endLoading = () => {
-    setLoading(false);
-    setTimeout(() => {setShowResult(true)}, 2000);
-  };
-
-  // get the data from server on page load async and start loading screen
-  React.useEffect(() => {
-    setLoading(true);
-    setShowResult(false);
 
     startAnalysis().then((table_id) => {
       if(table_id) 
@@ -185,7 +180,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
 
   const getPage = () => {
   // if there is no data, return a message
-  if (datasets.length === 0) {
+  if (data[0].length === 0) {
     return (
       <div className="App flex result">
         <button
@@ -211,7 +206,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           label: NEGATIVE_INTONATION[language],
           data: [
             countSumForType(
-              datasets,
+              data[0],
               "negative",
               positiveKeywords,
               negativeKeywords
@@ -224,7 +219,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           label: NEUTRAL_INTONATION[language],
           data: [
             countSumForType(
-              datasets,
+              data[0],
               "neutral",
               positiveKeywords,
               negativeKeywords
@@ -237,7 +232,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
           label: POSITIVE_INTONATION[language],
           data: [
             countSumForType(
-              datasets,
+              data[0],
               "positive",
               positiveKeywords,
               negativeKeywords
@@ -254,12 +249,25 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     };
 
     const timedDataByCount = {
-      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame)[0],
+      datasets: createTimeIntonationSet(data[1], timeFrame)[0],
     };
 
     const timedDataByScore = {
-      datasets: createTimeIntonationSet(articleIntonationDataset, timeFrame)[1],
+      datasets: createTimeIntonationSet(data[1], timeFrame)[1],
     };
+
+    const [keywordLabels, keywordDatasets] =websiteIntonationDatasets(data[2], merged.map((row) => row.keyword).filter(onlyUnique));
+    const dataByKeywordIntonationByScore = {
+      labels: keywordLabels,
+      datasets:keywordDatasets,
+    }
+
+    // TODO: remove comment when adding row count to keyword intonation
+    // const [keywordLabelsByCount, keywordDatasetsByCount] =websiteIntonationDatasetsByCount(data[2]);
+    // const dataByKeywordIntonationByScoreByCount = {
+    //   labels: keywordLabelsByCount,
+    //   datasets:keywordDatasetsByCount,
+    // }
 
     // ------ END DATA SETUP ------ //
 
@@ -275,6 +283,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               <Tab label= {KEYWORD_WEBSITE_GRAPH[language]} {...a11yProps(0)} />
               <Tab label= {KEYWORD_INTONATION_GRAPH[language]} {...a11yProps(1)} />
               <Tab label= {TIMED_INTONATION_GRAPH[language]} {...a11yProps(2)} />
+              <Tab label= {WATSON_KEYWORD_INTONATION_GRAPH[language]} {...a11yProps(3)} />
               <Button onClick={handleOpen}>{DOWNLOAD_ARTICLE_DATA[language]}</Button>
               <Modal 
                 open={open}
@@ -290,7 +299,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                   <p id="parent-modal-description_3">
                     {DOWNLOAD_DESC_3[language]}
                   </p>
-                  <Button onClick={() => downloadArticleDataAsExcel(articleIntonationDataset)}>{CLICK_TO_DOWNLOAD[language]}</Button>
+                  <Button onClick={() => downloadArticleDataAsExcel(data[1])}>{CLICK_TO_DOWNLOAD[language]}</Button>
                 </Box>
               </Modal>
             </Tabs>
@@ -363,13 +372,22 @@ export const BaseResults: React.FC<baseResultsProps> = ({
                 }}
                 data={dataByScore? timedDataByScore : timedDataByCount}
               />
+
               <Container className="timeFrames">
               <Button onClick={() => setTimeFrame("day")}>daily</Button>
               <Button onClick={() => setTimeFrame("week")}>weekly</Button>
               <Button onClick={() => setTimeFrame("month")}>monthly</Button>
               <Button onClick={() => setTimeFrame("year")}>yearly</Button>
             </Container>
-          </TabPanel>
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <Bar
+                datasetIdKey="trial"
+                options={options}
+                data={dataByKeywordIntonationByScore}
+                className="fit"
+              />
+            </TabPanel>
           </div>
         </Box>
       </>

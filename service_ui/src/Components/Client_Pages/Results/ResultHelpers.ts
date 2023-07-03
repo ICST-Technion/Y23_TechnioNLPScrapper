@@ -191,7 +191,6 @@ function createTimeAndValueBasedSet(dataMap: IntonationMap, timeFrame: unitType,
 export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => {
 
   const dataMap = groupByTimeAndIntonation(dataset, timeFrame);
-  console.log("------------- group by intonation ---------------");
   const dataByCount = createTimeAndValueBasedSet(dataMap, timeFrame, 0);
   const dataByScore = createTimeAndValueBasedSet(dataMap, timeFrame, 1, true);
 
@@ -320,3 +319,68 @@ export const downloadArticleDataAsExcel = (data: any) => {
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
   XLSX.writeFile(wb, "article_data.xlsx");
 }
+
+/*
+ * This function returns the datasets set up for use in the chart, split on website and keywords
+ */
+export const websiteIntonationDatasets = (merged: any[], orig_keywords:string[]): [string[],any] => {
+  // set up keyword data and filtered to only unique keywords
+  const keywords_websites = merged.filter((row) => row.score != 0).map((row) => row.keyword + '_' + row.website).filter(onlyUnique);
+  const intonations = merged.map((row) => row.intonation).filter(onlyUnique).filter((intonation) => intonation.toString() !== 'neutral');
+
+  let innerData = new Array(intonations.length);
+  for (let i = 0; i < intonations.length; i++) {
+    innerData[i] = new Array(keywords_websites.length);
+  }
+
+  intonations.forEach((intonation, idx) => {
+    merged.forEach((row) => {
+      // add /row.count for avergae to use later
+      if (row.intonation === intonation)
+        innerData[idx][keywords_websites.indexOf(row.keyword+'_'+row.website)] = orig_keywords.indexOf(row.keyword) >= 0 ? 
+        row.score / row.score //return to 1 as we are not using the count
+        : Math.abs(row.score) // /row.count;
+    });
+  });
+  let sets = innerData.map((dataset, idx) => {
+    return {
+      id: idx,
+      label: intonations[idx],
+      data: dataset,
+      backgroundColor: `rgba(${idx == 0? 0: 255},${idx == 0? 255 : 0},${0},0.5)`,
+    };
+  });
+  return [keywords_websites,sets]
+};
+
+  /*
+ * This function returns the datasets set up for use in the chart, split on website and keywords
+ */
+export const websiteIntonationDatasetsByCount = (merged: any[]) => {
+  // set up keyword data and filtered to only unique keywords
+  const keywords_websites = merged.map((row) => row.keyword + '_' + row.website);
+  const intonations = merged.map((row) => row.intonation).filter(onlyUnique);
+
+  let innerData = new Array(intonations.length);
+  for (let i = 0; i < intonations.length; i++) {
+    innerData[i] = new Array(keywords_websites.length);
+  }
+
+  intonations.forEach((intonation, idx) => {
+    merged.forEach((row) => {
+      // add /row.count for avergae to use later
+      if (row.intonation === intonation)
+        innerData[idx][keywords_websites.indexOf(row.keyword+'_'+row.website)] = row.count;
+    });
+  });
+  let sets = innerData.map((dataset, idx) => {
+    return {
+      id: idx,
+      label: intonations[idx],
+      data: dataset,
+      backgroundColor: `rgba(${randomIntFromInterval(0,255)},${randomIntFromInterval(0, 255)},${randomIntFromInterval(0, 255)},0.5)`,
+    };
+  });
+
+  return [keywords_websites,sets];
+};
