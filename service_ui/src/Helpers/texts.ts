@@ -85,6 +85,8 @@ export const COUNT = ["Article Count","מספר כתבות","عدد المقال
 export const SCORE = ["Average Score","ניקוד ממוצע","معدل درجات"]
 export const GRAPH_BY = ["Graph By","גרף לפי","رسم بياني بواسطة"]
 export const KEYWORD_INTONATION_COUNT = ["Intonated Use of Given Keywords","שימוש אינטונציונלי במילות מפתח נתונות","استخدام ملون للكلمات الرئيسية المعطاة"]
+export const WATSON_KEYWORD_INTONATION_GRAPH = ["Analyzer identified keywords", "מילות מפתח שזיהה המנתח", "الكلمات الرئيسية المعرفة من قبل المحلل"]
+
 
 export const DOWNLOAD_FILE = ["File Download", "הורדת הקובץ", "تحميل الملف"]
 export const DOWNLOAD_DESC_1 = ["The file you are about to download is the 'article_data.xlsx' file.", "הקובץ שאתה עומד להוריד הוא קובץ 'article_data.xlsx'.", "الملف الذي تقوم بتنزيله هو ملف 'article_data.xlsx'."]

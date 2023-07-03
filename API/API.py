@@ -6,6 +6,10 @@ from flask import Flask, jsonify, request, make_response
 from googleapiclient.discovery import build
 # for hebrew and arabic words
 from urllib.parse import quote, unquote
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # this line allows python to find our module.
 sys.path.append('.\\SQL')
@@ -115,6 +119,11 @@ app = Flask(__name__)
 
 @app.route('/sentiment', methods=['POST'])
 def get_sentiment_rows():
+    """
+    Retrieves sentiment rows from the database based on the provided table_id.
+    Returns:
+    A JSON response containing the sentiment rows.
+    """
     query = SQLQuery()
     #which table do we clear:
     table_id=request.json.get('table_id', "")
@@ -126,7 +135,13 @@ def get_sentiment_rows():
 
 @app.route('/delete/<string:tbid>', methods=['DELETE'])
 def delete_table(tbid):
-
+    """
+    Deletes a specific table from the database based on the provided table_id.
+    Args:
+    tbid (str): The ID of the table to be deleted.
+    Returns:
+    A response indicating the success of the deletion.
+    """
     clear_query = SQLQuery()
     #which table do we clear:
     table_id = tbid
@@ -136,7 +151,11 @@ def delete_table(tbid):
 
 @app.route('/clear', methods=['POST'])
 def clear_table():
-
+    """
+    Clears all created tables generated after the query is complete
+    Returns:
+    A response indicating the success of the table clearing.
+    """
     clear_query = SQLQuery()
     #which table do we clear:
     table_id=request.json.get('table_id', "")
@@ -145,23 +164,44 @@ def clear_table():
     return make_response("table cleared", 200)
 
 def get_default_websites():
+    """
+    Retrieves a list of default websites to search.
+    Returns:
+    A list of default websites.
+    """
     websites_to_search= ["www.ynet.co.il","www.israelhayom.co.il"] 
     return  websites_to_search
 
+
+def create_keyword_sentiment_rows(keywords_to_intonation_in_query,article):
+    """
+    Creates keyword sentiment rows based on the provided keywords and article.
+    Args:
+    keywords_to_intonation_in_query (list): List of tuples containing keywords and their intonation.
+    article (Article): The article object.
+    Returns:
+    A list of keyword sentiment rows.
+    """
+    website=article.get_website()
+    postive_rows_in_query= [(keyword,intonation,1.0,website) for (keyword,intonation) in keywords_to_intonation_in_query if intonation=='positive']
+    negative_rows_in_query= [(keyword,intonation,-1.0,website) for (keyword,intonation) in keywords_to_intonation_in_query if intonation=='negative']
+    #Watson doesn't find these as keywords
+    neutral_rows_in_query= [(keyword,intonation,0.0,website) for (keyword,intonation) in keywords_to_intonation_in_query if intonation=='neutral']
+    #keywords we have according to Watson 
+    rows_from_watson=[(keyword['text'],keyword['sentiment']['label'],keyword['sentiment']['score'],website) for keyword in article.find_keywords_in_article()]
+    return postive_rows_in_query+negative_rows_in_query+neutral_rows_in_query+rows_from_watson
+
 def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,table_id,category='1'):
-    #TODO: scrap phrases and keywords differently
     '''
-    scrapping information about each keyword and website
-    then inserting them into the databse
-
-    parameters:
-    links_to_scrap: the dictionary we get from the custom google search engine
-    keywords_intonation_list: a list of tuples, each tuple is (keyword,its intonation)
-    when intonation is positive,negative or neutral
-    category: the current query we are scrapping, currently placeholders
-    for comparison
-
-    notes: some websites are forbidden to scrap and we can't access to them
+    Scrapes information about each keyword and website from the provided links and inserts them into the database.
+    Parameters:
+    - links_to_scrap (dict): Dictionary containing the links to scrape.
+    - keywords_intonation_list (list): List of tuples containing keywords and their intonation.
+    - phrase_intonation_list (list): List of tuples containing phrases and their intonation.
+    - table_id (str): The ID of the table in the database.
+    - category (str): The current query category.
+    Notes:
+    - Some websites are forbidden to scrape, and we can't access them.
     '''
     if 'items' in links_to_scrap.keys():
         for item in links_to_scrap['items']:
@@ -175,19 +215,23 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 phrase_intonation_list,
                 category)
                 sentiment_row_to_add=article_info.create_sentiment_score_rows()
+                keyword_sentiment_rows_to_add=create_keyword_sentiment_rows(keywords_intonation_list,article_info)
                 insert_query=SQLQuery()
                 insert_query.insert_article_to_sql(rows_to_add,table_id)
                 insert_query.insert_article_intonation_analysis_sql(sentiment_row_to_add,table_id)
+                #TODO: change to insert and update
+                insert_query.insert_and_update_keyword_intonation_analysis_sql(keyword_sentiment_rows_to_add,table_id)
             except HTTPError:
-                make_response("This website is forbidden to scrap",403)   
+                print('forbidden website')
+                #skip websites that we can't scrap because access is forbidden
+                continue
 
 def do_search_query(category='1'):
     '''
-    Performs a Google search query (only keywords, no additional parameter).
+    Performs a Google search query (only keywords, no additional parameters).
     Scrapes from the links we found and updates the database.
-
     Parameters:
-    category: the number of the current category we are scraping for
+    - category (str): The number of the current category we are scraping for.
     '''
     query = request.json.get('Query'+category, "")  # assuming Query is the keywords
 
@@ -200,7 +244,7 @@ def do_search_query(category='1'):
     excluded_keywords = query_dict["excluded_keywords"]
     site = query_dict["site"]
     datarange = query_dict["datarange"]
-
+    
     # Get the list of websites to search
     site_list = get_default_websites()
     if site is not None:
@@ -220,28 +264,45 @@ def do_search_query(category='1'):
 
 
 
-# request of regular query
 @app.route('/query', methods=['POST'])
 def get_database_query():
     '''
-    search and scrap 2 categories, and then return a response when finished
+    search and scrap only by keywords
+    the default search by search bar
+    return an OK response for success
     '''
     table_id=do_search_query('1')
-    # do_search_query('2')
     return make_response(str(table_id), 200)  
 
 
 def search_google(query, site_list, exclude_query=''):
-    service = build("customsearch", "v1", developerKey="AIzaSyAsr-bDeoZiMP4KBzDNkqbFNNl49RLQbWE")
+    '''
+    Searches Google using the provided query and site list.
+
+    Parameters:
+    - query (str): The search query.
+    - site_list (list): The list of websites to search.
+    - exclude_query (str): The query to exclude.
+
+    Returns:
+    - result (dict): The search result from Google.
+    '''
+    service = build("customsearch", "v1", developerKey=os.environ['GOOGLE_API_KEY'])
     result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf').execute()
     return result
 
 
 def parse_json_and_strip(json_field):
     '''
-    searches for an element with the name json_field
-    if exists, returns a list of the content of that field
-    if not, returns empty list
+    Searches for an element with the name json_field.
+    If it exists, returns a list of the content of that field.
+    If not, returns an empty list.
+
+    Parameters:
+    - json_field (str): The name of the JSON field to search.
+
+    Returns:
+    - field_content (list): The content of the JSON field.
     '''
     field_content = request.json.get(json_field, [])
     if field_content == []:
@@ -251,39 +312,45 @@ def parse_json_and_strip(json_field):
 
 def parse_table_rows(rows):
     '''
+    Converts a list of rows returned by a select query to a list of values.
     when returning a select query, it returns as a list of tuple [(row1),(row2),...]
+    Parameters:
+    - rows (list): The rows returned by a select query.
+
+    Returns:
+    - result (list): The list of values extracted from the rows.
     '''
     return [row[0] for row in rows]
 
 
-# def include_exclude_lists(universe, included, excluded):
-#     '''
-#     prevents repetition in searching included and excluded keywords, websites etc.
-#     | is the union operator
-#     '''
-#     return list((set(universe) | set(included)) - set(excluded))
-
-
-# def create_parameters_list(included_field, excluded_field):
-#     '''
-#     returns a list of the parameters we want in the search, and without the ones we want to exclude
-#     '''
-#     included_parameters = parse_json_and_strip(included_field)
-#     excluded_parameters = parse_json_and_strip(excluded_field)
-#     return include_exclude_lists([], included_parameters, excluded_parameters)
 
 
 def is_at_least_one_keyword(category='1'):
     '''
-    any request requires at least one keyword, bad request otherwise
+    Checks if at least one keyword is provided in the request.
+
+    Parameters:
+    - category (str): The category number.
+
+    Returns:
+    - result (bool): True if at least one keyword is provided, False otherwise.
     '''
     included_keywords = parse_json_and_strip('included_keywords'+category)
     return included_keywords != []
 
 def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_keywords):
     '''
-    uses the existing keyword database and queries to map a keyword to the intonation
-    (if exists already)
+    Maps keywords and phrases to their intonation (if available).
+
+    Parameters:
+    - keywords_list (list): The list of keywords.
+    - phrases (list): The list of phrases.
+    - positive_keywords (list): The list of positive keywords.
+    - negative_keywords (list): The list of negative keywords.
+
+    Returns:
+    - keyword_to_intonation (list): List of tuples containing keywords and their intonation.
+    - phrase_to_intonation (list): List of tuples containing phrases and their intonation.
     '''
     known_keyword_to_intonation = {t[0]: t[1] for t in SQLQuery().select_learned_keywords()}
     # known_keyword_to_intonation = SQLQuery().select_learned_keywords()
@@ -315,8 +382,14 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
 
 def advanced_search_query(category='1'):
     '''
-    performs scrapping based on all the advanced search parameters.
-    the only mandatory one is keywords
+    Performs scraping based on all the advanced search parameters.
+    The only mandatory parameter is keywords.
+
+    Parameters:
+    - category (str): The category number. Default is '1'.
+
+    Returns:
+    - table_id (str): The ID of the generated table.
     '''
     if not is_at_least_one_keyword():
         # return bad request error
@@ -397,20 +470,18 @@ def url_encode_keywords(keywords):
 @app.route('/advancedSearch', methods=['POST'])
 def advanced_search():
     '''
-    api response to advanced search
-    searching with tags such as included/exluded keywords,websites, date range and so on
-    adds the information by category to the database for display in the frontend later
-    returns bad request if there are no keywords in the search query
-    otherwise returns ok
+    API response to advanced search.
+    Searching with tags such as included/excluded keywords, websites, date range, and so on.
+    Adds the information by category to the database for display in the frontend later.
+    Returns a bad request if there are no keywords in the search query.
+    Otherwise, returns OK.
     '''
     
     table_id=advanced_search_query('1')
-    
-    # not adding specified statistics yet, because there is only counter for now
     return make_response(str(table_id), 200)
 
 
-# driver function
+# run the server
 if __name__ == '__main__':
     from waitress import serve
     serve(app, host="0.0.0.0", port=10000)

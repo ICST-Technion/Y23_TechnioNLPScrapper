@@ -23,20 +23,24 @@ app.use(cookieParser())
 let userDB: typeof import("mongoose");
 
 
-//added the format here in addition to the test
-//link,overall_sentiment, sum_negative_keywords,sum_positive_keywords,date,total_sentiment_score 
-//why do we need total_sentiment_score?
-//because sometimes there aren't keywords in the article that watson can recognize, so we need all of these
-// [
-//   [
-//     "https://www.ynet.co.il/news/article/hjg6zmupo#autoplay",
-//     "negative",
-//     "0.000",
-//     "1.770",
-//     "Thu, 01 Dec 2022 00:00:00 GMT",
-//     "-0.781"
-//   ]
-// ]
+app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
+  try {
+    const token = protectedRoute(req, res);
+    if(token === consts.ERROR_401 || typeof(token) === "string")
+      return;
+    //if we reach here then we have a token and the user is logged in
+
+    //table id is req.params.id
+    const sentiment_results = await client.query('SELECT * FROM KeywordSentiment'+req.params.id);
+    
+    res.status(200).send({data: sentiment_results.rows}).end();
+    clearTable("KeywordSentiment"+req.params.id);
+
+  } catch (err) {
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+    clearTable("KeywordSentiment"+req.params.id);
+  }
+});
 
 app.get('/sentiment/:id', async (req: Request, res: Response) => {
   try {

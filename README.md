@@ -68,12 +68,17 @@ The database is responsible for storing data related to our project such
 as the sentiment of keywords in an article. We use 
 Python's libraries for postgresSQL to interact with the database.
 
-###Deployment
+### Deployment
 We have deployed our backend on Render, leveraging their 
 features to ensure seamless deployment of new updates and changes.
 We use Render's logs to keep track of bugs during processing requests.
 
-<!-- Add explanation for NLP when we add it-->
+### NLP
+In order to analyze article sentiments in Hebrew, we are using the API of IBM-Watson
+The NLP is responsible for classifying the article as positive, negative, or neutral,
+finding keywords (other than the keywords given as a user input) and calculating an overall score,
+to illustrate the how strong the sentiment is throughout the article.
+
 
 ## Frontend
 Using React.js and typescript, we aimed to design a 
