@@ -1,3 +1,4 @@
+import os
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions, KeywordsOptions
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -12,7 +13,7 @@ def initialize_natural_language_understanding():
     Return an instance of the NaturalLanguageUnderstandingV1 class.
     """
 
-    api_key = '14yrJFPYDHSKNq69o0O4t7EBr-TEScrM5PKBBdRxESev'
+    api_key = os.environ['NLP_API_KEY']
     url = 'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/7ce07ab7-0f4a-4105-9823-0cb663b472fb'
 
     authenticator = IAMAuthenticator(api_key)

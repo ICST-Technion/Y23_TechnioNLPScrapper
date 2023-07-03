@@ -6,6 +6,10 @@ from flask import Flask, jsonify, request, make_response
 from googleapiclient.discovery import build
 # for hebrew and arabic words
 from urllib.parse import quote, unquote
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # this line allows python to find our module.
 sys.path.append('.\\SQL')
@@ -283,7 +287,7 @@ def search_google(query, site_list, exclude_query=''):
     Returns:
     - result (dict): The search result from Google.
     '''
-    service = build("customsearch", "v1", developerKey="AIzaSyAsr-bDeoZiMP4KBzDNkqbFNNl49RLQbWE")
+    service = build("customsearch", "v1", developerKey=os.environ['GOOGLE_API_KEY'])
     result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf').execute()
     return result
 

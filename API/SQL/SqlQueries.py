@@ -21,7 +21,7 @@ class SQLQuery:
         Note about the encoding: the default encoding is typically ASCII, which does not support Hebrew
         characters
         """
-        self.db_url = "postgres://ltwwxnaj:BYQgr0k-KgVH98QbpkMfZ1USDpX2XDGU@ella.db.elephantsql.com/ltwwxnaj"
+        self.db_url = os.environ['DATABASE_URL']
         # this line allows us to figure out the connection information to our database independent of the actual url
         url = urlparse(self.db_url)
         self.database = url.path[1:]

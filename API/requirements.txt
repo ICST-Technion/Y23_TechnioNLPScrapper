@@ -7,3 +7,4 @@ ibm-watson==7.0.0
 psycopg2==2.9.5
 Scrapping==0.1.dev0
 waitress==2.1.2
+python_dotenv==1.0.0
