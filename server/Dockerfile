@@ -13,9 +13,6 @@ RUN npm install
 # Copy the rest of the application's source code to the container
 COPY . .
 
-# Copy the .env file to the container
-COPY .env .env
-
 # Build the TypeScript code
 RUN npm run build
 
