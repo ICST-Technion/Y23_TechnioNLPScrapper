@@ -37,7 +37,7 @@ import {
 } from "./ResultHelpers";
 import { TabPanel } from "./TabPanel";
 import "chartjs-adapter-date-fns";
-import { BASIC_TABS_EXAMPLE, CLICK_TO_DOWNLOAD, COUNT, DATA_PREPARATION_LABEL, DATA_READING_LABEL, DOWNLOAD_ARTICLE_DATA, DOWNLOAD_DESC_1, DOWNLOAD_DESC_2, DOWNLOAD_DESC_3, DOWNLOAD_FILE, GO_BACK, GRAPH_BY, INTONATION, KEYWORD_INTONATION_COUNT, INTONATION_SUMMARY_GRAPH as KEYWORD_INTONATION_GRAPH, KEYWORD_WEBSITE_GRAPH, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH, WATSON_KEYWORD_INTONATION_GRAPH } from "../../../Helpers/texts";
+import { BASIC_TABS_EXAMPLE, CLICK_TO_DOWNLOAD, COUNT, DAILY, DATA_PREPARATION_LABEL, DATA_READING_LABEL, DOWNLOAD_ARTICLE_DATA, DOWNLOAD_DESC_1, DOWNLOAD_DESC_2, DOWNLOAD_DESC_3, DOWNLOAD_FILE, GO_BACK, GRAPH_BY, INTONATION, KEYWORD_INTONATION_COUNT, INTONATION_SUMMARY_GRAPH as KEYWORD_INTONATION_GRAPH, KEYWORD_WEBSITE_GRAPH, MONTHLY, NEGATIVE, NEGATIVE_INTONATION, NEUTRAL, NEUTRAL_INTONATION, NODATA, POSITIVE, POSITIVE_INTONATION, SCORE, SESSION_EXPIRE, SHOW_THE_GRAPH_BY, TIMED_INTONATION_GRAPH, WATSON_KEYWORD_INTONATION_GRAPH, WEEKLY, YEARLY } from "../../../Helpers/texts";
 import { LoadingComponent } from "../General Components/LoadingComponent";
 import { TabPanelUnstyled } from "@mui/base";
 
@@ -374,10 +374,10 @@ export const BaseResults: React.FC<baseResultsProps> = ({
               />
 
               <Container className="timeFrames">
-              <Button onClick={() => setTimeFrame("day")}>daily</Button>
-              <Button onClick={() => setTimeFrame("week")}>weekly</Button>
-              <Button onClick={() => setTimeFrame("month")}>monthly</Button>
-              <Button onClick={() => setTimeFrame("year")}>yearly</Button>
+              <Button onClick={() => setTimeFrame("day")}>{DAILY[language]}</Button>
+              <Button onClick={() => setTimeFrame("week")}>{WEEKLY[language]}</Button>
+              <Button onClick={() => setTimeFrame("month")}>{MONTHLY[language]}</Button>
+              <Button onClick={() => setTimeFrame("year")}>{YEARLY[language]}</Button>
             </Container>
             </TabPanel>
             <TabPanel value={value} index={3}>
