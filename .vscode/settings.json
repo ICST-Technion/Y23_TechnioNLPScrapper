@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "./Scrapping",
+        "./SQL"
+    ],
+    "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+}

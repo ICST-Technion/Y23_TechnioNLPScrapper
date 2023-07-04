@@ -1,0 +1,663 @@
+.App {
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.flex-column{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.top-margin{
+  display:inline-block;
+  margin-top: 5vh;
+}
+
+.centered{
+  width: 100%;
+  text-align: center;
+} 
+
+.w7{
+  width: 70vw !important;
+}
+
+.w4{
+  width: 40vw !important;
+  text-align: center !important;
+}
+
+.App-logo {
+  height: 35vh;
+  margin-top: -2vh;
+  margin-bottom: -2vh;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.joined.App-logo{
+  height: 34vh !important;
+  padding-bottom: 1vh;
+}
+
+.minimized-logo{
+  height: 23vh !important;
+  margin-top: -4vh !important;
+}
+.minimized-logo2{
+  height: 25vh !important;
+  margin-top: -6vh !important;
+}
+
+.background{
+  position: fixed;
+  z-index: -2;
+  width:100vw;
+  margin-top: 5vh;
+  height:95vh;
+  background-image: url('./Images/BG.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+#searchbar{
+  width: 60vw;
+  display: flex;
+  margin-left: 20vw;
+}
+
+.search-bar{
+  width: 60vw;
+  height: 4rem;
+}
+.search-bar .MuiOutlinedInput-root{
+  border-radius: 250px;
+  width: inherit;
+  padding-right: 3.8vw;
+}
+.search-bar .MuiInputLabel-root {
+  color: rgb(0 0 0 / 48%);
+  font-size: auto;
+}
+
+.search-bar.RTL .MuiInputLabel-root:not(.Mui-focused):not(.MuiInputLabel-shrink){
+  right:3.5vw !important;
+}
+
+.search-bar.LTR .MuiInputLabel-root{
+  left:0 !important;
+}
+
+.search-bar .MuiInputLabel-root.Mui-focused {
+  color: black;
+}
+.search-bar .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: black;
+}
+
+.search-bar .MuiFormHelperText-root{
+  font-size: auto;
+}
+
+.search-icon{
+  position: absolute;
+  height: 2rem;
+  right: 21.5vw;
+  top:44.5vh;
+}
+
+.search-button{
+  margin-top: 4vh;
+}
+
+.advanced-search-button{
+  margin-top: 2vh;
+  position: relative;
+  float: right;
+  right: 21vw;
+  background-color: transparent;
+  color: #5e17eb;
+  text-decoration: underline;
+}
+
+
+.button-container{
+  margin-top: 7vh;
+  display: flex;
+  flex-direction: column;
+  gap: 6vh 0;
+  padding-block-end: 10vh;
+}
+
+.button-row{
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width:60vw;
+  gap:2vw;
+}
+
+.button-pop-component{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1vw;
+  width: 30vw;
+  height: 10vh;
+  height: auto;
+  align-items: baseline;
+}
+
+.button-pop-component p{
+  width: 11vw;
+  text-align: justify;
+  text-transform: capitalize;
+  color: black;
+  font-weight: 500;
+}
+
+.button-pop-component p.heb{
+  width: 9vw;
+}
+
+.button-pop-component.time p.heb{
+  width: 7vw;
+}
+
+.select-button{
+  width: 18vw;
+  height: 4vh;
+  font-weight: bold;
+  text-transform: capitalize;
+  font-size: 1.2vw;
+  color: black;
+  border-width: 1.35px;
+  border-color:rgb(221, 221, 221);
+  border-radius: 20px;
+  background-color: white;
+}
+
+
+.select-button:hover{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.select-button:active{
+  background-color: rgb(178, 177, 177);
+}
+
+.run-query-button{
+  position: fixed;
+  bottom: 10vh;
+  right:5vw;
+  border-color:rgb(221, 221, 221);
+  background-color: white;
+  color: black;
+  border-radius: 20px;
+  font-size: 1.3vw;
+  font-weight: bold;
+  border-width: 1.35px;
+  width: 9.5vw;
+  height: 4.2vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: end;
+}
+
+.run-query-button:hover{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.run-query-button:active{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.clear-query-button{
+  position: relative;
+  font-size: 1vw;
+  font-weight: bold;
+  width: 9.5vw;
+  height: 4vh;
+  color: black;
+  border-width: 1.35px;
+  border-color:rgb(221, 221, 221);
+  border-radius: 20px;
+  background-color: white;
+  margin-left: 20vw;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+.go-back-button.run{
+  top: 9vh;
+}
+
+.help-icon{
+  position: fixed;
+  top: 24px !important;
+  right:4vw;
+  height: 20px !important;
+  width: 20px !important;
+  z-index: 200 !important;
+  color: #8d6cdf !important;
+}
+
+.go-back-button{
+  position: fixed;
+  top: 100px;
+  left:3vw;
+  font-size: 1vw;
+  font-weight: bold;
+  color: black;
+  border-width: 1.35px;
+  border-color:rgb(221, 221, 221);
+  border-radius: 20px;
+  background-color: white;
+  width: 6vw;
+  height: 3vh;
+  /*weird centering issue of text in button*/
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+}
+
+.FAQs:active, .clear-query-button:active, .go-back-button:active, .help-icon:active{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.FAQs:hover, .clear-query-button:hover, .go-back-button:hover, .help-icon:hover{
+  background-color: rgb(206, 205, 205);
+  border-color: rgb(160, 160, 160);
+}
+
+.type-in{
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  align-items: flex-start;
+  width: 15vw;
+}
+
+.type-in input{
+  width: 15vw;
+  border-radius: 12px;
+  border-width: 1px;
+}
+
+/*calendar customization !!!!*/
+/*selected edges*/
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+background-color: #8d6cdf !important;
+}
+/*selected range*/
+.rs-calendar-table-cell-in-range .rs-calendar-table-cell-content, .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  background-color: #9d9af7 ;
+}
+/*calendar bg*/
+.rs-anim-fade.rs-anim-in.placement-bottom-start.rs-picker-daterange-menu.rs-picker-menu{
+  background-color: #f3f5f4;
+}
+
+.rs-stack-item{
+  color: #5e17eb;
+}
+
+.rs-stack-item button{
+  color: #5e17eb;
+}
+
+.rs-stack-item .rs-picker-toolbar-right button{
+  background-color: #5e17eb;
+  color:#f2f4f3;
+}
+
+.rs-stack-item span{
+  color: #5e17eb !important;
+}
+
+.rs-picker-default .rs-picker-toggle:hover{
+  border-color: #5e17eb !important;
+}
+
+.rs-picker {
+  width:18vw;
+}
+
+.flex{
+  display: flex;
+  flex-direction: column;
+  gap: 15vh;
+}
+
+.selected-values-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4vh 0.4vw;
+}
+
+.selected-value {
+  border: 1px solid #4d13c2;
+  border-radius: 20px;
+  padding-left: 4px;
+  font-size: smaller;
+  color: black;
+}
+.selected-value button{
+  border: none;
+  color: #4d13c2;
+  background: transparent;
+  margin-left: 0.1vw;
+  font-size: smaller;
+}
+
+.result{
+  gap: 3vh;
+  padding-top: 8vh;
+  justify-content: center;
+  align-items: center;
+  width: 70vw;
+  max-width: 70vw;
+  margin-left: 15vw;
+  min-height: 85vh;
+}
+
+.result div[role=tabpanel]{
+  width: inherit;
+  height: inherit;
+  max-width: inherit;
+}
+
+.result div[role=tabpanel] div{
+  height: 68vh !important;
+  width: inherit;
+  max-width: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.result div[role=tabpanel] p{
+  height: inherit;
+  width: inherit;
+  max-width: 60vw;
+  min-height: 55vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.result div[role=tabpanel] div :has(.timeFrames){
+  height: 55vh;
+  max-width: 60vw;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: -4vw;
+}
+
+.timeFrames{
+  min-height: 10vh !important;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
+
+.timeFrames button{
+  color: #4d13c2;
+  justify-content: center;
+  text-align:center;
+  width: 100%;
+  padding-left: 1vw !important;
+}
+
+.result div[role=tabpanel] p canvas{
+  display: inline;
+}
+
+.result .go-back-button{
+  top: 140px !important;
+}
+
+.Loading-Page{ 
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  top: 40vh !important;
+}
+
+.faqs {
+  margin-top: 4vh;
+	width: 70vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15vw;
+}
+
+.faqs .faq {
+	margin: 12px;
+	padding: 1vh 1vw;
+	background-color:white;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+.faqs .faq .faq-question,.faq-answer {
+  text-align: left;
+	position: relative;
+  color: black;
+  font-size: 1.4vw;
+	transition: all 0.4s ease;
+}
+
+.faqs .faq .faq-question::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 0px;
+	transform: translateY(-50%);
+	width: 30px;
+	height: 30px;
+	transition: all 0.4s ease-out;
+}
+
+.faqs .faq .faq-answer {
+  font-size: 20px;
+	opacity: 0;
+	max-height: 0;
+	overflow-y: hidden;
+}
+
+.faqs .faq.open .faq-question {
+	margin-bottom: 15px;
+}
+
+.faqs .faq.open .faq-question::after {
+	transform: translateY(-50%) rotate(180deg);
+}
+
+.faqs .faq.open .faq-answer {
+	max-height: 1000px;
+	opacity: 1;
+}
+
+.category-field{
+  display: flex;
+  flex-direction: row;
+  width:20vw;
+  margin-left: 22vw;
+  justify-content:space-between;
+  align-items: baseline;
+  font-weight: 600;
+  font-size: medium;
+  margin-top: 1vh;
+  margin-bottom: 1.5vh;
+}
+
+.introjs-helperLayer{
+  box-shadow: #39cdf1ce 0px 0px 1px 2px, rgba(33, 33, 33, 0.5) 0px 0px 0px 5000px !important;
+  line-height: 1px !important;
+}
+
+.introjs-button{
+  border-radius: 10px !important;
+  border-color: #39cdf1ce !important;
+}
+
+.introjs-tooltip {
+  border-radius: 10px !important;
+  box-shadow: 0 3px 30px #39cdf1ce !important;
+
+}
+
+.sign-out{
+  position:fixed !important;
+  top: 5vh;
+  right: 5vw;
+  font-size: 0.7rem !important;
+  z-index: 100;
+  color: #4d13c2 !important;
+}
+.register{
+  position: fixed !important;
+  top: 5vh;
+  right: 12vw;
+  font-size: 0.7rem !important;
+  z-index: 100;
+  color: #4d13c2 !important;
+}
+
+input, select, textarea, label, span, p, .faq-answer, .faq-question, .introjs-tooltiptext, h6{
+  text-align: start !important;
+  unicode-bidi: plaintext !important;
+}
+
+.faq-question {
+  justify-content: center !important;
+}
+
+.Icon{
+  background-image: url('./Images/icon.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 45px;
+  height: 45px;
+  mix-blend-mode: multiply;
+  filter: contrast(1);
+}
+
+.Header button{
+  color: #4d13c2 !important;
+  text-transform: capitalize;
+}
+
+.Header {
+  position: fixed !important;
+  background-color: white !important;
+  height: 68px !important;
+  z-index: 100 !important;
+}
+
+.user-hello{
+  pointer-events: none;
+  position: fixed !important;
+  right: 8vw !important;
+  text-transform: none !important;
+}
+
+.page-body{
+  padding-top: 68px !important;
+}
+
+.loading-bar{
+  width: 70vw;
+  height: 4vh !important;
+  border-radius: 30px;
+  background-color:#bfaeed80 !important;
+}
+
+.loading-bar span{
+  background-color: #9d9af7 !important;
+}
+
+.loading-message{
+  text-align: center;
+}
+
+.loading-container{
+  margin-top: 43vh;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-bar-container{
+  display: flex !important;
+  flex-direction: row !important;
+  column-gap: 2vh;
+  width: auto !important;
+  align-items: center !important;
+  padding-bottom: 1vh;
+}
+
+.landing-body.sign-text{
+  text-align: center !important;
+  color: #4d13c2 !important;
+  text-transform:none;
+}
+
+.landing-header{
+  color: black;
+  padding-bottom: 2vh ;
+}
+
+.landing-body{
+  color: black;
+  padding-bottom: 5vh;
+}
+
+.landing-page-container{
+  margin-top: 10vh !important;
+}
+
+.c1{
+  display: flex!important;
+  flex-direction: column !important;
+  justify-content: center!important;
+  align-items: center!important;
+}
+
+.download-modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #000;
+  background-color: floralwhite;
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+  font-size: x-large;
+  justify-content: space-evenly;
+  padding: 2vh 4vw 3vh 4vw;
+}

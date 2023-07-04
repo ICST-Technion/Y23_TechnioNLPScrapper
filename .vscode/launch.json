@@ -1,0 +1,58 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cloud Run: Run/Debug Locally",
+            "type": "cloudcode.cloudrun",
+            "request": "launch",
+            "build": {
+                "docker": {
+                    "path": "server/Dockerfile"
+                }
+            },
+            "image": "TechnioNLPScrapper",
+            "service": {
+                "name": "technlpscrap",
+                "containerPort": 5000,
+                "env": [
+                    {
+                        "name": "DBPASS",
+                        "value": "BYQgr0k-KgVH98QbpkMfZ1USDpX2XDGU"
+                    },
+                    {
+                        "name": "API_SECRET",
+                        "value": "This_is_very_secret_string"
+                    },
+                    {
+                        "name": "USERDB_ADMIN",
+                        "value": "technioNLP-admin"
+                    },
+                    {
+                        "name": "USERDB_PASSWORD",
+                        "value": "k6ckrd0Zx0P2nYXn"
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "cpu": 1,
+                        "memory": "256Mi"
+                    }
+                }
+            },
+            "target": {
+                "minikube": {}
+            },
+            "watch": true
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000/TechnioNLPScrapper",
+            "webRoot": "${workspaceFolder}/TechnioNLPScrapper"
+        }
+    ]
+}
