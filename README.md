@@ -53,6 +53,8 @@ from the frontend, categorize the sentiments of articles and quantify them
 and returning the appropriate results for building the charts.
 It is built using Python.
 
+it also contains these subfolder that allow it to run properly:
+
 
 ### API
 The API file is the main file of our backend. 
@@ -62,22 +64,28 @@ It communicates with the frontend using
 Flask. The API file also interacts with the SQL database to 
 retrieve or store data as required.
 
-### Database
+#### Database
 Our project uses ElephantSQL to store and manage data. 
 The database is responsible for storing data related to our project such 
 as the sentiment of keywords in an article. We use 
 Python's libraries for postgresSQL to interact with the database.
 
-### Deployment
+#### Deployment
 We have deployed our backend on Render, leveraging their 
 features to ensure seamless deployment of new updates and changes.
 We use Render's logs to keep track of bugs during processing requests.
 
-### NLP
+#### NLP
 In order to analyze article sentiments in Hebrew, we are using the API of IBM-Watson
 The NLP is responsible for classifying the article as positive, negative, or neutral,
 finding keywords (other than the keywords given as a user input) and calculating an overall score,
 to illustrate the how strong the sentiment is throughout the article.
+
+
+## FE Server / Gateway
+
+written in node.js, this server takes care of user authentication and autherization.
+it is responsible for redirecting requests between BE and FE, and connection to DB.
 
 
 ## Frontend
@@ -92,25 +100,24 @@ Giving them back detailed charts to showcase the
 sentiment and numerical differences between keywords,
 websites, and in different time ranges
 
-## Setup instructions
 
-1. Download the project files.
+## Website Access:
+[TechnioNLPScrapper](https://jouwana.github.io/TechnioNLPScrapper/)
 
-2. Start the Python API by navigating to the "API" folder and running the appropriate Python script.
+you will need to contact an admin to create a new account to use on the website.
 
-3. Start the server by navigating to the "server" folder and running the necessary server script.
 
-4. Navigate to the "service_ui" folder.
+## IDE / LOCAL Setup instructions
 
-5. Run the following command in your terminal:
+1. Clone the Repo
 
-`npm start`
+2. Start the Python API by navigating to the "API" folder, installing requirements, then running the api.py file.
+
+3. Start the server by navigating to the "server" folder, run `npm install` to download dependencies, then `npm star`t or `npm run dev` to start the server.
+
+4. Navigate to the "service_ui" folder, run `npm install` to download depndencies, then `npm start` to open the browser.
+
+5. You will need to change the links in the consts file of 'server' and 'service_ui' to run the local API and server.
 
 This will start the website and make it accessible in your local environment.
 
-Alternatively, you can access the website directly in:
-
-[TechnioNLPScrapper](https://jouwana.github.io/TechnioNLPScrapper/)
-
-
-Please make sure you have the necessary dependencies installed and any required environment configurations set up before running the project locally.
