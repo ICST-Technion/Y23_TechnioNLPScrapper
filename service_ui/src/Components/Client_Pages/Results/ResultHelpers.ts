@@ -195,7 +195,7 @@ export const createTimeIntonationSet = (dataset: any[], timeFrame: unitType) => 
   const dataByScore = createTimeAndValueBasedSet(dataMap, timeFrame, 1, true);
 
   let intonations = ["negative", "neutral", "positive"];
-  let colors = ["(255,0,0,0.5)", "(0,0,255,0.5)", "(0,255,0,0.5)"];
+  let colors = ["(255,182,179,1)", "(186,227,242,1)", "(189,231,189,1)"];
   let countSet = dataByCount.map((dataset, idx) => {
     return {
       id: idx,
@@ -347,7 +347,7 @@ export const websiteIntonationDatasets = (merged: any[], orig_keywords:string[])
       id: idx,
       label: intonations[idx],
       data: dataset,
-      backgroundColor: `rgba(${intonations[idx] === 'positive'? 0: 255},${intonations[idx] === 'positive'? 255 : 0},${0},0.5)`,
+      backgroundColor: `rgba(${intonations[idx] === 'positive'? 189: 255},${intonations[idx] === 'positive'? 231 : 182},${intonations[idx] === 'positive'? 189 : 179},1)`,
     };
   });
   return [keywords_websites,sets]
