@@ -1,4 +1,4 @@
-Flask==2.2.2
+Flask==2.2.5
 google_api_python_client==2.74.0
 SQL==2022.4.0
 beautifulsoup4==4.11.1
