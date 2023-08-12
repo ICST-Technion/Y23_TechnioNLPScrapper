@@ -414,7 +414,10 @@ def format_date(date_string):
     :param date_string: A string representation of a date in the format "YYYY-MM-DDTHH:MM:SS.sssZ"
     :return: A string representation of the date in the format "YYYYMMDD"
     '''
-    date_obj = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    if isinstance(date_string, str):
+        date_obj = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    else:
+        date_obj = date_string
     formatted_date = date_obj.strftime("%Y%m%d")
     return formatted_date
 
