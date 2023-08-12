@@ -36,15 +36,15 @@ between the frontend and the backend, return the results
 of the keyword search in articles to the frontend
 
 
-* Scrapping- this folder contains the code in our projects 
+  * Scrapping- this folder contains the code in our projects 
   which collects and parses information about keyword and sentiment
   from news articles, and stores it in a database.
 
 
-* SQL-this folder contains the code which handles connecting to our SQL database and
+  * SQL-this folder contains the code which handles connecting to our SQL database and
 handling SQL queries for the API
   
-* tests- this folder contains the backend tests.
+  * tests- this folder contains the backend tests.
 
 ## Backend
 
@@ -64,16 +64,16 @@ It communicates with the frontend using
 Flask. The API file also interacts with the SQL database to 
 retrieve or store data as required.
 
-#### Database
+#### Analysis Database
 Our project uses ElephantSQL to store and manage data. 
 The database is responsible for storing data related to our project such 
 as the sentiment of keywords in an article. We use 
 Python's libraries for postgresSQL to interact with the database.
 
 #### Deployment
-We have deployed our backend on Render, leveraging their 
+We have deployed our backend on google cloud run, leveraging their 
 features to ensure seamless deployment of new updates and changes.
-We use Render's logs to keep track of bugs during processing requests.
+We use GCR's logs to keep track of bugs during processing requests.
 
 #### NLP
 In order to analyze article sentiments in Hebrew, we are using the API of IBM-Watson
@@ -86,6 +86,7 @@ to illustrate the how strong the sentiment is throughout the article.
 
 written in node.js, this server takes care of user authentication and autherization.
 it is responsible for redirecting requests between BE and FE, and connection to DB.
+the server is deoployed on GCR and connects to the deployement of the BE.
 
 
 ## Frontend
@@ -100,18 +101,30 @@ Giving them back detailed charts to showcase the
 sentiment and numerical differences between keywords,
 websites, and in different time ranges
 
+the website connects to the server via its GCR deployement,
+the website itself is currently deployed on github pages.
+
 
 ## Website Access:
 [TechnioNLPScrapper](https://jouwana.github.io/TechnioNLPScrapper/)
 
 you will need to contact an admin to create a new account to use on the website.
+there is also the main admin account, please send a message if you need it.
+
+
+## Docker local setup
+1. clone the repo
+2. use the makefile option to build images (no run)
+3. make sure to remember to change and fix the connection addresses to fit the images.
+4. run the images in localhost.
+5. remember to add in the env vars
 
 
 ## IDE / LOCAL Setup instructions
 
 1. Clone the Repo
 
-2. Start the Python API by navigating to the "API" folder, installing requirements, then running the api.py file.
+2. Start the Python API by navigating to the "API" folder, installing requirements with `pip -r requirements.txt`, then running the api.py file with `python API.py`
 
 3. Start the server by navigating to the "server" folder, run `npm install` to download dependencies, then `npm star`t or `npm run dev` to start the server.
 
