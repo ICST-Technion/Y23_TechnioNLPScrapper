@@ -227,7 +227,7 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 if datetime_range is not None and isinstance(datetime_range, list):
                     article_date = article_info.date
                     formatted_date = format_date(article_date)
-                    if datetime_range.length >=2:
+                    if len(datetime_range) >=2:
                         if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[1]):
                             continue
                     else:
