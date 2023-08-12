@@ -191,7 +191,24 @@ def create_keyword_sentiment_rows(keywords_to_intonation_in_query,article):
     rows_from_watson=[(keyword['text'],keyword['sentiment']['label'],keyword['sentiment']['score'],website) for keyword in article.find_keywords_in_article()]
     return postive_rows_in_query+negative_rows_in_query+neutral_rows_in_query+rows_from_watson
 
-def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,table_id,category='1'):
+def is_date_in_range(date_str, start_str, end_str):
+    """
+    Check if the date represented by date_str is between start_str and end_str.
+    
+    :param date_str: Date string in the format "YYYYMMDD"
+    :param start_str: Start date string in the format "YYYYMMDD"
+    :param end_str: End date string in the format "YYYYMMDD"
+    :return: Boolean, True if date is in the range, False otherwise
+    """
+    date_format = "%Y%m%d"
+    
+    date = datetime.strptime(date_str, date_format)
+    start = datetime.strptime(start_str, date_format)
+    end = datetime.strptime(end_str, date_format)
+    
+    return start <= date <= end
+
+def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,table_id,datetime_range=None,category='1'):
     '''
     Scrapes information about each keyword and website from the provided links and inserts them into the database.
     Parameters:
@@ -207,7 +224,11 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
-                
+                if datetime_range is not None:
+                    article_date = article_info.date
+                    formatted_date = format_date(article_date)
+                    if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[1]):
+                        continue
                 keywords_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in keywords_intonation_list]
                 phrase_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in phrase_intonation_list]
                 
@@ -259,8 +280,10 @@ def do_search_query(category='1'):
     # Perform the search and scrape the links for each website
     SQLQuery().generate_table(str(table_id))
     for website in site_list:
-        search_results = search_google(query, website)
-        scrap_links(search_results, keyword_to_intonation,phrase_to_intonation,table_id,category)
+        # Retrieve the first 2 pages (20 results) for more results increase the end of the range.
+        for page in range(1, 21, 10):
+            search_results = search_google(query, website, page=page)
+            scrap_links(search_results, keyword_to_intonation,phrase_to_intonation,table_id,category)
     return table_id    
 
 
@@ -276,7 +299,7 @@ def get_database_query():
     return make_response(str(table_id), 200)  
 
 
-def search_google(query, site_list, exclude_query=''):
+def search_google(query, site_list, exclude_query='', datetime=None, page = 1):
     '''
     Searches Google using the provided query and site list.
 
@@ -284,12 +307,18 @@ def search_google(query, site_list, exclude_query=''):
     - query (str): The search query.
     - site_list (list): The list of websites to search.
     - exclude_query (str): The query to exclude.
+    - datetime (list): date range
+    - page (int): the index of the next result
 
     Returns:
     - result (dict): The search result from Google.
     '''
     service = build("customsearch", "v1", developerKey=os.environ['GOOGLE_API_KEY'])
-    result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf').execute()
+    if datetime is not None:
+        date_restrict = f'date:r:{datetime[0]}:{datetime[1]}'
+        result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf', sort= date_restrict, start=page).execute()
+    else:
+        result = service.cse().list(q=query, cx='0655ca3f748ac4757', siteSearch=site_list, excludeTerms=exclude_query, fileType='-pdf', start=page).execute()
     return result
 
 
@@ -322,8 +351,6 @@ def parse_table_rows(rows):
     - result (list): The list of values extracted from the rows.
     '''
     return [row[0] for row in rows]
-
-
 
 
 def is_at_least_one_keyword(category='1'):
@@ -381,6 +408,21 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
     SQLQuery().insert_keyword_intonation_to_sql(filtered_learned_words)
     return keyword_to_intonation, phrase_to_intonation
 
+def format_date(date_string):
+    '''
+    Converts a date string in the format "YYYY-MM-DDTHH:MM:SS.sssZ" to a simpler format "YYYYMMDD".
+    
+    :param date_string: A string representation of a date in the format "YYYY-MM-DDTHH:MM:SS.sssZ"
+    :return: A string representation of the date in the format "YYYYMMDD"
+    '''
+    if isinstance(date_string, str):
+        date_obj = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    else:
+        date_obj = date_string
+    formatted_date = date_obj.strftime("%Y%m%d")
+    return formatted_date
+
+
 def advanced_search_query(category='1'):
     '''
     Performs scraping based on all the advanced search parameters.
@@ -407,10 +449,11 @@ def advanced_search_query(category='1'):
     # no dates were passed
     if not time_range:
         # either default range or just not searching by range at all
-        datetime_range = [datetime(year=datetime.now().year - 1, month=1, day=1), datetime.now()]
+        notformated = [datetime(year=datetime.now().year - 1, month=1, day=1), datetime.now()]
+        datetime_range = [dt.strftime('%Y%m%d') for dt in notformated]
     else:
         try:
-            datetime_range = [datetime.fromisoformat(date_string[:-1]) for date_string in time_range]
+            datetime_range = [format_date(date_string) for date_string in time_range]
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
     
@@ -444,8 +487,10 @@ def advanced_search_query(category='1'):
 
     SQLQuery().generate_table(str(table_id))
     for website in websites_to_search:
-        links_to_scrap = search_google(query, website, exclude_query)
-        scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,table_id,category)
+        # Retrieve the first 2 pages (20 results) for more results increase the end of the range.
+        for page in range(1, 21, 10):
+            links_to_scrap = search_google(query, website, exclude_query, datetime_range, page)
+            scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,table_id,datetime_range,category)
     # TODO: specify dates in the google search
     return table_id
 
