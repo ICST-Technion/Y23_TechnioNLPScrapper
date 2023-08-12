@@ -389,7 +389,10 @@ def map_keywords_to_intonation(keywords_list,phrases,positive_keywords,negative_
     - keyword_to_intonation (list): List of tuples containing keywords and their intonation.
     - phrase_to_intonation (list): List of tuples containing phrases and their intonation.
     '''
-    known_keyword_to_intonation = {t[0]: t[1] for t in SQLQuery().select_learned_keywords()}
+    if(SQLQuery().select_learned_keywords() is None):
+        known_keyword_to_intonation={}
+    else:
+        known_keyword_to_intonation = {t[0]: t[1] for t in SQLQuery().select_learned_keywords()}
     # known_keyword_to_intonation = SQLQuery().select_learned_keywords()
     if known_keyword_to_intonation is None:
         known_keyword_to_intonation={}
