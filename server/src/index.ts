@@ -52,6 +52,9 @@ app.delete('/fullResults/:id', async (req: Request, res: Response) => {
   }
 });
 
+
+// TODO: set timeout to check every 5 seconds if data is done, this should
+// affect reading data after a disconnection happened, otherwise there will be no wait
 app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
   try {
     const token = protectedRoute(req, res);

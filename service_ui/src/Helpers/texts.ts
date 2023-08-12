@@ -27,6 +27,7 @@ export const PASSWORD = ["Password", "סיסמה", "كلمه السر"]
 export const FAQS = ["FAQs", "שאלות נפוצות", "أسئلة وأجوبة"]
 export const RUN = ["Run", "הרץ", "تشغيل"]
 export const ADVANCED_SEARCH_OPTIONS = ["Advanced Search Options","אפשרויות חיפוש מתקדמות", "خيارات البحث المتقدمة"]
+export const GET_LAST_SEARCH_RESULTS = ["Get last search results", "הבא תוצאות חיפוש אחרונות", "احصل على نتائج البحث الأخيرة"]  
 
 //advancedSearchComponent
 export const INCLUDED_KEYWORDS = ["included keywords", "מילים נכללות", "كلمات متضمنة"]

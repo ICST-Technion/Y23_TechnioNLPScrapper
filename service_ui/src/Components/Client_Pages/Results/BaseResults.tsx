@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
-import { basicAxiosInstance, cookie, copy, getLanguage, randomIntFromInterval } from "../../../Helpers/helpers";
+import { basicAxiosInstance, cookie, copy, getLanguage, getLastSearchID, randomIntFromInterval } from "../../../Helpers/helpers";
 import { Box, Button, Container, Modal, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
@@ -107,8 +107,16 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     try {
       setLoading(true);
       setShowResult(false);
-      const req = await axiosPromise!;
-      let table_id = req.data.table_id;
+      let table_id;
+      if(axiosPromise)
+      { 
+        const req = await axiosPromise!;
+        table_id = req.data.table_id;
+      }
+      else{
+        table_id = getLastSearchID();
+      }
+
       setLoadingMessage(DATA_READING_LABEL[language]);
       return table_id;
     } catch (err: any) {

@@ -8,7 +8,8 @@ import {
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
 import { basicAxiosInstance, getLanguage, getLastSearchID, setLastSearchID } from "../../../Helpers/helpers";
-import { ADVANCED_SEARCH_OPTIONS, FAQS, RUN } from "../../../Helpers/texts";
+import { ADVANCED_SEARCH_OPTIONS, FAQS, GET_LAST_SEARCH_RESULTS, RUN } from "../../../Helpers/texts";
+import Button from "@mui/material/Button";
 
 export interface searchPageProps {
   keywords: string[];
@@ -63,6 +64,7 @@ export const SearchPage: React.FC<searchPageProps> = ({
         {RUN[language]}
       </button>
       <div className="App">
+        <Button className="last-search-button" disabled={!getLastSearchID()} onClick={() => setPageNumber(RESULTS_PAGE)}> {GET_LAST_SEARCH_RESULTS[language]} </Button>
         <SearchComponent
           keywords={keywords}
           setKeywords={setKeywords}
