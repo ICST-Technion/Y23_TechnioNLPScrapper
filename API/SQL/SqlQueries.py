@@ -178,7 +178,14 @@ class SQLQuery:
                 cur.close()
                 conn.close()
 
-
+    def insert_finished_row(self,id):
+        """
+        Insert a row into the three tables: ArticleSentiment, KeywordSentiment and Articles, that indicates that the analysis is finished.
+        """
+        self.insert_article_intonation_analysis_sql([("XXXDONEXXX",0,0,0,datetime.now(),0)],id)
+        self.insert_and_update_keyword_intonation_analysis_sql([("XXXDONEXXX","",0,"")],id)
+        self.insert_article_to_sql([("XXXDONEXXX","XXXDONEXXX",datetime.now(),0,"XXXDONEXXX","XXXDONEXXX","XXXDONEXXX",0)],id)
+        
     def insert_article_intonation_analysis_sql(self,article_analysis_list,id=""):
         """
         Insert an article analysis list into the ArticleSentiment table.
@@ -230,7 +237,7 @@ class SQLQuery:
         clear_query = "TRUNCATE TABLE Articles"
         self.execute_query(clear_query)
 
-    def generate_table(self,upper_limit=1000):
+    def generate_table(self,table_id,upper_limit=1000):
         """
         Create a random Articles table to store the results, 
         so that concurrent requests will not show incorrectly.
@@ -238,7 +245,6 @@ class SQLQuery:
         :param upper_limit: Upper limit for the random table ID (default: 1000)
         :return: ID of the generated table
         """
-        table_id=str(random.randint(0,upper_limit))
         #erases previous tables we may have failed to close
         self.delete_table(table_id)
         create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation TEXT,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"

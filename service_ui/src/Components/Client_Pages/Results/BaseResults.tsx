@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import CircleLoader from "react-spinners/CircleLoader";
-import { basicAxiosInstance, cookie, copy, getLanguage, randomIntFromInterval } from "../../../Helpers/helpers";
+import { basicAxiosInstance, cookie, copy, getLanguage, getLastSearchID, randomIntFromInterval } from "../../../Helpers/helpers";
 import { Box, Button, Container, Modal, Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
 import { AxiosError, AxiosResponse } from "axios";
@@ -44,7 +44,7 @@ import { TabPanelUnstyled } from "@mui/base";
 export interface baseResultsProps {
   includedKeywords: string[];
   setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-  axiosPromise?: Promise<AxiosResponse<any, any>>;
+  axiosPromise?: Promise<AxiosResponse<any, any>> | undefined;
   positiveKeywords?: string[];
   negativeKeywords?: string[];
 }
@@ -107,8 +107,17 @@ export const BaseResults: React.FC<baseResultsProps> = ({
     try {
       setLoading(true);
       setShowResult(false);
-      const req = await axiosPromise!;
-      let table_id = req.data.table_id;
+      let table_id;
+      console.log(axiosPromise);
+      if(axiosPromise)
+      { 
+        const req = await axiosPromise!;
+        table_id = req.data.table_id;
+      }
+      else{
+        table_id = getLastSearchID();
+      }
+
       setLoadingMessage(DATA_READING_LABEL[language]);
       return table_id;
     } catch (err: any) {
@@ -129,6 +138,10 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         const [dataReq, intonationDataReq, keywordIntonationDataset] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
         basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id}),await basicAxiosInstance()({method:"get", url:"/keywordSentiment/" + table_id})])
   
+        console.log("finished reading data")
+        console.log(dataReq.data.data)
+        console.log(intonationDataReq.data.data)
+        console.log(keywordIntonationDataset.data.data)
         const datas = dataReq.data.data;
         //set the data
         setData([dataReq.data.data, intonationDataReq.data.data, keywordIntonationDataset.data.data]);

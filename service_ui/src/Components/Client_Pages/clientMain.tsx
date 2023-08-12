@@ -20,7 +20,7 @@ export interface SignedInMainPageProps {
 export const SignedInMainPage: React.FC<SignedInMainPageProps> = ({username, role}) => {
   const [keywords, setKeywords] = React.useState<string[]>(["", ""]);
   const [axiosPromise, setAxiosPromise] =
-    React.useState<Promise<AxiosResponse<any, any>>>();
+    React.useState<Promise<AxiosResponse<any, any>> | undefined>(undefined);
 
   // the base query state, which will be used to create the query object
   const [queryState, setQueryState] = React.useState<any>();

@@ -224,11 +224,15 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
-                if datetime_range is not None:
+                if datetime_range is not None and isinstance(datetime_range, list):
                     article_date = article_info.date
                     formatted_date = format_date(article_date)
-                    if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[1]):
-                        continue
+                    if len(datetime_range) >=2:
+                        if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[1]):
+                            continue
+                    else:
+                        if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[0]):
+                            continue
                 keywords_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in keywords_intonation_list]
                 phrase_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in phrase_intonation_list]
                 
@@ -247,6 +251,9 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 #skip websites that we can't scrap because access is forbidden
                 continue
 
+        
+        
+
 def do_search_query(category='1'):
     '''
     Performs a Google search query (only keywords, no additional parameters).
@@ -255,6 +262,7 @@ def do_search_query(category='1'):
     - category (str): The number of the current category we are scraping for.
     '''
     query = request.json.get('Query'+category, "")  # assuming Query is the keywords
+    table_id = str(request.json.get('id', ""))
 
     # Parse the query
     query_dict = parse_google_search_query(query)
@@ -277,12 +285,14 @@ def do_search_query(category='1'):
             negative_keywords=negative_keywords
         )
     # Perform the search and scrape the links for each website
-    table_id=SQLQuery().generate_table()
+    SQLQuery().generate_table(str(table_id))
     for website in site_list:
         # Retrieve the first 2 pages (20 results) for more results increase the end of the range.
         for page in range(1, 21, 10):
             search_results = search_google(query, website, page=page)
             scrap_links(search_results, keyword_to_intonation,phrase_to_intonation,table_id,category)
+        # create a 'i finished' row to signify data is ready
+    SQLQuery().insert_finished_row(table_id)
     return table_id    
 
 
@@ -438,7 +448,7 @@ def advanced_search_query(category='1'):
         return make_response("Searching requires at least one keyword", 400)
     #returns string
     keywords_to_search=request.json.get('included_keywords' + category, [])
-
+    table_id = str(request.json.get('id', ''))
 
     websites_to_search = list(set(request.json.get('included_sites' + category,[])) | 
                               set(get_default_websites()))
@@ -455,8 +465,7 @@ def advanced_search_query(category='1'):
             datetime_range = [format_date(date_string) for date_string in time_range]
         except ValueError:
             return make_response("The date format is incorrect, please make sure the format is year-month-day", 400)
-
-
+    
   
     negative_words=request.json.get('negative_words' + category, [])
         
@@ -485,13 +494,15 @@ def advanced_search_query(category='1'):
     exclude_query = ','.join(decoded_exclude)
     
 
-    table_id=SQLQuery().generate_table()
+    SQLQuery().generate_table(str(table_id))
     for website in websites_to_search:
         # Retrieve the first 2 pages (20 results) for more results increase the end of the range.
         for page in range(1, 21, 10):
             links_to_scrap = search_google(query, website, exclude_query, datetime_range, page)
             scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,table_id,datetime_range,category)
     # TODO: specify dates in the google search
+
+    SQLQuery().insert_finished_row(table_id)
     return table_id
 
 def url_encode_keywords(keywords):

@@ -22,62 +22,158 @@ app.use(cookieParser())
 
 let userDB: typeof import("mongoose");
 
-
-app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
-  try {
-    const token = protectedRoute(req, res);
-    if(token === consts.ERROR_401 || typeof(token) === "string")
-      return;
-    //if we reach here then we have a token and the user is logged in
-
-    //table id is req.params.id
-    const sentiment_results = await client.query('SELECT * FROM KeywordSentiment'+req.params.id);
-    
-    res.status(200).send({data: sentiment_results.rows}).end();
+app.delete('/keywordSentiment/:id', async (req: Request, res: Response) => {
+  try{
     clearTable("KeywordSentiment"+req.params.id);
-
-  } catch (err) {
-    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
-    clearTable("KeywordSentiment"+req.params.id);
+    res.status(200).send({message: "Table deleted"}).end();
+  } 
+  catch (err) {
+    redircetError(err, res," ---------- ERROR IN DELETE----------");
   }
+});
+
+app.delete('/sentiment/:id', async (req: Request, res: Response) => {
+  try{
+    clearTable("ArticleSentiment"+req.params.id);
+    res.status(200).send({message: "Table deleted"}).end();
+  } 
+  catch (err) {
+    redircetError(err, res," ---------- ERROR IN DELETE----------");
+  }
+});
+
+app.delete('/fullResults/:id', async (req: Request, res: Response) => {
+  try{
+    clearTable("Articles"+req.params.id);
+    res.status(200).send({message: "Table deleted"}).end();
+  } 
+  catch (err) {
+    redircetError(err, res," ---------- ERROR IN DELETE----------");
+  }
+});
+
+
+// TODO: set timeout to check every 5 seconds if data is done, this should
+// affect reading data after a disconnection happened, otherwise there will be no wait
+app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
+  const starttime = new Date().getTime();
+  let doesntExist = true;
+  while(new Date().getTime() - starttime < 10000 * 60 || doesntExist && new Date().getTime() - starttime < 10000 * 6)
+  {
+    try {
+      const token = protectedRoute(req, res);
+      if(token === consts.ERROR_401 || typeof(token) === "string")
+        return;
+      //if we reach here then we have a token and the user is logged in
+
+      if((await client.query('SELECT * FROM KeywordSentiment'+req.params.id + " WHERE keyword='XXXDONEXXX'")).rowCount === 0){
+        doesntExist = false;
+        continue;
+      }
+
+      //table id is req.params.id
+      const sentiment_results = await client.query('SELECT * FROM KeywordSentiment'+req.params.id + " WHERE NOT keyword='XXXDONEXXX'");
+      
+      res.status(200).send({data: sentiment_results.rows}).end();
+
+      return;
+
+    } catch (err) {
+      doesntExist = true;
+    }
+  }
+  if(doesntExist){
+    let err;
+    err.message = "Table not found";
+    err.status = 404;
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+  }
+  else{
+    let err;
+    err.message = "Timed OUT - please try again";
+    err.status = 500;
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+  }
+  return;
 });
 
 app.get('/sentiment/:id', async (req: Request, res: Response) => {
-  try {
-    const token = protectedRoute(req, res);
-    if(token === consts.ERROR_401 || typeof(token) === "string")
-      return;
-    //if we reach here then we have a token and the user is logged in
+  const starttime = new Date().getTime();
+  let doesntExist = true;
+  while(new Date().getTime() - starttime < 10000 * 60 || doesntExist && new Date().getTime() - starttime < 10000 * 6)
+  {
+    try {
+      const token = protectedRoute(req, res);
+      if(token === consts.ERROR_401 || typeof(token) === "string")
+        return;
+      //if we reach here then we have a token and the user is logged in
+      if((await client.query('SELECT * FROM ArticleSentiment'+req.params.id + " WHERE article_link='XXXDONEXXX'")).rowCount === 0){
+        doesntExist = false;
+        continue;
+      }
 
     //table id is req.params.id
-    const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+req.params.id);
+    const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+req.params.id + " WHERE NOT article_link='XXXDONEXXX'");
     
     res.status(200).send({data: sentiment_results.rows}).end();
-    clearTable("ArticleSentiment"+req.params.id);
+    return;
 
-  } catch (err) {
-    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
-    clearTable("ArticleSentiment"+req.params.id);
+    } catch (err) {
+      doesntExist = true;
+    }
   }
+  if(doesntExist){
+    let err;
+    err.message = "Table not found";
+    err.status = 404;
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+  }
+  else{
+    let err;
+    err.message = "Timed OUT - please try again";
+    err.status = 500;
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+  }
+  return;
 });
 
 app.get('/fullResults/:id', async (req: Request, res: Response) => {
-  try {
-    const token = protectedRoute(req, res);
-    if(token === consts.ERROR_401 || typeof(token) === "string")
+  const starttime = new Date().getTime();
+  let doesntExist = true;
+  while(new Date().getTime() - starttime < 10000 * 60 || doesntExist && new Date().getTime() - starttime < 10000 * 6)
+  {
+    try {
+      const token = protectedRoute(req, res);
+      if(token === consts.ERROR_401 || typeof(token) === "string")
+        return;
+      //if we reach here then we have a token and the user is logged in
+      if((await client.query('SELECT * FROM Articles'+req.params.id + " WHERE keyword='XXXDONEXXX'")).rowCount === 0){
+        doesntExist = false;
+        continue;
+      }
+      //table id is req.params.id
+      const sentiment_results = await client.query('SELECT * FROM Articles'+req.params.id + " WHERE NOT keyword='XXXDONEXXX'");
+      
+      res.status(200).send({data: sentiment_results.rows}).end();
       return;
-    //if we reach here then we have a token and the user is logged in
 
-    //table id is req.params.id
-    const sentiment_results = await client.query('SELECT * FROM Articles'+req.params.id);
-    
-    res.status(200).send({data: sentiment_results.rows}).end();
-    clearTable("Articles"+req.params.id);
-
-  } catch (err) {
-    redircetError(err, res," ---------- ERROR IN DB QUERY IN FULL RESULTS ----------");
-    clearTable("Articles"+req.params.id);
+    } catch (err) {
+      doesntExist = true;
+    }
   }
+  if(doesntExist){
+    let err;
+    err.message = "Table not found";
+    err.status = 404;
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+  }
+  else{
+    let err;
+    err.message = "Timed OUT - please try again";
+    err.status = 500;
+    redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
+  }
+  return;
 });
 
 async function clearTable(table_id: string) {

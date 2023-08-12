@@ -11,6 +11,14 @@ export const basicAxiosInstance = () => axios.create({
     Authorization: `Bearer ${cookie.get("token")}`
   },
 });
+
+export const setLastSearchID = (id: number) => {
+  cookie.set("lastSearchID", id);
+};
+
+export const getLastSearchID = () => {
+  return cookie.get("lastSearchID");
+};
  
  export const getLanguage:() => number = () => {
   if(!cookie.get("language")){
