@@ -22,6 +22,35 @@ app.use(cookieParser())
 
 let userDB: typeof import("mongoose");
 
+app.delete('/keywordSentiment/:id', async (req: Request, res: Response) => {
+  try{
+    clearTable("KeywordSentiment"+req.params.id);
+    res.status(200).send({message: "Table deleted"}).end();
+  } 
+  catch (err) {
+    redircetError(err, res," ---------- ERROR IN DELETE----------");
+  }
+});
+
+app.delete('/sentiment/:id', async (req: Request, res: Response) => {
+  try{
+    clearTable("ArticleSentiment"+req.params.id);
+    res.status(200).send({message: "Table deleted"}).end();
+  } 
+  catch (err) {
+    redircetError(err, res," ---------- ERROR IN DELETE----------");
+  }
+});
+
+app.delete('/fullResults/:id', async (req: Request, res: Response) => {
+  try{
+    clearTable("Articles"+req.params.id);
+    res.status(200).send({message: "Table deleted"}).end();
+  } 
+  catch (err) {
+    redircetError(err, res," ---------- ERROR IN DELETE----------");
+  }
+});
 
 app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
   try {
@@ -34,7 +63,6 @@ app.get('/keywordSentiment/:id', async (req: Request, res: Response) => {
     const sentiment_results = await client.query('SELECT * FROM KeywordSentiment'+req.params.id);
     
     res.status(200).send({data: sentiment_results.rows}).end();
-    clearTable("KeywordSentiment"+req.params.id);
 
   } catch (err) {
     redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
@@ -53,7 +81,6 @@ app.get('/sentiment/:id', async (req: Request, res: Response) => {
     const sentiment_results = await client.query('SELECT * FROM ArticleSentiment'+req.params.id);
     
     res.status(200).send({data: sentiment_results.rows}).end();
-    clearTable("ArticleSentiment"+req.params.id);
 
   } catch (err) {
     redircetError(err, res," ---------- ERROR IN DB QUERY IN SENTIMENT ----------");
@@ -72,7 +99,6 @@ app.get('/fullResults/:id', async (req: Request, res: Response) => {
     const sentiment_results = await client.query('SELECT * FROM Articles'+req.params.id);
     
     res.status(200).send({data: sentiment_results.rows}).end();
-    clearTable("Articles"+req.params.id);
 
   } catch (err) {
     redircetError(err, res," ---------- ERROR IN DB QUERY IN FULL RESULTS ----------");
