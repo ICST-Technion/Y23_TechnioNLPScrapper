@@ -10,6 +10,9 @@ COPY requirements.txt .
 # Copy the rest of the application's source code to the container
 COPY . .
 
+# Copy the env file to the container
+COPY .env ./
+
 # Install Python dependencies
 RUN pip install -r requirements.txt
 
