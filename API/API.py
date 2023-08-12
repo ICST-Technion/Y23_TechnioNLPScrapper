@@ -224,11 +224,15 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
         for item in links_to_scrap['items']:
             try:
                 article_info=Article(item['link'])
-                if datetime_range is not None:
+                if datetime_range is not None and isinstance(datetime_range, list):
                     article_date = article_info.date
                     formatted_date = format_date(article_date)
-                    if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[1]):
-                        continue
+                    if datetime_range.length >=2:
+                        if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[1]):
+                            continue
+                    else:
+                        if not is_date_in_range(formatted_date, datetime_range[0], datetime_range[0]):
+                            continue
                 keywords_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in keywords_intonation_list]
                 phrase_intonation_list=[(keyword,intonation) if intonation!='neutral' else (keyword,article_info.sentiment)  for (keyword,intonation) in phrase_intonation_list]
                 
