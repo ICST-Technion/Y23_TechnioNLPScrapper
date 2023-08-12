@@ -129,6 +129,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         const [dataReq, intonationDataReq, keywordIntonationDataset] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
         basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id}),await basicAxiosInstance()({method:"get", url:"/keywordSentiment/" + table_id})])
   
+        
         const datas = dataReq.data.data;
         //set the data
         setData([dataReq.data.data, intonationDataReq.data.data, keywordIntonationDataset.data.data]);

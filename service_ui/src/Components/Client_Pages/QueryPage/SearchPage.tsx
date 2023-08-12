@@ -7,7 +7,7 @@ import {
   FE_SERVER,
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
-import { basicAxiosInstance, getLanguage } from "../../../Helpers/helpers";
+import { basicAxiosInstance, getLanguage, getLastSearchID, setLastSearchID } from "../../../Helpers/helpers";
 import { ADVANCED_SEARCH_OPTIONS, FAQS, RUN } from "../../../Helpers/texts";
 
 export interface searchPageProps {
@@ -37,9 +37,24 @@ export const SearchPage: React.FC<searchPageProps> = ({
         disabled={keywords[0].length === 0}
         onClick={async () => {
           setPageNumber(RESULTS_PAGE);
-          const query_body = { Query1: keywords[0] };
+          const generated_id = Math.floor(100000 + Math.random() * 900000);
+          const query_body = { Query1: keywords[0], id: generated_id};
           try {
             setAxiosPromise(basicAxiosInstance()({method:"post", url:"/query", data:query_body}));
+            //get last search id cookie
+            const lastSearchID = getLastSearchID();
+
+            if(lastSearchID)
+            {
+              //delete from DB all tables for last search id
+              basicAxiosInstance()({method:"delete", url:`/sentiment/${lastSearchID}`});
+              basicAxiosInstance()({method:"delete", url:`/fullResults/${lastSearchID}`});
+              basicAxiosInstance()({method:"delete", url:`/keywordSentiment/${lastSearchID}`});
+            }
+
+            //change last search id cookie
+            setLastSearchID(generated_id);
+
           } catch (err) {
             console.log(err);
           }

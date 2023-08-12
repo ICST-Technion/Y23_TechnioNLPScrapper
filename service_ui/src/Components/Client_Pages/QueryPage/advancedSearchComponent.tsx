@@ -5,7 +5,7 @@ import {
   MAIN_SEARCH_PAGE,
   RESULTS_PAGE,
 } from "../../../Helpers/consts";
-import { basicAxiosInstance, getLanguage, mapToArray, parseString } from "../../../Helpers/helpers";
+import { basicAxiosInstance, getLanguage, getLastSearchID, mapToArray, parseString, setLastSearchID } from "../../../Helpers/helpers";
 import { ButtonWithPopUp } from "../General Components/ButtonWithPopUp";
 import { TimeRange } from "../General Components/TimeRange";
 import { CLEAR, INCLUDED_KEYWORDS, EXCLUDE_KEYWORDS, EXCLUDE_WEBSITES, GO_BACK, NEGATIVE_KEYWORDS, POSITIVE_KEYWORDS, RUN, SPECIFY_WEBSITES, TIME_RANGE } from "../../../Helpers/texts";
@@ -175,9 +175,24 @@ export const AdvancedSearchComponent: React.FC<
           disabled={keywords[0].length === 0}
           onClick={async () => {
             setPageNumber(RESULTS_PAGE);
-            const merged = { ...getAdvancedSearchJson(0) };
+            const generated_id = Math.floor(100000 + Math.random() * 900000);
+            const merged = { ...getAdvancedSearchJson(0), id: generated_id};
             try {
               setAxiosPromise(basicAxiosInstance()({method:"post", url:"/advancedSearch", data:merged}));
+              //get last search id cookie
+              const lastSearchID = getLastSearchID();
+  
+              if(lastSearchID)
+              {
+                //delete from DB all tables for last search id
+                basicAxiosInstance()({method:"delete", url:`/sentiment/${lastSearchID}`});
+                basicAxiosInstance()({method:"delete", url:`/fullResults/${lastSearchID}`});
+                basicAxiosInstance()({method:"delete", url:`/keywordSentiment/${lastSearchID}`});
+              }
+  
+              //change last search id cookie
+              setLastSearchID(generated_id);
+
             } catch (err) {
               console.log(err);
             }

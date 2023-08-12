@@ -230,7 +230,7 @@ class SQLQuery:
         clear_query = "TRUNCATE TABLE Articles"
         self.execute_query(clear_query)
 
-    def generate_table(self,upper_limit=1000):
+    def generate_table(self,table_id,upper_limit=1000):
         """
         Create a random Articles table to store the results, 
         so that concurrent requests will not show incorrectly.
@@ -238,7 +238,6 @@ class SQLQuery:
         :param upper_limit: Upper limit for the random table ID (default: 1000)
         :return: ID of the generated table
         """
-        table_id=str(random.randint(0,upper_limit))
         #erases previous tables we may have failed to close
         self.delete_table(table_id)
         create_query = "CREATE TABLE Articles"+table_id+"(website TEXT,keyword TEXT,date DATE,count INT,link TEXT,intonation TEXT,category TEXT,score Numeric(4,3),PRIMARY KEY (link,keyword));"
