@@ -178,7 +178,14 @@ class SQLQuery:
                 cur.close()
                 conn.close()
 
-
+    def insert_finished_row(self,id):
+        """
+        Insert a row into the three tables: ArticleSentiment, KeywordSentiment and Articles, that indicates that the analysis is finished.
+        """
+        self.insert_article_intonation_analysis_sql([("XXXDONEXXX",0,0,0,datetime.now(),0)],id)
+        self.insert_and_update_keyword_intonation_analysis_sql([("XXXDONEXXX","",0,"")],id)
+        self.insert_article_to_sql([("XXXDONEXXX","XXXDONEXXX",datetime.now(),0,"XXXDONEXXX","XXXDONEXXX","XXXDONEXXX",0)],id)
+        
     def insert_article_intonation_analysis_sql(self,article_analysis_list,id=""):
         """
         Insert an article analysis list into the ArticleSentiment table.

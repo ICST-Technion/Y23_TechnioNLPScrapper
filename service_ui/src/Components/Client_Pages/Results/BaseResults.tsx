@@ -44,7 +44,7 @@ import { TabPanelUnstyled } from "@mui/base";
 export interface baseResultsProps {
   includedKeywords: string[];
   setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-  axiosPromise?: Promise<AxiosResponse<any, any>>;
+  axiosPromise?: Promise<AxiosResponse<any, any>> | undefined;
   positiveKeywords?: string[];
   negativeKeywords?: string[];
 }
@@ -108,6 +108,7 @@ export const BaseResults: React.FC<baseResultsProps> = ({
       setLoading(true);
       setShowResult(false);
       let table_id;
+      console.log(axiosPromise);
       if(axiosPromise)
       { 
         const req = await axiosPromise!;
@@ -137,7 +138,10 @@ export const BaseResults: React.FC<baseResultsProps> = ({
         const [dataReq, intonationDataReq, keywordIntonationDataset] = await Promise.all([basicAxiosInstance()({method:"get", url:"/fullResults/" + table_id}),
         basicAxiosInstance()({method:"get", url:"/sentiment/" + table_id}),await basicAxiosInstance()({method:"get", url:"/keywordSentiment/" + table_id})])
   
-        
+        console.log("finished reading data")
+        console.log(dataReq.data.data)
+        console.log(intonationDataReq.data.data)
+        console.log(keywordIntonationDataset.data.data)
         const datas = dataReq.data.data;
         //set the data
         setData([dataReq.data.data, intonationDataReq.data.data, keywordIntonationDataset.data.data]);

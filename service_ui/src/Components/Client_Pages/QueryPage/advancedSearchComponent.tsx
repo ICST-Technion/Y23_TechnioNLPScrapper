@@ -14,7 +14,7 @@ export interface AdvancedSearchComponentProps {
   keywords: string[];
   setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
   setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-  setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>>>;
+  setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>> | undefined>;
   idx: number;
   query: any;
 }

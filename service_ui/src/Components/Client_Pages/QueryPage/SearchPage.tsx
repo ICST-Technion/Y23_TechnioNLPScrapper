@@ -15,7 +15,7 @@ export interface searchPageProps {
   keywords: string[];
   setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
   setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-  setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>>>;
+  setAxiosPromise: React.Dispatch<Promise<AxiosResponse<any, any>> | undefined>;
 }
 
 export const SearchPage: React.FC<searchPageProps> = ({
@@ -64,7 +64,9 @@ export const SearchPage: React.FC<searchPageProps> = ({
         {RUN[language]}
       </button>
       <div className="App">
-        <Button className="last-search-button" disabled={!getLastSearchID()} onClick={() => setPageNumber(RESULTS_PAGE)}> {GET_LAST_SEARCH_RESULTS[language]} </Button>
+        <Button className="last-search-button" disabled={!getLastSearchID()} 
+          onClick={() => {setPageNumber(RESULTS_PAGE); setAxiosPromise(undefined)}}>
+           {GET_LAST_SEARCH_RESULTS[language]} </Button>
         <SearchComponent
           keywords={keywords}
           setKeywords={setKeywords}

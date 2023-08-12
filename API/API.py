@@ -251,6 +251,9 @@ def scrap_links(links_to_scrap,keywords_intonation_list,phrase_intonation_list,t
                 #skip websites that we can't scrap because access is forbidden
                 continue
 
+        
+        
+
 def do_search_query(category='1'):
     '''
     Performs a Google search query (only keywords, no additional parameters).
@@ -288,6 +291,8 @@ def do_search_query(category='1'):
         for page in range(1, 21, 10):
             search_results = search_google(query, website, page=page)
             scrap_links(search_results, keyword_to_intonation,phrase_to_intonation,table_id,category)
+        # create a 'i finished' row to signify data is ready
+    SQLQuery().insert_finished_row(table_id)
     return table_id    
 
 
@@ -496,6 +501,8 @@ def advanced_search_query(category='1'):
             links_to_scrap = search_google(query, website, exclude_query, datetime_range, page)
             scrap_links(links_to_scrap,keyword_to_intonation,phrases_to_intonation,table_id,datetime_range,category)
     # TODO: specify dates in the google search
+
+    SQLQuery().insert_finished_row(table_id)
     return table_id
 
 def url_encode_keywords(keywords):
