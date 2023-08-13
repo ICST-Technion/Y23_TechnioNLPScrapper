@@ -112,25 +112,36 @@ you will need to contact an admin to create a new account to use on the website.
 there is also the main admin account, please send a message if you need it.
 
 
-## Docker local setup
-1. clone the repo
-2. use the makefile option to build images (no run)
-3. make sure to remember to change and fix the connection addresses to fit the images.
-4. run the images in localhost.
-5. remember to add in the env vars
+## LOCAL Setup instructions
 
+1. Clone the Repo.
+   
+3. You will need to change the links in the consts file of 'server' and 'service_ui' to run the local API and server.
 
-## IDE / LOCAL Setup instructions
+4. Start the Python API by navigating to the "API" folder, installing requirements with `pip -r requirements.txt`, then running the api.py file with `python API.py`.
 
-1. Clone the Repo
+5. Start the server by navigating to the "server" folder, run `npm install` to download dependencies, then `npm star`t or `npm run dev` to start the server.
 
-2. Start the Python API by navigating to the "API" folder, installing requirements with `pip -r requirements.txt`, then running the api.py file with `python API.py`
+6. Navigate to the "service_ui" folder, run `npm install` to download depndencies, then `npm start` to open the browser.
 
-3. Start the server by navigating to the "server" folder, run `npm install` to download dependencies, then `npm star`t or `npm run dev` to start the server.
-
-4. Navigate to the "service_ui" folder, run `npm install` to download depndencies, then `npm start` to open the browser.
-
-5. You will need to change the links in the consts file of 'server' and 'service_ui' to run the local API and server.
 
 This will start the website and make it accessible in your local environment.
+
+note: if you ran it before, you dont need to 'install' the libraries again, and can simply use the run commands alone instead.
+
+
+
+## Docker local setup:
+1. Clone the repo:
+   
+3. Open Docker Client, and open a local terminal and write `make build-images`.
+   
+4. If you would like to run the images locally and use the localhost, change the links in the const files as explained in local setup instruction '2'. 
+   
+5. Create and run the containers locally.
+   
+6. Add in the env vars in .env files to server and API, or add them in during creating the container.
+
+### links to the dockerhub images:
+The links can be found [here]('./prebuilt docker images.md')
 
